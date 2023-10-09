@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 const SignIn = () => {
@@ -35,9 +36,9 @@ const SignIn = () => {
       </div>
     </form>
 
-    <p className="mt-10 text-center text-sm text-gray-500">
-      Not a member?
-      <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
+    <p className="mt-4 text-center text-sm text-gray-500">
+      <Link href="/" className='font-semibold leading-4 text-indigo-600 hover:text-indigo-500'>Back to Home</Link>
+      {/* <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
     </p>
   </div>
 </div>
