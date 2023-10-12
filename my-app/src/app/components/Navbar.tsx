@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import "./Navbar.css";
 import {NextUIProvider} from "@nextui-org/react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
 import DropDown from "./DropDown";
@@ -80,7 +79,7 @@ const Navbar = () => {
                   Dashboard
                 </Link>
                 <Link
-                  href="#"
+                  href="/pages/registerthesis"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
                   Đăng ký Khóa luận Tốt Nghiệp
