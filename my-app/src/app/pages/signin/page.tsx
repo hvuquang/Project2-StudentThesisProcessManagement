@@ -14,15 +14,20 @@ const SignIn = () => {
   //dấu chấm hỏi là gì
 
   const checkLogIn = () => {
-    console.log(1)
+    // console.log(1)
+  };
+
+  function handleChange() {
+    setEmail(email);
+    setPassword(password);
+  }
+
+  function handleClick() {
+    console.log(email);
     if (email === "20521419@gm.uit.edu.vn" && password === "123456") {
       console.log(email);
       router.push("/pages/dashboard");
     }
-  }
-
-  function handleClick() {
-    console.log('test')
   }
 
   return (
@@ -41,7 +46,7 @@ const SignIn = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" method="POST">
+        <div className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -56,7 +61,9 @@ const SignIn = () => {
                 type="email"
                 autoComplete="email"
                 defaultValue={email}
-                onChange={() => {setEmail(email)}}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -87,7 +94,9 @@ const SignIn = () => {
                 type="password"
                 autoComplete="current-password"
                 defaultValue={password}
-                onChange={() => setPassword(password)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -98,15 +107,17 @@ const SignIn = () => {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={checkLogIn}
+              onClick={handleClick}
             >
               Sign in
             </button>
           </div>
-        </form>
-        <button type="submit"
-        className="flex w-full bg-indigo-600 hover:bg-indigo-500"
-        onClick={handleClick}>
+        </div>
+        <button
+          type="submit"
+          className="flex w-full bg-indigo-600 hover:bg-indigo-500"
+          onClick={handleClick}
+        >
           test
         </button>
         <p className="mt-4 text-center text-sm text-gray-500">
