@@ -1,11 +1,19 @@
-'use client'
+"use client";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import "./Navbar.css";
+import {NextUIProvider} from "@nextui-org/react";
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
+import DropDown from "./DropDown";
+
 
 const Navbar = () => {
+  function manageDropDownMenu() {
+
+  }
   return (
+    <NextUIProvider>
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
@@ -75,7 +83,7 @@ const Navbar = () => {
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
-                  Team
+                  Đăng ký Khóa luận Tốt Nghiệp
                 </Link>
                 <Link
                   href="#"
@@ -87,7 +95,7 @@ const Navbar = () => {
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
-                  Calendar
+                  Tiến trình thực hiện
                 </Link>
               </div>
             </div>
@@ -117,14 +125,15 @@ const Navbar = () => {
 
             {/* <!-- Profile dropdown --> */}
             <div className="relative ml-3">
+              <DropDown></DropDown>
               <div>
-                <button
+                {/* <button
                   type="button"
                   className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   id="user-menu-button"
                   aria-expanded="false"
                   aria-haspopup="true"
-                  // onClick={}
+                  onClick={manageDropDownMenu}
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only">Open user menu</span>
@@ -135,7 +144,7 @@ const Navbar = () => {
                     width={50}
                     height={50}
                   />
-                </button>
+                </button> */}
               </div>
 
               {/* <!--
@@ -148,38 +157,6 @@ const Navbar = () => {
                 From: "transform opacity-100 scale-100"
                 To: "transform opacity-0 scale-95"
             --> */}
-              <div
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="user-menu-button"
-              >
-                {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  id="user-menu-item-0"
-                >
-                  Your Profile
-                </Link>
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  id="user-menu-item-1"
-                >
-                  Settings
-                </Link>
-                <Link
-                  href="/pages/signin"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  id="user-menu-item-2"
-                >
-                  Sign out
-                </Link>
-              </div>
             </div>
           </div>
         </div>
@@ -217,6 +194,8 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+    </NextUIProvider>
+
   );
 };
 
