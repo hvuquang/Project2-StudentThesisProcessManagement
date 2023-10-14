@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Router } from "next/router";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+// import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { serialize } from "v8";
 
@@ -10,23 +10,19 @@ const SignIn = () => {
   const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const router = useRouter()
   //dấu chấm hỏi là gì
 
-  const checkLogIn = () => {
-    // console.log(1)
-  };
-
-  function handleChange() {
-    setEmail(email);
-    setPassword(password);
-  }
-
   function handleClick() {
-    console.log(email);
+    // console.log(email);
     if (email === "20521419@gm.uit.edu.vn" && password === "123456") {
-      console.log(email);
-      router.push("/pages/dashboard");
+      router.push("/pages/dashboard/", );
+      // <Link href={{
+      //   pathname: "/pages/dashboard/", query: {
+      //     password: password,
+      //     email: email
+      //   }
+      // }}></Link>
     }
   }
 
@@ -122,7 +118,6 @@ const SignIn = () => {
           </Link>
           {/* <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
         </p>
-        
       </div>
     </div>
   );

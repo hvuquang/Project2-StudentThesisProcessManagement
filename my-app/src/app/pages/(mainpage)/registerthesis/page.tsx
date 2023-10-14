@@ -1,9 +1,12 @@
-import React from 'react'
+import CustomTable from "@/app/components/Table";
+import React from "react";
 
 const RegisterThesis = () => {
   return (
-    <div>Welcome to RegisterThesis Page</div>
-  )
-}
+    <div>
+      <CustomTable />
+    </div>
+  );
+};
 
-export default RegisterThesis
+export default RegisterThesis;
