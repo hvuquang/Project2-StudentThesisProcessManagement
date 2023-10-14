@@ -37,13 +37,13 @@ const Navbar = () => {
       id: "registerthesis"
     },
     {
-      name: "Projects",
-      href: "1",
-      id: "projects"
+      name: "Nộp ĐTĐT",
+      href: "/pages/changetopic",
+      id: "changetopic"
     },
     {
       name: "Tiến trình thực hiện",
-      href: "2",
+      href: "/pages/process",
       id: "process"
     },
   ];
