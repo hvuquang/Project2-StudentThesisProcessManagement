@@ -60,6 +60,15 @@ const topicController = {
         } catch (error) {
             res.status(500).json(error);
         }
+    },
+    searchTopic: async(req,res)=>{
+        try {
+            const search_string = req.body.search_string;
+            const topics = await topicModel.find({ topic_name: { $regex: search_string.trim(), $options: 'i' } });
+            res.status(200).json(topics);
+        } catch (error) {
+            res.status(500).json(error);
+        }
     }
 }
 
