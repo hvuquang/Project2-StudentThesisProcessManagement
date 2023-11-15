@@ -14,7 +14,8 @@ const registerTopicController = {
                 const registerTopic = new registerTopicModel({
                     ma_sv: ma_sv,
                     id_topic: id_topic,
-                    topic_name: topic.topic_name
+                    topic_name: topic.topic_name,
+                    ma_gv : topic.ma_gv,
                 });
                 await registerTopic.save();
                 res.status(200).json(registerTopic);

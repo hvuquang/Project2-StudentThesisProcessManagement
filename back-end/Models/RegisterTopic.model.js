@@ -14,7 +14,20 @@ const registerTopicSchema = new mongoose.Schema({
     topic_name: {
         type: String,
         require: true
-    }
+    },
+    ma_gv : {
+        type : mongoose.SchemaTypes.ObjectId,
+        ref : "Account",
+        required : true
+    },
+    id_deadlines : [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Deadline",
+    }],
+    deadlines_done: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Deadline",
+    }]
 },{timestamps: true});
 
 const registerTopic = mongoose.model("RegisterTopic",registerTopicSchema);
