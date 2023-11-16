@@ -13,6 +13,10 @@ const topicSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         required: true,
         ref: "Account"
+    },
+    trang_thai: {
+        type: String,
+        default: "Chưa đăng ký"
     }
 }, { timestamps: true })
 

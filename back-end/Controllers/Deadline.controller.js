@@ -1,5 +1,5 @@
 const deadlineModel = require("../Models/Deadline.model");
-const registerTopic = require("../Models/RegisterTopic.model")
+const registerTopicModel = require("../Models/RegisterTopic.model")
 
 const deadlineController = {
     addDeadline: async (req, res) => {
@@ -20,7 +20,7 @@ const deadlineController = {
             const savedDeadline = await newDeadline.save();
 
             // Tìm tất cả registerTopic có ma_gv bằng với ma_gv hiện tại
-            const foundRegisterTopics = await registerTopic.find({ ma_gv: ma_gv });
+            const foundRegisterTopics = await registerTopicModel.find({ ma_gv: ma_gv });
 
             // Lấy mảng _id của deadlines để thêm vào registerTopic
             const deadlineId = savedDeadline._id;
@@ -37,6 +37,28 @@ const deadlineController = {
             res.status(201).send(savedDeadline);
         } catch (error) {
             res.status(500).send(error);
+        }
+    },
+    done_deadline: async (req, res) => {
+        try {
+            const { ma_sv, id_deadline } = req.params;
+            const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
+
+            // Lọc các phần tử khác id_deadline và gán lại vào mảng id_deadlines
+            const index = registerTopic.id_deadlines.indexOf(id_deadline);
+            if (index !== -1) {
+                registerTopic.id_deadlines.splice(index, 1);
+            }
+
+            // Đẩy id_deadline vào mảng done_deadline
+            registerTopic.deadlines_done.push(id_deadline);
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            await registerTopic.save();
+
+            res.status(200).json(registerTopic);
+        } catch (error) {
+            res.status(500).json(error);
         }
     }
 };

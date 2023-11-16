@@ -23,7 +23,7 @@ const deadlineSchema = new mongoose.Schema({
     ma_gv : {
         type: mongoose.SchemaTypes.ObjectId,
         required : true
-    }
+    },
 }, { timestamps: true });
 
 const deadline = mongoose.model('Deadline', deadlineSchema);

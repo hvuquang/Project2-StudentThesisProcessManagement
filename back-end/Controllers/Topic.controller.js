@@ -11,7 +11,8 @@ const topicController = {
                 const newTopic = {
                     topic_name: req.body.topic_name,
                     topic_description: req.body.topic_description,
-                    ma_gv: teacher._id
+                    ma_gv: teacher._id,
+                    trang_thai: req.body.trang_thai
                 };
 
                 const topic = new topicModel(newTopic);

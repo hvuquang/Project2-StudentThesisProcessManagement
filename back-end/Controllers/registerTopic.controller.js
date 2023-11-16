@@ -6,26 +6,19 @@ const registerTopicController = {
     registerTopic: async(req,res)=>{
         const ma_sv = req.params.ma_sv;
         const id_topic = req.params.id_topic;
-        const sv = await accountModel.findById(ma_sv);
         const topic = await topicModel.findById(id_topic);
         try {
-            if(sv.account_type === "sv")
-            {
                 const registerTopic = new registerTopicModel({
                     ma_sv: ma_sv,
                     id_topic: id_topic,
                     topic_name: topic.topic_name,
                     ma_gv : topic.ma_gv,
                 });
-                await registerTopic.save();
+                topic.trang_thai = "Đã đăng ký";
+                await registerTopic.save().then(()=>topic.save());
                 res.status(200).json(registerTopic);
-            }
-            else
-            {
-                res.status(401).json("Register topic unsuccessfully");
-            }
-            
-        } catch (error) {
+        }
+        catch (error) {
             res.status(500).json(error);
         }
     },
