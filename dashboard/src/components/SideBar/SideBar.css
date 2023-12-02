@@ -1,0 +1,62 @@
+/* Sidebar.css */
+
+.sidebar {
+    width: 250px;
+    /* Độ rộng của sidebar */
+    height: 100%;
+    /* Chiều cao tối đa của sidebar */
+    /* Giữ sidebar ở vị trí cố định trên màn hình */
+    background-color: #333;
+    /* Màu nền của sidebar */
+    padding-top: 20px;
+    /* Khoảng cách từ phía trên cùng của sidebar */
+    color: #fff;
+    /* Màu chữ */
+}
+
+.sidebar img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-left: 40px;
+}
+
+/* Thiết lập kiểu cho các mục menu */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-link {
+    color: inherit;
+    /* Kế thừa màu chữ từ phần tử cha */
+    text-decoration: none;
+    /* Loại bỏ đường gạch dưới */
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li:hover {
+    background-color: #555;
+}
+
+/* Style cho icon */
+.sidebar ul li svg {
+    margin-right: 20px;
+    /* Khoảng cách giữa icon và text */
+    width: 20px;
+    /* Điều chỉnh kích thước của icon (tùy chọn) */
+    height: auto;
+    /* Điều chỉnh kích thước của icon (tùy chọn) */
+}
+
+/* Style cho text */
+.sidebar ul li span {
+    color: #fff;
+}
