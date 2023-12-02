@@ -17,6 +17,10 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pass: {
+        type: String,
+        required : true
+    },
     id_deadlines: {
         type: mongoose.SchemaTypes.ObjectId,
     }

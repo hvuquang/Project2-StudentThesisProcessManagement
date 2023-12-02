@@ -48,6 +48,20 @@ const accountController = {
         } catch (error) {
             res.status(500).json(error);
         }
+    },
+    singin: async(req,res)=>{
+        try {
+            const { email, pass } = req.body;
+            const account = await accountModel.findOne({ email: email });
+            if (account != null && account.pass === pass) {
+                res.status(200).json(account);
+            }
+            else{
+                res.status(404).json("Sai tài khoản hoặc mật khẩu");
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
     }
 }
 

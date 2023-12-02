@@ -5,24 +5,28 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { serialize } from "v8";
+import axios from "axios"
 
 const SignIn = () => {
   const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [account,setAccount] = useState();
+  const [status, setStatus] = useState(0);
   const router = useRouter()
   //dấu chấm hỏi là gì
 
-  function handleClick() {
-    // console.log(email);
-    if (email === "20521419@gm.uit.edu.vn" && password === "123456") {
-      router.push("/pages/dashboard/", );
-      // <Link href={{
-      //   pathname: "/pages/dashboard/", query: {
-      //     password: password,
-      //     email: email
-      //   }
-      // }}></Link>
+  function singInHandleClick() {
+    axios.post('http://localhost:8000/v1/account/singin',{
+      email: email,
+      pass: password
+    }).then(res=>{
+      setAccount(res.data);
+      setStatus(res.status);
+    })
+
+    if (status === 200) {
+      router.push("/pages/dashboard/");
     }
   }
 
@@ -103,7 +107,7 @@ const SignIn = () => {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={handleClick}
+              onClick={singInHandleClick}
             >
               Sign in
             </button>
