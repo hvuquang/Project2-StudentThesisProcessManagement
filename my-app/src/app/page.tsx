@@ -4,19 +4,20 @@ import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
-import { serialize } from "v8";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const SignIn = () => {
   const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter()
-  //dấu chấm hỏi là gì
+  const router = useRouter();
+  const { data: session } = useSession();
 
   function handleClick() {
-    // console.log(email);
+    console.log(session?.user);
     if (email === "20521419@gm.uit.edu.vn" && password === "123456") {
-      router.push("/pages/dashboard/", );
+      router.push("/pages/dashboard/");
       // <Link href={{
       //   pathname: "/pages/dashboard/", query: {
       //     password: password,
@@ -25,9 +26,10 @@ const SignIn = () => {
       // }}></Link>
     }
   }
-
+  // const session = await getServerSession(authOptions);
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <p>Hello {}</p>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <Image
           className="mx-auto h-10 w-auto"
