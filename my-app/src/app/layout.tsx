@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { NextUIProvider } from "@nextui-org/react";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
 
@@ -17,10 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <body className={inter.className}>
-        {children}
-      </body>
-    </div>
+    <html>
+      <body className={inter.className}>{children}</body>
+    </html>
   );
 }

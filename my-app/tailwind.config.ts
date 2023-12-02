@@ -1,10 +1,12 @@
 import type { Config } from 'tailwindcss'
-
+const {nextui} = require("@nextui-org/react");
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./*.{html,js}", "./src/**/*.{html,js}"
   ],
   theme: {
     extend: {
@@ -13,8 +15,21 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      // fontSize: {
+      //   sm: '0.8rem',
+      //   base: '1rem',
+      //   xl: '1.25rem',
+      //   '2xl': '1.563rem',
+      //   '3xl': '1.953rem',
+      //   '4xl': '2.441rem',
+      //   '5xl': '3.052rem',
+      // },
     },
+    boxShadow: {
+      '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+    }
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [nextui()],
 }
 export default config

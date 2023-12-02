@@ -1,28 +1,32 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-// import { Router } from "next/router";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { serialize } from "v8";
 
-const SignIn = () => {
+const ForgetPassword = () => {
   const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter()
+  const router = useRouter();
   //dấu chấm hỏi là gì
 
+  const checkLogIn = () => {
+    // console.log(1)
+  };
+
+  function handleChange() {
+    setEmail(email);
+    setPassword(password);
+  }
+
   function handleClick() {
-    // console.log(email);
+    console.log(email);
     if (email === "20521419@gm.uit.edu.vn" && password === "123456") {
-      router.push("/pages/dashboard/", );
-      // <Link href={{
-      //   pathname: "/pages/dashboard/", query: {
-      //     password: password,
-      //     email: email
-      //   }
-      // }}></Link>
+      console.log(email);
+      router.push("/pages/dashboard");
     }
   }
 
@@ -37,7 +41,7 @@ const SignIn = () => {
           height={100}
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          Reset Password
         </h2>
       </div>
 
@@ -75,12 +79,12 @@ const SignIn = () => {
                 Password
               </label>
               <div className="text-sm">
-                <Link
-                  href="/pages/forgetpassword"
+                <a
+                  href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
-                </Link>
+                </a>
               </div>
             </div>
             <div className="mt-2">
@@ -105,16 +109,16 @@ const SignIn = () => {
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={handleClick}
             >
-              Sign in
+              Reset
             </button>
           </div>
         </div>
         <p className="mt-4 text-center text-sm text-gray-500">
           <Link
-            href="/"
+            href="/pages/signin"
             className="font-semibold leading-4 text-indigo-600 hover:text-indigo-500"
           >
-            Back to Home
+            Back to Sign In
           </Link>
           {/* <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
         </p>
@@ -123,4 +127,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgetPassword;
