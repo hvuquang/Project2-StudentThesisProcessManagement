@@ -30,6 +30,21 @@ const accountController = {
             res.status(500).json(error);
         }
     },
+    getAccountByAccountType: async (req, res) => {
+        try {
+            const page = req.params.page; // Trang được yêu cầu (mặc định là trang 1)
+            const perPage = 10; // Số tài khoản mỗi trang
+
+            const accounts = await accountModel
+                .find({ account_type: req.params.account_type })
+                .skip((page - 1) * perPage) // Bỏ qua các tài khoản đã lấy trước đó
+                .limit(perPage); // Giới hạn số lượng tài khoản được trả về
+
+            res.status(200).json(accounts);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
     updateAccount: async(req,res)=>{
         try {
             const id_account = req.params._id;
@@ -61,6 +76,15 @@ const accountController = {
             }
         } catch (error) {
             res.status(500).json(error);
+        }
+    },
+    pageNumber: async(req,res)=>{
+        try {
+            const countAccount = await accountModel.find({account_type:req.params.account_type}).countDocuments();
+            const pageNumber = Math.ceil(countAccount/10);
+            res.status(200).json(pageNumber)
+        } catch (error) {
+            res.status(500).json(error)
         }
     }
 }

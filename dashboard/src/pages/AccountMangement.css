@@ -1,0 +1,120 @@
+/* Container của bảng tài khoản */
+.account-table-container {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+/* CSS cho các nút "Sinh viên" và "Giáo viên" */
+.account-type-button {
+    padding: 10px 20px;
+    background-color: gray;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+/* CSS cho button "Thêm" */
+.add-account-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #27ae60;
+    /* Màu xanh lá cây */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.add-account-button:hover {
+    background-color: #219653;
+    /* Màu xanh lá cây khi hover */
+}
+
+.account-type-button:hover {
+    background-color: #2980b9;
+}
+
+.account-type-button.active {
+    background-color: #3498db;
+}
+
+/* CSS cho bảng tài khoản */
+.account-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* CSS cho hàng chẵn */
+.account-table tbody tr:nth-child(even) {
+    background-color: #2F6BFF;
+    color: white;
+}
+
+/* CSS cho hàng lẻ */
+.account-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* CSS cho các ô trong bảng */
+.account-table td,
+.account-table th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+    /* Căn giữa văn bản */
+    vertical-align: middle;
+    /* Canh giữa theo chiều dọc */
+}
+
+/* CSS cho tiêu đề cột */
+.account-table th {
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Căn giữa văn bản */
+    vertical-align: middle;
+    /* Canh giữa theo chiều dọc */
+}
+
+.pagination {
+    position: absolute;
+    bottom: 30px;
+    /* hoặc bất kỳ khoảng cách nào phù hợp */
+    display: flex;
+    justify-content: center;
+    width: 98%;
+}
+
+.page-button {
+    padding: 8px 12px;
+    margin: 0 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.page-button:hover {
+    background-color: #f0f0f0;
+}
+
+.page-button.active {
+    background-color: #007bff;
+    color: #fff;
+}
