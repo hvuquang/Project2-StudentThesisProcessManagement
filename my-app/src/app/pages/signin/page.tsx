@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
-import { serialize } from "v8";
-import axios from "axios";
 import { signIn } from "next-auth/react";
 
 const SignIn = () => {
