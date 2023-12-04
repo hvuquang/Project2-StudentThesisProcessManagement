@@ -5,25 +5,27 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { serialize } from "v8";
-import axios from "axios"
+import axios from "axios";
 
 const SignIn = () => {
   const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [account,setAccount] = useState();
+  const [account, setAccount] = useState();
   const [status, setStatus] = useState(0);
-  const router = useRouter()
+  const router = useRouter();
   //dấu chấm hỏi là gì
 
   function singInHandleClick() {
-    axios.post('http://localhost:8000/v1/account/singin',{
-      email: email,
-      pass: password
-    }).then(res=>{
-      setAccount(res.data);
-      setStatus(res.status);
-    })
+    axios
+      .post("http://localhost:8000/v1/account/singin", {
+        email: email,
+        pass: password,
+      })
+      .then((res) => {
+        setAccount(res.data);
+        setStatus(res.status);
+      });
 
     if (status === 200) {
       router.push("/pages/dashboard/");
