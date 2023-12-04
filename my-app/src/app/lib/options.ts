@@ -37,6 +37,7 @@ export const options: NextAuthOptions = {
         if (res.ok && account) {
           return account;
         }
+        throw new Error("Invalid");
       },
     }),
   ],

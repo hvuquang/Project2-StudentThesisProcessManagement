@@ -6,31 +6,52 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { serialize } from "v8";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 
 const SignIn = () => {
-  const [flag, setFlag] = useState("false");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [account, setAccount] = useState();
-  const [status, setStatus] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  // * if callbackURL falsy (null, undefined, false, 0, empty string) => fallbacks to the "/pages/dashboard"
+  // * to pass the ts type check
+  // * get("callbackUrl" || "/pages/dashboard") -> wrong logic
+  const callbackUrl = searchParams.get("callbackUrl") || "/pages/dashboard";
   const router = useRouter();
-  //dấu chấm hỏi là gì
 
-  function singInHandleClick() {
-    axios
-      .post("http://localhost:8000/v1/account/singin", {
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await signIn("credentials", {
         email: email,
         pass: password,
-      })
-      .then((res) => {
-        setAccount(res.data);
-        setStatus(res.status);
+        callbackUrl: callbackUrl,
+        redirect: false,
       });
-
-    if (status === 200) {
-      router.push("/pages/dashboard/");
+      if (!res?.error) {
+        router.push(callbackUrl);
+      } else {
+        setLoading(false);
+        alert("invalid email or password");
+      }
+      // axios
+      //   .post("http://localhost:8000/v1/account/singin", {
+      //     email: email,
+      //     pass: password,
+      //   })
+      //   .then((res) => {
+      //     setAccount(res.data);
+      //     setStatus(res.status);
+      //   });
+    } catch (error: any) {
+      console.log(error);
     }
-  }
+
+    // if (status === 200) {
+    //   router.push("/pages/dashboard/");
+    // }
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -47,7 +68,10 @@ const SignIn = () => {
         </h2>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <form
+        className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm"
+        onSubmit={onSubmit}
+      >
         <div className="space-y-6">
           <div>
             <label
@@ -109,9 +133,9 @@ const SignIn = () => {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={singInHandleClick}
+              // onClick={singInHandleClick}
             >
-              Sign in
+              {loading ? "loading..." : "Sign in"}
             </button>
           </div>
         </div>
@@ -124,7 +148,7 @@ const SignIn = () => {
           </Link>
           {/* <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
         </p>
-      </div>
+      </form>
     </div>
   );
 };
