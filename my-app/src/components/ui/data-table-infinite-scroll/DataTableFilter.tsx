@@ -2,7 +2,7 @@ import type { Column } from "@tanstack/react-table";
 import type { LucideIcon } from "lucide-react";
 import { Check, Filter } from "lucide-react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -26,14 +26,22 @@ interface DataTableFilter<TData, TValue> {
     icon?: LucideIcon;
   }[];
 }
-export function DataTableFilter<TData, TValue>({ column, title, options }: DataTableFilter<TData, TValue>) {
+export function DataTableFilter<TData, TValue>({
+  column,
+  title,
+  options,
+}: DataTableFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button color="secondary" size="sm" className="border-subtle h-8 rounded-md">
+        <Button
+          color="secondary"
+          size="sm"
+          className="border-subtle h-8 rounded-md"
+        >
           <Filter className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
@@ -47,7 +55,11 @@ export function DataTableFilter<TData, TValue>({ column, title, options }: DataT
                   options
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
-                      <Badge color="gray" key={option.value} className="rounded-sm px-1 font-normal">
+                      <Badge
+                        color="gray"
+                        key={option.value}
+                        className="rounded-sm px-1 font-normal"
+                      >
                         {option.label}
                       </Badge>
                     ))
@@ -76,18 +88,24 @@ export function DataTableFilter<TData, TValue>({ column, title, options }: DataT
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue(filterValues.length ? filterValues : undefined);
+                      column?.setFilterValue(
+                        filterValues.length ? filterValues : undefined
+                      );
                     }}
                   >
                     <div
                       className={cn(
                         "border-subtle mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
-                        isSelected ? "text-emphasis" : "opacity-50 [&_svg]:invisible"
+                        isSelected
+                          ? "text-emphasis"
+                          : "opacity-50 [&_svg]:invisible"
                       )}
                     >
                       <Check className={cn("h-4 w-4")} />
                     </div>
-                    {option.icon && <option.icon className="text-muted mr-2 h-4 w-4" />}
+                    {option.icon && (
+                      <option.icon className="text-muted mr-2 h-4 w-4" />
+                    )}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">

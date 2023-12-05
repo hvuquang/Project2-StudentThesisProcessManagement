@@ -5,11 +5,17 @@ import * as Label from "@radix-ui/react-label";
 import * as PrimitiveSwitch from "@radix-ui/react-switch";
 import React from "react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Tooltip } from "../../tooltip";
 
-const Wrapper = ({ children, tooltip }: { tooltip?: string; children: React.ReactNode }) => {
+const Wrapper = ({
+  children,
+  tooltip,
+}: {
+  tooltip?: string;
+  children: React.ReactNode;
+}) => {
   if (!tooltip) {
     return <>{children}</>;
   }
@@ -29,7 +35,14 @@ const Switch = (
     LockedIcon?: React.ReactNode;
   }
 ) => {
-  const { label, fitToHeight, classNames, labelOnLeading, LockedIcon, ...primitiveProps } = props;
+  const {
+    label,
+    fitToHeight,
+    classNames,
+    labelOnLeading,
+    LockedIcon,
+    ...primitiveProps
+  } = props;
   const id = useId();
   const isChecked = props.checked || props.defaultChecked;
   return (
@@ -40,7 +53,8 @@ const Switch = (
           fitToHeight && "h-fit",
           labelOnLeading && "flex-row-reverse",
           classNames?.container
-        )}>
+        )}
+      >
         {LockedIcon && <div className="mr-2">{LockedIcon}</div>}
         <PrimitiveSwitch.Root
           className={cn(
@@ -49,7 +63,8 @@ const Switch = (
             "focus:ring-brand-default h-5 w-[34px] rounded-full shadow-none focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1",
             props.className
           )}
-          {...primitiveProps}>
+          {...primitiveProps}
+        >
           <PrimitiveSwitch.Thumb
             id={id}
             className={cn(
@@ -64,9 +79,12 @@ const Switch = (
             htmlFor={id}
             className={cn(
               "text-emphasis ms-2 align-text-top text-sm font-medium",
-              primitiveProps.disabled ? "cursor-not-allowed opacity-25" : "cursor-pointer",
+              primitiveProps.disabled
+                ? "cursor-not-allowed opacity-25"
+                : "cursor-pointer",
               labelOnLeading && "flex-1"
-            )}>
+            )}
+          >
             {label}
           </Label.Root>
         )}

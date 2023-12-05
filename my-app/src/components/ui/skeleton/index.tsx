@@ -1,10 +1,12 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import React from "react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 const SkeletonAvatar: React.FC<SkeletonBaseProps> = ({ className }) => {
-  return <div className={cn(`bg-emphasis me-3 mt-1 rounded-full`, className)} />;
+  return (
+    <div className={cn(`bg-emphasis me-3 mt-1 rounded-full`, className)} />
+  );
 };
 
 type AsProp<T extends ElementType = ElementType> = {
@@ -39,11 +41,15 @@ const Skeleton = <T extends ElementType>({
     <Component
       className={cn(
         loading
-          ? cn("font-size-0 bg-emphasis animate-pulse rounded-md text-transparent", loadingClassName)
+          ? cn(
+              "font-size-0 bg-emphasis animate-pulse rounded-md text-transparent",
+              loadingClassName
+            )
           : "",
         className
       )}
-      {...rest}>
+      {...rest}
+    >
       {children}
     </Component>
   );
@@ -53,11 +59,9 @@ type SkeletonBaseProps = {
   className?: string;
 };
 
-const SkeletonText: React.FC<SkeletonBaseProps & { invisible?: boolean; style?: React.CSSProperties }> = ({
-  className = "",
-  invisible = false,
-  style,
-}) => {
+const SkeletonText: React.FC<
+  SkeletonBaseProps & { invisible?: boolean; style?: React.CSSProperties }
+> = ({ className = "", invisible = false, style }) => {
   return (
     <span
       style={style}
@@ -83,9 +87,21 @@ interface SkeletonContainer {
   children?: React.ReactNode;
   className?: string;
 }
-const SkeletonContainer: React.FC<SkeletonContainer> = ({ children, as, className }) => {
+const SkeletonContainer: React.FC<SkeletonContainer> = ({
+  children,
+  as,
+  className,
+}) => {
   const Component = as || "div";
-  return <Component className={cn("animate-pulse", className)}>{children}</Component>;
+  return (
+    <Component className={cn("animate-pulse", className)}>{children}</Component>
+  );
 };
 
-export { Skeleton, SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonContainer };
+export {
+  Skeleton,
+  SkeletonAvatar,
+  SkeletonText,
+  SkeletonButton,
+  SkeletonContainer,
+};

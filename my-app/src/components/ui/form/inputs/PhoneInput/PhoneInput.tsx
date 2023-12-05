@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 export type PhoneInputProps = {
   value?: string;
@@ -17,7 +17,12 @@ export type PhoneInputProps = {
   onChange: (value: string) => void;
 };
 
-function BasePhoneInput({ name, className = "", onChange, ...rest }: PhoneInputProps) {
+function BasePhoneInput({
+  name,
+  className = "",
+  onChange,
+  ...rest
+}: PhoneInputProps) {
   useEffect(() => {
     if (!rest.value) {
       return;

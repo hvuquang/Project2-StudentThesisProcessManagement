@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
-import { Button } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/Button";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ const SignIn = () => {
   // * if callbackURL falsy (null, undefined, false, 0, empty string) => fallbacks to the "/pages/dashboard"
   // * to pass the ts type check
   // * get("callbackUrl" || "/pages/dashboard") -> wrong logic
-  const callbackUrl = searchParams.get("callbackUrl") || "/pages/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/pages/homepage";
   const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent) => {

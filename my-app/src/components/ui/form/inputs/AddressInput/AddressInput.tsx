@@ -1,4 +1,4 @@
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Input } from "../..";
 import { MapPin } from "../../../icons";
@@ -15,7 +15,10 @@ export type AddressInputProps = {
 function AddressInput({ value, onChange, ...rest }: AddressInputProps) {
   return (
     <div className="relative flex items-center">
-      <MapPin className="text-muted absolute left-0.5 ml-3 h-4 w-4 -translate-y-1/2" style={{ top: "44%" }} />
+      <MapPin
+        className="text-muted absolute left-0.5 ml-3 h-4 w-4 -translate-y-1/2"
+        style={{ top: "44%" }}
+      />
       <Input
         {...rest}
         value={value}

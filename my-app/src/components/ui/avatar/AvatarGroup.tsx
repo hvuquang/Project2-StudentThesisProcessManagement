@@ -1,4 +1,4 @@
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Avatar } from "./Avatar";
 
@@ -21,7 +21,9 @@ export const AvatarGroup = function AvatarGroup(props: AvatarGroupProps) {
    * First, filter all the avatars object that have image
    * Then, slice it until before `truncateAfter` index
    */
-  const displayedAvatars = props.items.filter((avatar) => avatar.image).slice(0, truncateAfter);
+  const displayedAvatars = props.items
+    .filter((avatar) => avatar.image)
+    .slice(0, truncateAfter);
   const numTruncatedAvatars = LENGTH - displayedAvatars.length;
 
   if (!displayedAvatars.length) return <></>;
@@ -45,12 +47,14 @@ export const AvatarGroup = function AvatarGroup(props: AvatarGroupProps) {
           className={cn(
             "bg-inverted relative -mr-[4px] mb-1 inline-flex justify-center overflow-hidden rounded-full",
             props.size === "sm" ? "min-w-6 h-6" : "min-w-16 h-16"
-          )}>
+          )}
+        >
           <span
             className={cn(
               "text-inverted m-auto px-1 text-center",
               props.size === "sm" ? "text-[12px]" : "text-2xl"
-            )}>
+            )}
+          >
             +{numTruncatedAvatars}
           </span>
         </li>

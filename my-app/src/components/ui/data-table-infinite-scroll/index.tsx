@@ -19,9 +19,16 @@ import {
 import { useState } from "react";
 import { useVirtual } from "react-virtual";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table/TableNew";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../table/TableNew";
 import type { ActionItem } from "./DataTableSelectionBar";
 import { DataTableSelectionBar } from "./DataTableSelectionBar";
 import type { FilterableItems } from "./DataTableToolbar";
@@ -94,7 +101,9 @@ export function DataTable<TData, TValue>({
   const { virtualItems: virtualRows, totalSize } = rowVirtualizer;
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom =
-    virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
+    virtualRows.length > 0
+      ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+      : 0;
 
   return (
     <div className="relative space-y-4">
@@ -104,7 +113,11 @@ export function DataTable<TData, TValue>({
         searchKey={searchKey}
         tableCTA={tableCTA}
       />
-      <div className="border-subtle border" ref={tableContainerRef} onScroll={onScroll}>
+      <div
+        className="border-subtle border"
+        ref={tableContainerRef}
+        onScroll={onScroll}
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -114,7 +127,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -141,7 +157,10 @@ export function DataTable<TData, TValue>({
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
                         </TableCell>
                       );
                     })}
@@ -150,7 +169,10 @@ export function DataTable<TData, TValue>({
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>

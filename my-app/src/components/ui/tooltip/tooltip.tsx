@@ -3,7 +3,7 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import React from "react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 export function Tooltip({
   children,
@@ -28,7 +28,8 @@ export function Tooltip({
       delayDuration={delayDuration || 50}
       open={open}
       defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}>
+      onOpenChange={onOpenChange}
+    >
       <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
       <TooltipPrimitive.Portal>
         <TooltipPrimitive.Content
@@ -40,7 +41,8 @@ export function Tooltip({
             props.className && `${props.className}`
           )}
           side={side}
-          align="center">
+          align="center"
+        >
           {content}
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Portal>

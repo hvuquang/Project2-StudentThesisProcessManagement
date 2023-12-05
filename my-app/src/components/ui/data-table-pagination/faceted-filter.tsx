@@ -1,6 +1,6 @@
 import { type Column } from "@tanstack/react-table";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -38,25 +38,40 @@ export function DataTableFacetedFilter<TData, TValue>({
       {variant === "popover" ? (
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="button" color="minimal" size="sm" className="h-8 border-dashed">
+            <Button
+              variant="button"
+              color="minimal"
+              size="sm"
+              className="h-8 border-dashed"
+            >
               <PlusCircle className="mr-2 h-4 w-4" />
               {title}
               {selectedValues?.size > 0 && (
                 <>
                   <Separator orientation="vertical" className="mx-2 h-4" />
-                  <Badge variant="gray" className="rounded-sm px-1 font-normal lg:hidden">
+                  <Badge
+                    variant="gray"
+                    className="rounded-sm px-1 font-normal lg:hidden"
+                  >
                     {selectedValues.size}
                   </Badge>
                   <div className="hidden space-x-1 lg:flex">
                     {selectedValues.size > 2 ? (
-                      <Badge variant="gray" className="rounded-sm px-1 font-normal">
+                      <Badge
+                        variant="gray"
+                        className="rounded-sm px-1 font-normal"
+                      >
                         {selectedValues.size} selected
                       </Badge>
                     ) : (
                       options
                         .filter((option) => selectedValues.has(option.value))
                         .map((option) => (
-                          <Badge variant="gray" key={option.value} className="rounded-sm px-1 font-normal">
+                          <Badge
+                            variant="gray"
+                            key={option.value}
+                            className="rounded-sm px-1 font-normal"
+                          >
                             {option.label}
                           </Badge>
                         ))
@@ -84,19 +99,29 @@ export function DataTableFacetedFilter<TData, TValue>({
                             selectedValues.add(option.value);
                           }
                           const filterValues = Array.from(selectedValues);
-                          column?.setFilterValue(filterValues.length ? filterValues : undefined);
+                          column?.setFilterValue(
+                            filterValues.length ? filterValues : undefined
+                          );
                         }}
                       >
                         <div
                           className={cn(
                             "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
-                            isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
+                            isSelected
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
                           )}
                         >
-                          <CheckIcon className={cn("h-4 w-4")} aria-hidden="true" />
+                          <CheckIcon
+                            className={cn("h-4 w-4")}
+                            aria-hidden="true"
+                          />
                         </div>
                         {option.icon && (
-                          <option.icon className="text-muted-foreground mr-2 h-4 w-4" aria-hidden="true" />
+                          <option.icon
+                            className="text-muted-foreground mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
                         )}
                         <span>{option.label}</span>
                       </CommandItem>
@@ -142,19 +167,26 @@ export function DataTableFacetedFilter<TData, TValue>({
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue(filterValues.length ? filterValues : undefined);
+                      column?.setFilterValue(
+                        filterValues.length ? filterValues : undefined
+                      );
                     }}
                   >
                     <div
                       className={cn(
                         "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
-                        isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
+                        isSelected
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible"
                       )}
                     >
                       <CheckIcon className={cn("h-4 w-4")} aria-hidden="true" />
                     </div>
                     {option.icon && (
-                      <option.icon className="text-muted-foreground mr-2 h-4 w-4" aria-hidden="true" />
+                      <option.icon
+                        className="text-muted-foreground mr-2 h-4 w-4"
+                        aria-hidden="true"
+                      />
                     )}
                     <span>{option.label}</span>
                   </CommandItem>

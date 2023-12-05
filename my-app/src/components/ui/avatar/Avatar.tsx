@@ -4,7 +4,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import Link from "next/link";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 import { AVATAR_FALLBACK } from "@ttbs/lib/constants";
 
 import { Tooltip } from "../tooltip";
@@ -43,7 +43,8 @@ export function Avatar(props: AvatarProps) {
         indicator ? "overflow-visible" : "overflow-hidden",
         props.className,
         sizesPropsBySize[size]
-      )}>
+      )}
+    >
       <>
         <AvatarPrimitive.Image
           src={imageSrc ?? undefined}
@@ -53,9 +54,14 @@ export function Avatar(props: AvatarProps) {
         <AvatarPrimitive.Fallback
           delayMs={600}
           asChild={props.asChild}
-          className="flex h-full items-center justify-center">
+          className="flex h-full items-center justify-center"
+        >
           <>
-            {props.fallback ? props.fallback : <img src={AVATAR_FALLBACK} alt={alt} className={rootClass} />}
+            {props.fallback ? (
+              props.fallback
+            ) : (
+              <img src={AVATAR_FALLBACK} alt={alt} className={rootClass} />
+            )}
           </>
         </AvatarPrimitive.Fallback>
         {indicator}

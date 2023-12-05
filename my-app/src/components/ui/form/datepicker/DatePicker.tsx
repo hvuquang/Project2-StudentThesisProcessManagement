@@ -3,7 +3,7 @@ import "react-calendar/dist/Calendar.css";
 import PrimitiveDatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Calendar } from "../../icons";
 import "./DatePicker.css";
@@ -20,7 +20,13 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const DatePicker = ({ minDate, disabled, date, onDatesChange, className }: Props) => {
+const DatePicker = ({
+  minDate,
+  disabled,
+  date,
+  onDatesChange,
+  className,
+}: Props) => {
   return (
     <PrimitiveDatePicker
       className={cn("focus:ring-primary-500 h-9 sm:text-sm", className)}

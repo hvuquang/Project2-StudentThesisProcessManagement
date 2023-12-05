@@ -6,13 +6,15 @@ import type { ReactNode } from "react";
 import React, { useState } from "react";
 
 import { useClientTranslation } from "@ttbs/i18n";
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 import type { SVGComponent } from "@ttbs/types/SVGComponent";
 
 import type { ButtonProps } from "../../components/button";
 import { Button } from "../../components/button";
 
-export type DialogProps = React.ComponentProps<(typeof DialogPrimitive)["Root"]> & {
+export type DialogProps = React.ComponentProps<
+  (typeof DialogPrimitive)["Root"]
+> & {
   name?: string;
   clearQueryParamsOnClose?: string[];
 };
@@ -34,10 +36,15 @@ export function Dialog(props: DialogProps) {
   const { children, name, ...dialogProps } = props;
 
   // only used if name is set
-  const [dialogState, setDialogState] = useState(dialogProps.open ? DIALOG_STATE.OPEN : DIALOG_STATE.CLOSED);
+  const [dialogState, setDialogState] = useState(
+    dialogProps.open ? DIALOG_STATE.OPEN : DIALOG_STATE.CLOSED
+  );
   const shouldOpenDialog = newSearchParams.get("dialog") === name;
   if (name) {
-    const clearQueryParamsOnClose = ["dialog", ...(props.clearQueryParamsOnClose || [])];
+    const clearQueryParamsOnClose = [
+      "dialog",
+      ...(props.clearQueryParamsOnClose || []),
+    ];
 
     dialogProps.onOpenChange = (open) => {
       if (props.onOpenChange) {
@@ -71,9 +78,13 @@ export function Dialog(props: DialogProps) {
     }
   }
 
-  return <DialogPrimitive.Root {...dialogProps}>{children}</DialogPrimitive.Root>;
+  return (
+    <DialogPrimitive.Root {...dialogProps}>{children}</DialogPrimitive.Root>
+  );
 }
-type DialogContentProps = React.ComponentProps<(typeof DialogPrimitive)["Content"]> & {
+type DialogContentProps = React.ComponentProps<
+  (typeof DialogPrimitive)["Content"]
+> & {
   size?: "xl" | "lg" | "md";
   type?: "creation" | "confirmation";
   title?: string;
@@ -85,8 +96,14 @@ type DialogContentProps = React.ComponentProps<(typeof DialogPrimitive)["Content
 };
 
 // enableOverflow:- use this prop whenever content inside DialogContent could overflow and require scrollbar
-export const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ children, title, Icon, enableOverflow, type = "creation", ...props }, forwardedRef) => {
+export const DialogContent = React.forwardRef<
+  HTMLDivElement,
+  DialogContentProps
+>(
+  (
+    { children, title, Icon, enableOverflow, type = "creation", ...props },
+    forwardedRef
+  ) => {
     return (
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fadeIn fixed inset-0 z-50 bg-neutral-800 bg-opacity-70 transition-opacity dark:bg-opacity-70 " />
@@ -152,12 +169,18 @@ export function DialogHeader(props: DialogHeaderProps) {
       >
         {props.title}
       </h3>
-      {props.subtitle && <div className="text-subtle text-sm">{props.subtitle}</div>}
+      {props.subtitle && (
+        <div className="text-subtle text-sm">{props.subtitle}</div>
+      )}
     </div>
   );
 }
 
-export function DialogFooter(props: { children: ReactNode; className?: string; showDivider?: boolean }) {
+export function DialogFooter(props: {
+  children: ReactNode;
+  className?: string;
+  showDivider?: boolean;
+}) {
   return (
     <div className={cn("bg-default sticky bottom-0", props.className)}>
       {props.showDivider && (
@@ -194,7 +217,11 @@ export function DialogClose(
   return (
     <DialogPrimitive.Close asChild {...props.dialogCloseProps}>
       {/* This will require the i18n string passed in */}
-      <Button data-testid="dialog-rejection" color={props.color || "minimal"} {...props}>
+      <Button
+        data-testid="dialog-rejection"
+        color={props.color || "minimal"}
+        {...props}
+      >
         {props.children ? props.children : t("Close")}
       </Button>
     </DialogPrimitive.Close>

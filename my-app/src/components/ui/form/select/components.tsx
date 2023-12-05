@@ -3,7 +3,7 @@
 import type { GroupBase, InputProps, OptionProps } from "react-select";
 import { components as reactSelectComponents } from "react-select";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Check } from "../../icons";
 
@@ -43,7 +43,12 @@ export const OptionComponent = <
     // This gets styled in the select classNames prop now - handles overrides with styles vs className here doesnt
     <reactSelectComponents.Option {...props}>
       <div className="flex">
-        <span className="mr-auto" data-testid={`select-option-${(props as unknown as ExtendedOption).value}`}>
+        <span
+          className="mr-auto"
+          data-testid={`select-option-${
+            (props as unknown as ExtendedOption).value
+          }`}
+        >
           {props.label || <>&nbsp;</>}
         </span>
         {props.isSelected && <Check className="ml-2 h-4 w-4" />}

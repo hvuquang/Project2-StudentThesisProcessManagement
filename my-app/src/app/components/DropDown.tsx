@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/Button";
 
 const DropDown = () => {
   return (

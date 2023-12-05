@@ -6,7 +6,7 @@ import { Check } from "lucide-react";
 import type { InputHTMLAttributes } from "react";
 import React, { forwardRef } from "react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   label?: React.ReactNode;
@@ -32,8 +32,11 @@ const Checkbox = React.forwardRef<
       "border-default data-[state=checked]:bg-brand-default data-[state=checked]:text-brand peer h-4 w-4 shrink-0 rounded-[4px] border ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed",
       className
     )}
-    {...props}>
-    <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator
+      className={cn("flex items-center justify-center text-current")}
+    >
       <Check className="h-4 w-4" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
@@ -41,7 +44,10 @@ const Checkbox = React.forwardRef<
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 const CheckboxField = forwardRef<HTMLInputElement, Props>(
-  ({ label, description, error, disabled, descriptionAsSafeHtml, ...rest }, ref) => {
+  (
+    { label, description, error, disabled, descriptionAsSafeHtml, ...rest },
+    ref
+  ) => {
     const descriptionAsLabel = !label || rest.descriptionAsLabel;
     const id = useId();
     return (
@@ -69,7 +75,9 @@ const CheckboxField = forwardRef<HTMLInputElement, Props>(
               {
                 className: cn(
                   "relative flex items-start",
-                  !error && descriptionAsLabel ? "text-emphasis" : "text-emphasis",
+                  !error && descriptionAsLabel
+                    ? "text-emphasis"
+                    : "text-emphasis",
                   error && "text-error"
                 ),
               },
@@ -100,7 +108,9 @@ const CheckboxField = forwardRef<HTMLInputElement, Props>(
                     }}
                   />
                 ) : (
-                  <span className={cn("text-sm", rest.descriptionClassName)}>{description}</span>
+                  <span className={cn("text-sm", rest.descriptionClassName)}>
+                    {description}
+                  </span>
                 )}
               </>
             )}

@@ -2,16 +2,26 @@
 
 import { useId } from "@radix-ui/react-id";
 import * as React from "react";
-import type { GroupBase, Props, SingleValue, MultiValue, InputProps } from "react-select";
+import type {
+  GroupBase,
+  Props,
+  SingleValue,
+  MultiValue,
+  InputProps,
+} from "react-select";
 import ReactSelect, { components } from "react-select";
 
 import { useClientTranslation } from "@ttbs/i18n";
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { Label } from "../inputs/Label";
 import { getReactSelectProps } from "./selectTheme";
 
-const InputComponent = <Option, IsMulti extends boolean, Group extends GroupBase<Option>>({
+const InputComponent = <
+  Option,
+  IsMulti extends boolean,
+  Group extends GroupBase<Option>
+>({
   inputClassName,
   ...props
 }: InputProps<Option, IsMulti, Group>) => {
@@ -115,7 +125,11 @@ export const Select = <
             state.isSelected && "bg-emphasis text-default",
             innerClassNames?.option
           ),
-        placeholder: (state) => cn("text-muted", state.isFocused && variant !== "checkbox" && "hidden"),
+        placeholder: (state) =>
+          cn(
+            "text-muted",
+            state.isFocused && variant !== "checkbox" && "hidden"
+          ),
         dropdownIndicator: () => "text-default",
         control: (state) =>
           cn(
@@ -130,9 +144,16 @@ export const Select = <
             props.isDisabled && "bg-subtle",
             innerClassNames?.control
           ),
-        singleValue: () => cn("text-emphasis placeholder:text-muted", innerClassNames?.singleValue),
+        singleValue: () =>
+          cn(
+            "text-emphasis placeholder:text-muted",
+            innerClassNames?.singleValue
+          ),
         valueContainer: () =>
-          cn("text-emphasis placeholder:text-muted flex gap-1", innerClassNames?.valueContainer),
+          cn(
+            "text-emphasis placeholder:text-muted flex gap-1",
+            innerClassNames?.valueContainer
+          ),
         multiValue: () =>
           cn(
             "bg-subtle text-default rounded-md py-1.5 px-2 flex items-center text-sm leading-tight",
@@ -143,8 +164,13 @@ export const Select = <
             "rounded-md bg-default text-sm leading-4 text-default mt-1 border border-subtle",
             innerClassNames?.menu
           ),
-        groupHeading: () => "leading-none text-xs uppercase text-default pl-2.5 pt-4 pb-2",
-        menuList: () => cn("scroll-bar scrollbar-track-w-20 rounded-md", innerClassNames?.menuList),
+        groupHeading: () =>
+          "leading-none text-xs uppercase text-default pl-2.5 pt-4 pb-2",
+        menuList: () =>
+          cn(
+            "scroll-bar scrollbar-track-w-20 rounded-md",
+            innerClassNames?.menuList
+          ),
         indicatorsContainer: (state) =>
           cn(
             state.selectProps.menuIsOpen
@@ -178,13 +204,23 @@ export const SelectField = function SelectField<
   } & SelectProps<Option, IsMulti, Group>
 ) {
   const { t } = useClientTranslation();
-  const { label = t(props.name || ""), containerClassName, labelProps, className, ...passThrough } = props;
+  const {
+    label = t(props.name || ""),
+    containerClassName,
+    labelProps,
+    className,
+    ...passThrough
+  } = props;
   const id = useId();
   return (
     <div className={cn(containerClassName)}>
       <div className={cn(className)}>
         {!!label && (
-          <Label htmlFor={id} {...labelProps} className={cn(props.error && "text-error")}>
+          <Label
+            htmlFor={id}
+            {...labelProps}
+            className={cn(props.error && "text-error")}
+          >
             {label}
           </Label>
         )}
@@ -214,15 +250,18 @@ export function SelectWithValidation<
     return value.value || "";
   });
 
-  const setHiddenInputValue = React.useCallback((value: MultiValue<Option> | SingleValue<Option>) => {
-    let hiddenInputValue = "";
-    if (value instanceof Array) {
-      hiddenInputValue = value.map((val) => val.value).join(",");
-    } else {
-      hiddenInputValue = value?.value || "";
-    }
-    _setHiddenInputValue(hiddenInputValue);
-  }, []);
+  const setHiddenInputValue = React.useCallback(
+    (value: MultiValue<Option> | SingleValue<Option>) => {
+      let hiddenInputValue = "";
+      if (value instanceof Array) {
+        hiddenInputValue = value.map((val) => val.value).join(",");
+      } else {
+        hiddenInputValue = value?.value || "";
+      }
+      _setHiddenInputValue(hiddenInputValue);
+    },
+    []
+  );
 
   React.useEffect(() => {
     if (!value) {

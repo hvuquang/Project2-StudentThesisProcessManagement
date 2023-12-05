@@ -15,8 +15,8 @@ import {
 import DropDown from "./DropDown";
 
 const Navbar = () => {
-  const [isActive, setActive] = useState(false)
-  const highlightNav = ["bg-gray-900", "text-white"]
+  const [isActive, setActive] = useState(false);
+  const highlightNav = ["bg-gray-900", "text-white"];
   const activeNavItem = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent<Element, MouseEvent>>
   ) => {
@@ -27,24 +27,29 @@ const Navbar = () => {
 
   const navigation = [
     {
-      name: "Dashboard",
-      href: "/pages/dashboard",
-      id: "dashboard"
+      name: "Trang chủ",
+      href: "/pages/homepage",
+      id: "homepage",
     },
     {
       name: "Đăng ký Khóa luận Tốt Nghiệp",
       href: "/pages/registerthesis",
-      id: "registerthesis"
+      id: "registerthesis",
     },
     {
       name: "Nộp ĐTĐT",
       href: "/pages/changetopic",
-      id: "changetopic"
+      id: "changetopic",
     },
     {
       name: "Tiến trình thực hiện",
       href: "/pages/process",
-      id: "process"
+      id: "process",
+    },
+    {
+      name: "Dashboard",
+      href: "/pages/dashboard",
+      id: "dashboard",
     },
   ];
 
@@ -53,16 +58,16 @@ const Navbar = () => {
     const navitem = document.getElementsByClassName("navbar-items");
     for (let i = 0; i < navitem.length; i++) {
       //cast to HTMLElement
-      const item = navitem[i] as HTMLElement
+      const item = navitem[i] as HTMLElement;
       item.classList.remove(...highlightNav);
     }
   }
 
   function handleClick(event: React.MouseEvent) {
-    deactiveNavItem()
-    const navitem_id = document.getElementById(event.currentTarget.id)
+    deactiveNavItem();
+    const navitem_id = document.getElementById(event.currentTarget.id);
     //spread operator
-    navitem_id!.classList.add(...highlightNav)
+    navitem_id!.classList.add(...highlightNav);
   }
 
   return (
@@ -161,9 +166,11 @@ const Navbar = () => {
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium navbar-items"
                       id={item.id}
                       onClick={handleClick}
-                    >{item.name}</Link>
+                    >
+                      {item.name}
+                    </Link>
                   ))}
-                </div>  
+                </div>
               </div>
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">

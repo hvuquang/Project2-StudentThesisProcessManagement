@@ -2,7 +2,7 @@ import type { Table } from "@tanstack/react-table";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
-import { cn } from "@ttbs/lib/cn";
+import { cn } from "@/lib/utils";
 import { useDebounce } from "@ttbs/lib/hooks";
 
 import { Button } from "../../button";
@@ -23,7 +23,9 @@ import type { DataTableFilterOption } from "../types";
 interface DataTableAdvancedFilterItemProps<TData> {
   table: Table<TData>;
   selectedOption: DataTableFilterOption<TData>;
-  setSelectedOptions: React.Dispatch<React.SetStateAction<DataTableFilterOption<TData>[]>>;
+  setSelectedOptions: React.Dispatch<
+    React.SetStateAction<DataTableFilterOption<TData>[]>
+  >;
 }
 
 export function DataTableAdvancedFilterItem<TData>({
@@ -40,11 +42,19 @@ export function DataTableAdvancedFilterItem<TData>({
 
   const selectedValues =
     selectedOption.items.length > 0
-      ? Array.from(new Set(table.getColumn(String(selectedOption.value))?.getFilterValue() as string[]))
+      ? Array.from(
+          new Set(
+            table
+              .getColumn(String(selectedOption.value))
+              ?.getFilterValue() as string[]
+          )
+        )
       : [];
 
   const filterVarieties =
-    selectedOption.items.length > 0 ? ["is", "is not"] : ["contains", "does not contain", "is", "is not"];
+    selectedOption.items.length > 0
+      ? ["is", "is not"]
+      : ["contains", "does not contain", "is", "is not"];
 
   const [filterVariety, setFilterVariety] = React.useState(filterVarieties[0]);
 
@@ -70,7 +80,9 @@ export function DataTableAdvancedFilterItem<TData>({
     if (debounceValue.length > 0) {
       router.push(
         `${pathname}?${createQueryString({
-          [selectedOption.value]: `${debounceValue}${debounceValue.length > 0 ? `.${filterVariety}` : ""}`,
+          [selectedOption.value]: `${debounceValue}${
+            debounceValue.length > 0 ? `.${filterVariety}` : ""
+          }`,
         })}`,
         {
           scroll: false,
@@ -104,7 +116,9 @@ export function DataTableAdvancedFilterItem<TData>({
         >
           {value.length > 0 || selectedValues.length > 0 ? (
             <>
-              <span className="font-medium capitalize">{selectedOption.label}:</span>
+              <span className="font-medium capitalize">
+                {selectedOption.label}:
+              </span>
               {selectedValues.length > 0 ? (
                 <span className="ml-1">
                   {selectedValues.length > 2
@@ -153,17 +167,23 @@ export function DataTableAdvancedFilterItem<TData>({
                   scroll: false,
                 }
               );
-              setSelectedOptions((prev) => prev.filter((item) => item.value !== selectedOption.value));
+              setSelectedOptions((prev) =>
+                prev.filter((item) => item.value !== selectedOption.value)
+              );
             }}
           >
             <TrashIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
         {selectedOption.items.length > 0 ? (
-          table.getColumn(selectedOption.value ? String(selectedOption.value) : "") && (
+          table.getColumn(
+            selectedOption.value ? String(selectedOption.value) : ""
+          ) && (
             <DataTableFacetedFilter
               key={String(selectedOption.value)}
-              column={table.getColumn(selectedOption.value ? String(selectedOption.value) : "")}
+              column={table.getColumn(
+                selectedOption.value ? String(selectedOption.value) : ""
+              )}
               title={selectedOption.label}
               options={selectedOption.items}
               variant="command"
