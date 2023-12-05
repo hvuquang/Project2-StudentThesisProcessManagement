@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button/button";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -146,6 +147,8 @@ const SignIn = () => {
           </Link>
           {/* <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
         </p>
+        {/* <Button variant={"default"}>Log out</Button>
+        <Button variant="outline">Button</Button> */}
       </form>
     </div>
   );

@@ -10,6 +10,8 @@ import {
   User,
 } from "@nextui-org/react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button/button";
 
 const DropDown = () => {
   return (
@@ -84,14 +86,22 @@ const DropDown = () => {
             </Link>
           </DropdownItem>
           <DropdownItem key="logout" color="danger">
-            <Link
-              href="/pages/signin"
+            {/* <Link
+              href="/"
               className="block px-4 py-2 text-sm text-gray-700"
               role="menuitem"
               id="user-menu-item-2"
+              onClick={() => signOut()}
             >
               Log out
-            </Link>
+            </Link> */}
+            <Button
+              onClick={() => signOut()}
+              className="block px-4 py-2 text-sm text-gray-700"
+              variant={"link"}
+            >
+              log out
+            </Button>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
