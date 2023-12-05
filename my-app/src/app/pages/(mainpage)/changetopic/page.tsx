@@ -5,12 +5,10 @@ import React, { useState } from "react";
 const ChangeTopic = () => {
   const { data: session } = useSession();
   const [requestList, setRequestList] = useState([
-    <div className="flex bg-white p-3 m-auto mt-4 rounded-xl border-slate-300 justify-around">
-      <p>Tên đề tài mới</p>
-      <p>Giáo viên hướng dẫn</p>
-      <p>Trạng thái</p>
-    </div>,
-    <div className="flex bg-white p-3 m-auto mt-4 rounded-xl border-slate-300 justify-around">
+    <div
+      key={1}
+      className="flex bg-white p-3 m-auto mt-4 rounded-xl border-slate-300 justify-around"
+    >
       <p>Tên đề tài mới</p>
       <p>Giáo viên hướng dẫn</p>
       <p>Trạng thái</p>

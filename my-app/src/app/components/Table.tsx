@@ -26,12 +26,14 @@ export default function CustomTable() {
   function handleClick() {
     const table = document.getElementById("thesis-table");
     const table_body = document.getElementById("thesis-table-body");
-    var htmlStr = <TableRow key="1">
-    <TableCell>Tony Reichert</TableCell>
-    <TableCell>CEO</TableCell>
-    <TableCell>Active</TableCell>
-    </TableRow>
-    table_body!.innerHTML += htmlStr
+    var htmlStr = (
+      <TableRow key="1">
+        <TableCell>Tony Reichert</TableCell>
+        <TableCell>CEO</TableCell>
+        <TableCell>Active</TableCell>
+      </TableRow>
+    );
+    table_body!.innerHTML += htmlStr;
     // table!.innerHTML = `<p>Hello</p>`
   }
   return (
