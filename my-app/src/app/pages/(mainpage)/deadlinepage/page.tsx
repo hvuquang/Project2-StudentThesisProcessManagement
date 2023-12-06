@@ -1,11 +1,12 @@
 import React from "react";
 import DashboardLayout from "../layout-for-dashboard/layout-for-dashboard";
+import { DeadlineList } from "@/app/components/deadline-lists";
 
 const DeadlinePage = () => {
   return (
     <DashboardLayout>
       <div>
-        <h1>DeadlinePage</h1>
+        <DeadlineList />
       </div>
     </DashboardLayout>
   );

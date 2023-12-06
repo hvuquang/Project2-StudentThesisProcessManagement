@@ -5,12 +5,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
 
-import { useClientTranslation } from "@ttbs/i18n";
+// import { useClientTranslation } from "@ttbs/i18n";
 import { cn } from "@/lib/utils";
-import type { SVGComponent } from "@ttbs/types/SVGComponent";
+// import type { SVGComponent } from "@ttbs/types/SVGComponent";
 
-import type { ButtonProps } from "../../components/button";
-import { Button } from "../../components/button";
+// import type { ButtonProps } from "../../ui/button-group/ButtonGroup";
+// import { Button } from "../../components/button";
+import { Button } from "../button/Button";
 
 export type DialogProps = React.ComponentProps<
   (typeof DialogPrimitive)["Root"]
@@ -91,7 +92,7 @@ type DialogContentProps = React.ComponentProps<
   description?: string | JSX.Element | null;
   closeText?: string;
   actionDisabled?: boolean;
-  Icon?: SVGComponent | React.ElementType;
+  Icon?: "SVGComponent" | React.ElementType;
   enableOverflow?: boolean;
 };
 
@@ -136,7 +137,7 @@ export const DialogContent = React.forwardRef<
             <div className="flex">
               {Icon && (
                 <div className="bg-emphasis mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full">
-                  <Icon className="text-emphasis h-4 w-4" />
+                  {/* <Icon className="text-emphasis h-4 w-4" /> */}
                 </div>
               )}
               <div className="w-full">
@@ -210,10 +211,10 @@ export function DialogClose(
     children?: ReactNode;
     onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     disabled?: boolean;
-    color?: ButtonProps["color"];
+    // color?: ButtonProps["color"];
   } & React.ComponentProps<typeof Button>
 ) {
-  const { t } = useClientTranslation();
+  // const { t } = useClientTranslation();
   return (
     <DialogPrimitive.Close asChild {...props.dialogCloseProps}>
       {/* This will require the i18n string passed in */}
@@ -222,7 +223,7 @@ export function DialogClose(
         color={props.color || "minimal"}
         {...props}
       >
-        {props.children ? props.children : t("Close")}
+        {/* {props.children ? props.children : t("Close")} */}
       </Button>
     </DialogPrimitive.Close>
   );

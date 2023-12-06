@@ -4,7 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { PropsWithChildren, ReactElement } from "react";
 import React from "react";
 
-import { useClientTranslation } from "@ttbs/i18n";
+// import { useClientTranslation } from "@ttbs/i18n";
 
 import { AlertCircle, Check } from "../icons";
 import { DialogClose, DialogContent } from "./Dialog";
@@ -22,15 +22,17 @@ export type ConfirmationDialogContentProps = {
   variety?: "danger" | "warning" | "success";
 } & ConfirmBtnType;
 
-export function ConfirmationDialogContent(props: PropsWithChildren<ConfirmationDialogContentProps>) {
-  const { t } = useClientTranslation();
+export function ConfirmationDialogContent(
+  props: PropsWithChildren<ConfirmationDialogContentProps>
+) {
+  // const { t } = useClientTranslation();
   const {
     title,
     variety,
     confirmBtn = null,
-    confirmBtnText = t("confirm"),
-    cancelBtnText = t("cancel"),
-    loadingText = t("loading"),
+    // confirmBtnText = t("confirm"),
+    // cancelBtnText = t("cancel"),
+    // loadingText = t("loading"),
     isLoading = false,
     onConfirm,
     children,
@@ -71,11 +73,15 @@ export function ConfirmationDialogContent(props: PropsWithChildren<ConfirmationD
         {confirmBtn ? (
           confirmBtn
         ) : (
-          <DialogClose color="primary" loading={isLoading} onClick={(e) => onConfirm && onConfirm(e)}>
-            {isLoading ? loadingText : confirmBtnText}
+          <DialogClose
+            color="primary"
+            // loading={isLoading}
+            onClick={(e) => onConfirm && onConfirm(e)}
+          >
+            {/* {isLoading ? loadingText : confirmBtnText} */}
           </DialogClose>
         )}
-        <DialogClose disabled={isLoading}>{cancelBtnText}</DialogClose>
+        {/* <DialogClose disabled={isLoading}>{cancelBtnText}</DialogClose> */}
       </div>
     </DialogContent>
   );

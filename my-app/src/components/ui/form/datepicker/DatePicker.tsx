@@ -1,44 +1,43 @@
-import "react-calendar/dist/Calendar.css";
-// import PrimitiveDatePicker from 'react-date-picker/dist/entry.nostyle';
-import PrimitiveDatePicker from "react-date-picker";
-import "react-date-picker/dist/DatePicker.css";
+"use client";
+
+import * as React from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button/Button";
+import { Calendar } from "@/components/ui/calendar/Calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-import { Calendar } from "../../icons";
-import "./DatePicker.css";
+export function DatePickerDemo() {
+  const [date, setDate] = React.useState<Date>();
 
-type Props = {
-  date: Date;
-  onDatesChange?: ((date: Value) => void) | undefined;
-  className?: string;
-  disabled?: boolean;
-  minDate?: Date;
-};
-
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-const DatePicker = ({
-  minDate,
-  disabled,
-  date,
-  onDatesChange,
-  className,
-}: Props) => {
   return (
-    <PrimitiveDatePicker
-      className={cn("focus:ring-primary-500 h-9 sm:text-sm", className)}
-      calendarClassName="border rounded-md dark:text-black bg-primary border-default hover:border-emphasis"
-      clearIcon={null}
-      calendarIcon={<Calendar className="text-subtle h-5 w-5 rounded-md" />}
-      value={date}
-      minDate={minDate}
-      disabled={disabled}
-      onChange={onDatesChange}
-    />
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[280px] justify-start text-left font-normal",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
-};
-
-export default DatePicker;
+}

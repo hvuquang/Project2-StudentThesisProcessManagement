@@ -1,11 +1,28 @@
+"use client";
 import BreadcrumbDashboard from "@/app/components/breadcrumb";
+import { ButtonDashboard } from "@/app/components/button-dashboard";
+import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import React from "react";
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+type Layout = {
+  children?: React.ReactNode;
+  className?: string;
+};
+
+const DashboardLayout = ({ children, className }: Layout) => {
+  const { data: session } = useSession();
   return (
-    <div>
+    <div className={cn("w-full min-h-screen ", className)}>
       <BreadcrumbDashboard />
-      <div>{children}</div>
+      {session?.user?.account_type === "gv" && <ButtonDashboard />}
+      <div
+        className={cn(
+          "rounded-sm border border-gray-300 mx-10 my-5 min-h-screen p-3"
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 };
