@@ -6,3 +6,8 @@ export type DeadlineItemObj = {
   file?: string;
   ma_gv: string;
 };
+
+export type Topic = {
+  topic_name: string;
+  topic_description: string;
+};

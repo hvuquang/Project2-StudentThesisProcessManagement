@@ -13,8 +13,10 @@ import {
   User,
 } from "@nextui-org/react";
 import DropDown from "./DropDown";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const [isActive, setActive] = useState(false);
   const highlightNav = ["bg-gray-900", "text-white"];
   const activeNavItem = (
@@ -25,7 +27,7 @@ const Navbar = () => {
     alert(event.target);
   };
 
-  const navigation = [
+  const NAVIGATION_ITEMS = [
     {
       name: "Trang chủ",
       href: "/pages/homepage",
@@ -33,6 +35,34 @@ const Navbar = () => {
     },
     {
       name: "Đăng ký Khóa luận Tốt Nghiệp",
+      href: "/pages/registerthesis",
+      id: "registerthesis",
+    },
+    {
+      name: "Nộp ĐTĐT",
+      href: "/pages/changetopic",
+      id: "changetopic",
+    },
+    {
+      name: "Tiến trình thực hiện",
+      href: "/pages/process",
+      id: "process",
+    },
+    {
+      name: "Dashboard",
+      href: "/pages/dashboard",
+      id: "dashboard",
+    },
+  ];
+
+  const NAVIGATION_ITEMS_TEACHER = [
+    {
+      name: "Trang chủ",
+      href: "/pages/homepage",
+      id: "homepage",
+    },
+    {
+      name: "Đăng ký Đề Tài",
       href: "/pages/registerthesis",
       id: "registerthesis",
     },
@@ -160,16 +190,28 @@ const Navbar = () => {
                   >
                     Tiến trình thực hiện
                   </Link> */}
-                  {navigation.map((item) => (
-                    <Link
-                      href={item.href}
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium navbar-items"
-                      id={item.id}
-                      onClick={handleClick}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  {session?.user?.account_type === "gv" &&
+                    NAVIGATION_ITEMS_TEACHER.map((item) => (
+                      <Link
+                        href={item.href}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium navbar-items"
+                        id={item.id}
+                        onClick={handleClick}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  {session?.user?.account_type === "sv" &&
+                    NAVIGATION_ITEMS.map((item) => (
+                      <Link
+                        href={item.href}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium navbar-items"
+                        id={item.id}
+                        onClick={handleClick}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
                 </div>
               </div>
             </div>

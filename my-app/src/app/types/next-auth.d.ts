@@ -14,6 +14,7 @@ export enum Role {
 declare module "next-auth" {
   interface User {
     // role?: Role;
+    _id?: string;
     email?: string;
     fullname?: string;
     account_type?: string;
@@ -36,6 +37,7 @@ declare module "next-auth/jwt" {
     account_type?: string;
     email?: string;
     fullname?: string;
+    _id?: string;
     // subscribed: boolean;
   }
 }

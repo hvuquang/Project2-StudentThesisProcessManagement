@@ -10,60 +10,36 @@ import {
   User,
 } from "@nextui-org/react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button/Button";
-
+import Image from "next/image";
 const DropDown = () => {
+  const { data: session } = useSession();
   return (
     <div className="flex items-center gap-4">
-      {/* <Dropdown placement="bottom-end">
+      <Dropdown
+        placement="bottom-start"
+        className="bg-white border-2 rounded-md"
+      >
         <DropdownTrigger>
-          <Avatar
-            isBordered
-            as="button"
-            className="transition-transform"
-            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-          />
-        </DropdownTrigger>
-        <DropdownMenu aria-label="Profile Actions" variant="flat">
-          <DropdownItem key="profile" className="h-14 gap-2">
-            <p className="font-semibold">Signed in as</p>
-            <p className="font-semibold">zoey@example.com</p>
-          </DropdownItem>
-          <DropdownItem key="settings">
-            My Settings
-          </DropdownItem>
-          <DropdownItem key="team_settings">Team Settings</DropdownItem>
-          <DropdownItem key="analytics">
-            Analytics
-          </DropdownItem>
-          <DropdownItem key="system">System</DropdownItem>
-          <DropdownItem key="configurations">Configurations</DropdownItem>
-          <DropdownItem key="help_and_feedback">
-            Help & Feedback
-          </DropdownItem>
-          <DropdownItem key="logout" color="danger">
-            Log Out
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown> */}
-      <Dropdown placement="bottom-start">
-        <DropdownTrigger>
-          <User
-            as="button"
-            avatarProps={{
-              isBordered: true,
-              src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-            }}
-            className="transition-transform text-white"
-            description="20521419@gm.uit.edu.vn"
-            name="Vũ Quang Huy"
-          />
+          <div className="flex text-white gap-2">
+            <Image
+              src={"/profile.png"}
+              alt="profile-image"
+              className="transition-transform text-white"
+              width={50}
+              height={50}
+            />
+            <div>
+              <p>{session?.user?.fullname}</p>
+              <p>{session?.user?.email}</p>
+            </div>
+          </div>
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
           <DropdownItem key="profile" className="h-14 gap-2">
             <p className="font-bold">Signed in as</p>
-            <p className="font-bold">20521419@gm.uit.edu.vn</p>
+            <p className="font-bold">{session?.user?.email}</p>
           </DropdownItem>
           <DropdownItem key="settings">
             <Link
@@ -86,21 +62,12 @@ const DropDown = () => {
             </Link>
           </DropdownItem>
           <DropdownItem key="logout" color="danger">
-            {/* <Link
-              href="/"
-              className="block px-4 py-2 text-sm text-gray-700"
-              role="menuitem"
-              id="user-menu-item-2"
-              onClick={() => signOut()}
-            >
-              Log out
-            </Link> */}
             <Button
               onClick={() => signOut()}
-              className="block px-4 py-2 text-sm text-gray-700"
+              className="block px-4 py-2 text-sm text-red-500"
               variant={"link"}
             >
-              log out
+              Log out
             </Button>
           </DropdownItem>
         </DropdownMenu>

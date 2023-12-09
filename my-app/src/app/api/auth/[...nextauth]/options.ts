@@ -49,6 +49,7 @@ export const options: NextAuthOptions = {
       //   if (user?.account_type) token.account_type = user.account_type;
       // }
       if (user) {
+        token._id = user._id;
         token.account_type = user.account_type;
         token.email = user.email;
         token.fullname = user.fullname;
@@ -68,6 +69,7 @@ export const options: NextAuthOptions = {
       // Send properties to the client, like an access_token from a provider.
       // session.user = token!;
       if (token && session.user) {
+        session.user._id = token._id;
         session.user.account_type = token.account_type;
         session.user.email = token.email;
         session.user.fullname = token.fullname;
