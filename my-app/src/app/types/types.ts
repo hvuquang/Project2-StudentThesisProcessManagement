@@ -7,7 +7,15 @@ export type DeadlineItemObj = {
   ma_gv: string;
 };
 
+export type Teacher = {
+  fullname?: string;
+  email?: string;
+  phonenumber?: string;
+};
+
 export type Topic = {
   topic_name: string;
   topic_description: string;
+  ma_gv?: Teacher;
+  trang_thai?: string;
 };

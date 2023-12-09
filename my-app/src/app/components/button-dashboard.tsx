@@ -25,7 +25,11 @@ import { Topic } from "../types/types";
 import { useSession } from "next-auth/react";
 import { Toaster, toast } from "sonner";
 
-export const ButtonDashboard = () => {
+type ButtonDashboard = {
+  className?: string;
+};
+
+export const ButtonDashboard = (className: ButtonDashboard) => {
   const { data: teacherSession } = useSession();
   let [topic, setTopic] = useState<Topic>({
     topic_name: "",
@@ -71,9 +75,9 @@ export const ButtonDashboard = () => {
   // handlePathname();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return (
-    <div>
+    <div className={cn(className)}>
       {page === "deadlinepage" && (
-        <div className="min-w-screen ml-10 mt-3 flex gap-10">
+        <div className="min-w-screen ml-10 mt-3 flex gap-5">
           <Dialog>
             <DialogTrigger>
               <Button className="w-20" variant={"default"}>
@@ -170,17 +174,17 @@ export const ButtonDashboard = () => {
             </DialogContent>
           </Dialog>
 
-          <Button className="w-20" variant={"outline"}>
+          {/* <Button className="w-20" variant={"outline"}>
             Xóa
-          </Button>
+          </Button> */}
         </div>
       )}
       {page === "registerthesis" && (
-        <div className="min-w-screen ml-10 mt-3 flex gap-10">
+        <div className="min-w-screen ml-10 my-3 flex justify-end">
           <Dialog>
             <DialogTrigger>
-              <Button className="w-20" variant={"default"}>
-                Thêm
+              <Button className="min-w-20 w-max" variant={"default"}>
+                Thêm đề tài KLTN
               </Button>
             </DialogTrigger>
             <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
@@ -221,9 +225,9 @@ export const ButtonDashboard = () => {
             </DialogContent>
           </Dialog>
 
-          <Button className="w-20" variant={"outline"}>
+          {/* <Button className="w-20" variant={"outline"}>
             Xóa
-          </Button>
+          </Button> */}
         </div>
       )}
     </div>

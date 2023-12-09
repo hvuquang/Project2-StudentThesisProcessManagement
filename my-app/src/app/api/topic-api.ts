@@ -14,3 +14,78 @@ export async function POSTaddTopic(topic: Topic, teacher_id: string) {
     throw err;
   }
 }
+
+export async function DELETEdeleteTopic(topic_id: string) {
+  try {
+    await axios.delete(url + `v1/topic/deleteTopic/${topic_id}`);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETsearchTopic(search_string: string) {
+  try {
+    await axios.put(url + `v1/topic/searchTopic`, {
+      search_string: search_string,
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETgetAllTopic() {
+  try {
+    const response = await axios.get(url + `v1/topic/getAllTopic`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETgetASingleTopic(topic_id: string) {
+  try {
+    await axios.get(url + `v1/topic/getASingleTopic/${topic_id}`);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function PUTupdateTopic(topic: Topic, topic_id: string) {
+  try {
+    const response = await axios.post(
+      url + `v1/topic/updateTopic/${topic_id}`,
+      {
+        topic_name: topic.topic_name,
+        topic_description: topic.topic_description,
+      }
+    );
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function POSTregisterTopic(student_id: string, topic_id: string) {
+  try {
+    await axios.post(
+      url + `v1/registerTopic/registerTopic/` + student_id + "&" + topic_id
+    );
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETsearchRegisterTopic() {
+  try {
+    await axios.get(url + `v1/registerTopic/searchRegisterTopic`);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETgetAllRegisterTopic() {
+  try {
+    await axios.get(url + `v1/registerTopic/getAllRegisterTopic`);
+  } catch (err) {
+    throw err;
+  }
+}
