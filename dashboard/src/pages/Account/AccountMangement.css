@@ -91,12 +91,13 @@
 }
 
 .pagination {
-    position: absolute;
+    position: fixed;
     bottom: 30px;
+    left: -380px;
     /* hoặc bất kỳ khoảng cách nào phù hợp */
     display: flex;
     justify-content: center;
-    width: 98%;
+    width: 100%;
 }
 
 .page-button {

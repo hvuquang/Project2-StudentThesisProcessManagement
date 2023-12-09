@@ -1,0 +1,98 @@
+/* ReportManagement.css */
+
+.report-management {
+    padding: 20px;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 1250px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* CSS cho dòng chẵn */
+.report-table tbody tr:nth-child(even) {
+    background-color: #2F6BFF;
+    color: white;
+}
+
+/* CSS cho dòng lẻ */
+.report-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+    /* Màu trắng */
+}
+
+.file-icon {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    /* Màu xanh dương */
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    font-size: 24px;
+}
+
+.file-icon:hover {
+    background-color: #2980b9;
+    /* Màu xanh dương nhạt khi hover */
+}
+
+.file-icon::before {
+    content: '\f1c6';
+    /* Unicode của biểu tượng file RAR */
+    font-family: 'Font Awesome 5 Free';
+    /* Thay thế bằng font-family của icon của bạn */
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.report-table th,
+.report-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.report-table th {
+    background-color: #f2f2f2;
+}
+
+.report-pagination {
+    position: fixed;
+    display: flex;
+    bottom: 30px;
+    justify-content: center;
+}
+
+.report-pagination button {
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.report-pagination button:hover {
+    background-color: #2980b9;
+}

@@ -70,17 +70,56 @@ const reportController = {
             res.status(500).json(error);
         }
     },
-    getMiddleReport: async (req, res) => {
+    // getSubmitMiddleReport: async (req, res) => {
+    //     try {
+    //         const middleReports = await registerTopicModel
+    //             .find({ submit_reports: { $exists: true, $ne: [] } })
+    //             .populate({
+    //                 path: 'submit_reports',
+    //                 populate: {
+    //                     path: 'ma_sv'
+    //                 },
+    //             });
+
+    //         res.status(200).json(middleReports);
+    //     } catch (error) {
+    //         res.status(500).json({ error: error.message });
+    //     }
+    // },
+    getSubmitReport: async (req, res) => {
         try {
+            const page = req.params.page; // Trang được yêu cầu (mặc định là trang 1)
+            const perPage = 6; // Số tài khoản mỗi trang
+
             const middleReports = await registerTopicModel
                 .find({ submit_reports: { $exists: true, $ne: [] } })
                 .populate({
                     path: 'submit_reports',
-                });
+                    populate: {
+                        path: 'ma_sv'
+                    },
+                }).skip((page - 1) * perPage) // Bỏ qua các tài khoản đã lấy trước đó
+                .limit(perPage); // Giới hạn số lượng tài khoản được trả về
 
             res.status(200).json(middleReports);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json(error);
+        }
+    },
+    pageNumber: async (req, res) => {
+        try {
+            const countSubmitMiddleReport = await registerTopicModel
+                .find({ submit_reports: { $exists: true, $ne: [] } })
+                .populate({
+                    path: 'submit_reports',
+                    populate: {
+                        path: 'ma_sv'
+                    },
+                }).countDocuments();
+            const pageNumber = Math.ceil(countSubmitMiddleReport / 6);
+            res.status(200).json(pageNumber)
+        } catch (error) {
+            res.status(500).json(error)
         }
     }
 };
