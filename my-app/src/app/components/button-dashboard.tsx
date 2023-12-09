@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation";
 import { POSTaddTopic } from "../api/topic-api";
 import { Topic } from "../types/types";
 import { useSession } from "next-auth/react";
+import { Toaster, toast } from "sonner";
 
 export const ButtonDashboard = () => {
   const { data: teacherSession } = useSession();
@@ -30,11 +31,17 @@ export const ButtonDashboard = () => {
     topic_name: "",
     topic_description: "",
   });
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(teacherSession?.user);
-    if (teacherSession?.user)
-      POSTaddTopic(topic, teacherSession.user._id || "error");
+    if (teacherSession?.user) {
+      await POSTaddTopic(topic, teacherSession.user._id || "error")
+        .then(() => {
+          toast.success("Add topic successfully");
+        })
+        .catch((err) => {
+          toast.error("Invalid Information");
+        });
+    }
     return;
   };
 
@@ -177,7 +184,7 @@ export const ButtonDashboard = () => {
               </Button>
             </DialogTrigger>
             <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
-              <DialogHeader title="Tạo deadline" />
+              <DialogHeader title="Đăng ký đề tài KLTN" />
               <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">

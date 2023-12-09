@@ -5,15 +5,12 @@ import { Topic } from "../types/types";
 
 export async function POSTaddTopic(topic: Topic, teacher_id: string) {
   try {
-    const response = await axios
-      .post(url + `v1/topic/addTopic/${teacher_id}`, {
-        topic_name: topic.topic_name,
-        topic_description: topic.topic_description,
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
+    const response = await axios.post(url + `v1/topic/addTopic/${teacher_id}`, {
+      topic_name: topic.topic_name,
+      topic_description: topic.topic_description,
+    });
   } catch (err) {
-    console.log(err);
+    // * Re-throw the error to make sure the promise is rejected
+    throw err;
   }
 }

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import AuthProvider from "./context/AuthProvider";
 import { Suspense } from "react";
 import Loading from "./components/loading/loading";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Suspense fallback={<Loading />}>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster />
         </Suspense>
       </body>
     </html>
