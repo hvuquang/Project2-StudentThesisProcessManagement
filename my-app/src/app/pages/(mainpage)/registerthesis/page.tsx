@@ -1,4 +1,5 @@
 import { CustomTable } from "@/app/components/Table";
+import { QueryClient } from "@tanstack/react-query";
 import React from "react";
 
 const RegisterThesis = () => {

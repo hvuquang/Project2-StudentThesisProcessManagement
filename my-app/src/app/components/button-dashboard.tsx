@@ -24,27 +24,47 @@ import { POSTaddTopic } from "../api/topic-api";
 import { Topic } from "../types/types";
 import { useSession } from "next-auth/react";
 import { Toaster, toast } from "sonner";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 type ButtonDashboard = {
   className?: string;
 };
 
 export const ButtonDashboard = (className: ButtonDashboard) => {
+  const queryClient = useQueryClient();
   const { data: teacherSession } = useSession();
+  const addTopicMutation = useMutation({
+    mutationFn: POSTaddTopic,
+    onSuccess: () => {
+      toast.success("Add topic successfully");
+      queryClient.invalidateQueries({ queryKey: ["topics"] });
+    },
+    onError: () => {
+      toast.error("Invalid Information");
+    },
+  });
   let [topic, setTopic] = useState<Topic>({
     topic_name: "",
     topic_description: "",
   });
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (teacherSession?.user) {
-      await POSTaddTopic(topic, teacherSession.user._id || "error")
-        .then(() => {
-          toast.success("Add topic successfully");
-        })
-        .catch((err) => {
-          toast.error("Invalid Information");
-        });
+      addTopicMutation.mutate({
+        topic: topic,
+        teacher_id: teacherSession.user._id || "",
+      });
+      // POSTaddTopic(topic, teacherSession.user._id || "")
+      //   .then(() => {
+      //     toast.success("Add topic successfully");
+      //   })
+      //   .catch((err) => {
+      //     toast.error("Invalid Information");
+      //   });
     }
     return;
   };
@@ -89,7 +109,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
               <form
                 action="POST"
                 className="grid gap-4 py-4"
-                onSubmit={handleSubmit}
+                // onSubmit={handleSubmit}
               >
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">

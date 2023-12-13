@@ -12,5 +12,6 @@ export const config = {
     "/pages/process",
     "/pages/registerthesis",
     "/pages/homepage",
+    "/pages/notificationpage",
   ],
 };

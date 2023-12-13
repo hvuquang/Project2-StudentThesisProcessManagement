@@ -10,9 +10,12 @@ import {
 } from "@/components/ui/table/TableNew";
 import { useSession } from "next-auth/react";
 import { ButtonDashboard } from "./button-dashboard";
-import { GETgetAllTopic } from "../api/topic-api";
+import { DELETEdeleteTopic, GETgetAllTopic } from "../api/topic-api";
 import { Topic } from "../types/types";
 import Link from "next/link";
+import axios from "axios";
+// import { useSession } from "next-auth/react";
+import { url } from "@/app/lib/constants";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,10 +25,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export function CustomTable({ className }: { className?: string }) {
+  const queryClient = useQueryClient();
+  const delTopicMutation = useMutation({
+    mutationFn: (topic_id: string) => {
+      return DELETEdeleteTopic(topic_id);
+    },
+    onSuccess: () => {
+      toast.success("Xóa thành công");
+      queryClient.invalidateQueries({ queryKey: ["topics"] });
+    },
+  });
+
   const { data: session } = useSession();
   const [topics, setTopics] = useState<Topic[]>([]);
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["topics"],
+    queryFn: GETgetAllTopic,
+  });
 
   const TABLE_HEAD_ITEMS = [
     {
@@ -49,25 +74,11 @@ export function CustomTable({ className }: { className?: string }) {
       title: "Chỉnh sửa",
     },
   ];
-
   //* for each item, if it not 4, it will be included in the new array
   const filteredTableHeadItems =
     session?.user?.account_type === "gv"
       ? TABLE_HEAD_ITEMS
       : TABLE_HEAD_ITEMS.filter((item) => item.key !== 4);
-
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const topicsData = await GETgetAllTopic();
-        setTopics(topicsData);
-        console.log(topicsData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchTopics();
-  }, []);
   return (
     <div className={cn("mx-auto", className)}>
       {session?.user?.account_type === "gv" && (
@@ -85,7 +96,7 @@ export function CustomTable({ className }: { className?: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {topics.map((topic) => (
+          {data?.map((topic: Topic) => (
             <TableRow key={topic.topic_name}>
               <TableCell className="text-center">{topic.topic_name}</TableCell>
               <TableCell className="text-center">
@@ -110,7 +121,12 @@ export function CustomTable({ className }: { className?: string }) {
                         {/* <DropdownMenuLabel>Chỉnh sửa</DropdownMenuLabel> */}
                         <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-white bg-red-500 hover:bg-red-600 focus:text-none focus:bg-red-600">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            delTopicMutation.mutate(topic._id ?? "");
+                          }}
+                          className="text-white bg-red-500 hover:bg-red-600 focus:text-none focus:bg-red-600"
+                        >
                           Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>

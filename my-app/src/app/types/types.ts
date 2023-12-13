@@ -14,6 +14,7 @@ export type Teacher = {
 };
 
 export type Topic = {
+  _id?: string;
   topic_name: string;
   topic_description: string;
   ma_gv?: Teacher;
