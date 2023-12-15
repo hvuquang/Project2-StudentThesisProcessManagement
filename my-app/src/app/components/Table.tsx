@@ -228,24 +228,32 @@ export function CustomTable({ className }: { className?: string }) {
                   </Dialog>
                 </div>
               </TableCell>
-              <TableCell className="text-center">
-                {topicItem.trang_thai === "Đã đăng ký" ? (
-                  topicItem.trang_thai
-                ) : (
-                  <Button
-                    type="submit"
-                    variant={"default"}
-                    onClick={() => {
-                      registerTopicMutation.mutate({
-                        student_id: session!.user?._id || "",
-                        topic_id: topicItem._id || "",
-                      });
-                    }}
-                  >
-                    Đăng ký
-                  </Button>
-                )}
-              </TableCell>
+              {session?.user?.account_type === "gv" && (
+                <TableCell className="text-center">
+                  {topicItem.trang_thai}
+                </TableCell>
+              )}
+              {session?.user?.account_type === "sv" && (
+                <TableCell className="text-center">
+                  {topicItem.trang_thai === "Đã đăng ký" ? (
+                    topicItem.trang_thai
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant={"default"}
+                      onClick={() => {
+                        registerTopicMutation.mutate({
+                          student_id: session!.user?._id || "",
+                          topic_id: topicItem._id || "",
+                        });
+                      }}
+                    >
+                      Đăng ký
+                    </Button>
+                  )}
+                </TableCell>
+              )}
+
               {/* <TableCell className="text-center">Chỉnh sửa</TableCell> */}
 
               <TableCell className="text-center">
