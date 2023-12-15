@@ -10,11 +10,23 @@ import {
 } from "@/components/ui/table/TableNew";
 import { useSession } from "next-auth/react";
 import { ButtonDashboard } from "./button-dashboard";
-import { DELETEdeleteTopic, GETgetAllTopic } from "../api/topic-api";
+import { Input } from "@/components/ui/form/inputs/input/Input";
+import {
+  DELETEdeleteTopic,
+  GETgetAllTopic,
+  PUTupdateTopic,
+} from "../api/topic-api";
 import { Topic } from "../types/types";
 import Link from "next/link";
 import axios from "axios";
 // import { useSession } from "next-auth/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { url } from "@/app/lib/constants";
 import {
   DropdownMenu,
@@ -32,6 +44,9 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button/Button";
+import { Label } from "@/components/ui/label/Label";
+import { Dropdown } from "@nextui-org/react";
 
 export function CustomTable({ className }: { className?: string }) {
   const queryClient = useQueryClient();
@@ -45,6 +60,19 @@ export function CustomTable({ className }: { className?: string }) {
     },
   });
 
+  const updateTopicMutation = useMutation({
+    mutationFn: (topic: Topic) => {
+      return PUTupdateTopic(topic);
+    },
+    onSuccess: () => {
+      toast.success("Update successfully");
+      queryClient.invalidateQueries({ queryKey: ["topics"] });
+    },
+    onError: (err) => {
+      toast.error("Error: " + err);
+    },
+  });
+  const [modal, setModal] = useState(false);
   const { data: session } = useSession();
   const [topics, setTopics] = useState<Topic[]>([]);
   const { isLoading, error, data } = useQuery({
@@ -52,6 +80,27 @@ export function CustomTable({ className }: { className?: string }) {
     queryFn: GETgetAllTopic,
   });
 
+  let [topic, setTopic] = useState<Topic>({
+    topic_name: "",
+    topic_description: "",
+    _id: "",
+  });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateTopicMutation.mutate(topic);
+    return;
+  };
+  const handleChange = (
+    topic_name?: string,
+    topic_description?: string,
+    topic_id?: string
+  ) => {
+    setTopic({
+      topic_name: topic_name ?? topic.topic_name,
+      topic_description: topic_description ?? topic.topic_description,
+      _id: topic_id,
+    });
+  };
   const TABLE_HEAD_ITEMS = [
     {
       key: 0,
@@ -82,10 +131,10 @@ export function CustomTable({ className }: { className?: string }) {
   return (
     <div className={cn("mx-auto", className)}>
       {session?.user?.account_type === "gv" && (
-        <ButtonDashboard className="justify-end" />
+        <ButtonDashboard className="justify-end " />
       )}
       {/* <div className="flex flex-col gap-3 m-auto pt-8"></div> */}
-      <Table className="mx-auto w-full text-default">
+      <Table className="mx-auto h-96 w-full text-default overflow-auto">
         <TableHeader className="[&_tr]:bg-info">
           <TableRow className=" text-center">
             {filteredTableHeadItems.map((item) => (
@@ -96,13 +145,17 @@ export function CustomTable({ className }: { className?: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((topic: Topic) => (
-            <TableRow key={topic.topic_name}>
-              <TableCell className="text-center">{topic.topic_name}</TableCell>
+          {data?.map((topicItem: Topic) => (
+            <TableRow key={topicItem._id}>
               <TableCell className="text-center">
-                {topic.ma_gv?.fullname}
+                {topicItem.topic_name}
               </TableCell>
-              <TableCell className="text-center">{topic.trang_thai}</TableCell>
+              <TableCell className="text-center">
+                {topicItem.ma_gv?.fullname}
+              </TableCell>
+              <TableCell className="text-center">
+                {topicItem.trang_thai}
+              </TableCell>
               <TableCell className="text-center">
                 <Link className="text-indigo-600 hover:underline" href="#">
                   Chi tiết
@@ -113,24 +166,96 @@ export function CustomTable({ className }: { className?: string }) {
 
               <TableCell className="text-center">
                 {session?.user?.account_type === "gv" &&
-                  topic.ma_gv?.email === session?.user?.email && (
+                  topicItem.ma_gv?.email === session?.user?.email && (
+                    <div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>Chỉnh sửa</DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          {/* <DropdownMenuItem> */}
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setTopic({
+                                topic_name: topicItem.topic_name,
+                                topic_description: topicItem.topic_description,
+                                _id: topicItem._id,
+                              });
+                              setModal(!modal);
+                            }}
+                          >
+                            Chỉnh sửa
+                          </DropdownMenuItem>
+                          {/* </DropdownMenuItem> */}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => {
+                              delTopicMutation.mutate(topicItem._id ?? "");
+                            }}
+                            className="text-white bg-red-500 hover:bg-red-600 focus:text-none focus:bg-red-600"
+                          >
+                            Xóa
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <Dialog
+                        key={topicItem._id}
+                        open={topicItem._id === topic._id && modal}
+                        onOpenChange={() => {
+                          setModal(!modal);
+                        }}
+                      >
+                        {/* <DialogTrigger>
+                            <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
+                          </DialogTrigger> */}
+                        <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
+                          <DialogHeader title="Cập nhật đề tài KLTN" />
+                          <form
+                            className="grid gap-4 py-4"
+                            onSubmit={(e) => handleSubmit(e)}
+                          >
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">
+                                Tên đề tài
+                              </Label>
+                              <Input
+                                id="name"
+                                defaultValue={topicItem.topic_name}
+                                className="col-span-3"
+                                onChange={(e) => {
+                                  handleChange(
+                                    e.target.value,
+                                    undefined,
+                                    topicItem._id ?? ""
+                                  );
+                                }}
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right">
+                                Nội dung đề tài
+                              </Label>
+                              <Input
+                                id="username"
+                                defaultValue={topicItem.topic_description}
+                                className="col-span-3"
+                                onChange={(e) => {
+                                  handleChange(
+                                    undefined,
+                                    e.target.value,
+                                    topicItem._id ?? ""
+                                  );
+                                }}
+                              />
+                            </div>
+                            <DialogFooter>
+                              <Button type="submit" variant={"secondary"}>
+                                Cập nhật đề tài
+                              </Button>
+                            </DialogFooter>
+                          </form>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     // <Button>Chỉnh sửa</Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>Chỉnh sửa</DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        {/* <DropdownMenuLabel>Chỉnh sửa</DropdownMenuLabel> */}
-                        <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => {
-                            delTopicMutation.mutate(topic._id ?? "");
-                          }}
-                          className="text-white bg-red-500 hover:bg-red-600 focus:text-none focus:bg-red-600"
-                        >
-                          Xóa
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   )}
               </TableCell>
             </TableRow>

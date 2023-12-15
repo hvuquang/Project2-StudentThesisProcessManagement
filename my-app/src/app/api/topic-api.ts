@@ -57,15 +57,12 @@ export async function GETgetASingleTopic(topic_id: string) {
   }
 }
 
-export async function PUTupdateTopic(topic: Topic, topic_id: string) {
+export async function PUTupdateTopic(topic: Topic) {
   try {
-    const response = await axios.post(
-      url + `v1/topic/updateTopic/${topic_id}`,
-      {
-        topic_name: topic.topic_name,
-        topic_description: topic.topic_description,
-      }
-    );
+    await axios.put(url + `v1/topic/updateTopic/${topic._id}`, {
+      topic_name: topic.topic_name,
+      topic_description: topic.topic_description,
+    });
   } catch (err) {
     throw err;
   }

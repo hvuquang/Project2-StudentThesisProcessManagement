@@ -58,13 +58,6 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
         topic: topic,
         teacher_id: teacherSession.user._id || "",
       });
-      // POSTaddTopic(topic, teacherSession.user._id || "")
-      //   .then(() => {
-      //     toast.success("Add topic successfully");
-      //   })
-      //   .catch((err) => {
-      //     toast.error("Invalid Information");
-      //   });
     }
     return;
   };
