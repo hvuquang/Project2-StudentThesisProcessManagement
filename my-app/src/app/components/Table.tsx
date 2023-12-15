@@ -48,6 +48,7 @@ import {
 import { Button } from "@/components/ui/button/Button";
 import { Label } from "@/components/ui/label/Label";
 import { Dropdown } from "@nextui-org/react";
+import { TextArea } from "@/components/ui/form";
 
 export function CustomTable({ className }: { className?: string }) {
   const queryClient = useQueryClient();
@@ -176,9 +177,56 @@ export function CustomTable({ className }: { className?: string }) {
               </TableCell>
 
               <TableCell className="text-center">
-                <Link className="text-indigo-600 hover:underline" href="#">
-                  Chi tiết
-                </Link>
+                <div className="text-indigo-600 hover:underline">
+                  <Dialog>
+                    <DialogTrigger>Chi tiết</DialogTrigger>
+                    <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
+                      <DialogHeader title="Cập nhật đề tài KLTN" />
+                      <form
+                        className="grid gap-4 py-4"
+                        onSubmit={(e) => handleSubmit(e)}
+                      >
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Tên đề tài
+                          </Label>
+                          <Input
+                            readOnly
+                            id="name"
+                            defaultValue={topicItem.topic_name}
+                            className="col-span-3"
+                            onChange={(e) => {
+                              handleChange(
+                                e.target.value,
+                                undefined,
+                                topicItem._id ?? ""
+                              );
+                            }}
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="username" className="text-right">
+                            Nội dung đề tài
+                          </Label>
+
+                          <Input
+                            readOnly
+                            id="username"
+                            defaultValue={topicItem.topic_description}
+                            className="col-span-3"
+                            onChange={(e) => {
+                              handleChange(
+                                undefined,
+                                e.target.value,
+                                topicItem._id ?? ""
+                              );
+                            }}
+                          />
+                        </div>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </TableCell>
               <TableCell className="text-center">
                 {topicItem.trang_thai === "Đã đăng ký" ? (

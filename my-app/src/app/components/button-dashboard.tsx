@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar/Calendar";
 import { usePathname } from "next/navigation";
 import { POSTaddTopic } from "../api/topic-api";
-import { Topic } from "../types/types";
+import { Topic, Notification } from "../types/types";
 import { useSession } from "next-auth/react";
 import { Toaster, toast } from "sonner";
 import {
@@ -29,6 +29,8 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import FileInput from "./file-input";
+import { POSTaddNotification } from "../api/notification-api";
 
 type ButtonDashboard = {
   className?: string;
@@ -47,12 +49,34 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       toast.error("Invalid Information");
     },
   });
+  const addNotification = useMutation({
+    mutationFn: POSTaddNotification,
+    onSuccess: () => {
+      toast.success("Thêm thông báo thành công");
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+    onError: () => {
+      toast.error("Lỗi. Vui lòng kiểm tra lại");
+    },
+  });
   let [topic, setTopic] = useState<Topic>({
     topic_name: "",
     topic_description: "",
   });
+  const [notification, setNotification] = useState<Notification>({
+    title: "",
+    file: null,
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (page === "notificationpage") {
+      addNotification.mutate({
+        title: notification.title,
+        file: notification.file,
+      });
+      return;
+    }
     if (teacherSession?.user) {
       addTopicMutation.mutate({
         topic: topic,
@@ -62,7 +86,18 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     return;
   };
 
-  const handleChange = (topic_name: string, topic_description: string) => {
+  const handleChange = (
+    topic_name: string,
+    topic_description: string,
+    file?: FileList
+  ) => {
+    if (page === "notificationpage") {
+      setNotification({
+        title: topic_name,
+        file: file,
+      });
+      return;
+    }
     setTopic({
       topic_name: topic_name,
       topic_description: topic_description,
@@ -81,10 +116,26 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     if (pageName === "registerthesis") {
       setPage("registerthesis");
     }
+    if (pageName === "notificationpage") {
+      setPage("notificationpage");
+    }
   };
   useEffect(() => {
     handlePathname();
   }, []);
+  const handleFilesChange = (files: FileList | null) => {
+    // Do something with the selected files
+    if (files) {
+      const fileNames = Array.from(files).map((file) => file.name);
+      setNotification({
+        title: notification.title ?? "",
+        file: files,
+      });
+      console.log("Selected Files:", fileNames);
+    } else {
+      console.log("No files selected");
+    }
+  };
   // handlePathname();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return (
@@ -232,6 +283,58 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                 <DialogFooter>
                   <Button type="submit" variant={"secondary"}>
                     THÊM
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          {/* <Button className="w-20" variant={"outline"}>
+            Xóa
+          </Button> */}
+        </div>
+      )}
+      {page === "notificationpage" && (
+        <div className="min-w-screen ml-10 my-3 flex justify-end">
+          <Dialog>
+            <DialogTrigger>
+              <Button className="min-w-20 w-max" variant={"default"}>
+                Thêm thông báo
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
+              <DialogHeader title="Đăng ký đề tài KLTN" />
+              <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Nội dung tiêu đề
+                  </Label>
+                  <Input
+                    id="name"
+                    defaultValue="Pedro Duarte"
+                    className="col-span-3"
+                    onChange={(e) => {
+                      handleChange(
+                        e.target.value,
+                        "",
+                        notification.file || undefined
+                      );
+                    }}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    File
+                  </Label>
+                  <FileInput onFilesChange={handleFilesChange} />
+                </div>
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    variant={"secondary"}
+                    onClick={handleSubmit}
+                  >
+                    Thêm thông báo
                   </Button>
                 </DialogFooter>
               </form>

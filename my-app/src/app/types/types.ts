@@ -20,3 +20,8 @@ export type Topic = {
   ma_gv?: Teacher;
   trang_thai?: string;
 };
+
+export type Notification = {
+  title?: string;
+  file?: FileList | null;
+};

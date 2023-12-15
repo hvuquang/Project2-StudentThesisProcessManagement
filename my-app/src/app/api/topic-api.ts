@@ -88,7 +88,10 @@ export async function GETsearchRegisterTopic() {
 
 export async function GETgetAllRegisterTopic() {
   try {
-    await axios.get(url + `v1/registerTopic/getAllRegisterTopic`);
+    const response = await axios.get(
+      url + `v1/registerTopic/getAllRegisterTopic`
+    );
+    return response.data;
   } catch (err) {
     throw err;
   }

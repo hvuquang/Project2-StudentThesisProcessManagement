@@ -1,9 +1,27 @@
 "use client";
+import { GETgetAllRegisterTopic } from "@/app/api/topic-api";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ChangeTopic = () => {
   const { data: session } = useSession();
+  const [registeredTopic, setRegisteredTopic] = useState([]);
+  const [topic, setTopic] = useState({});
+  useEffect(() => {
+    const getTopic = async () => {
+      await GETgetAllRegisterTopic().then((res) => {
+        setRegisteredTopic(res);
+      });
+    };
+    getTopic();
+  }, []);
+
+  let topic1 = registeredTopic.filter((item) => {
+    // if (item.ma_sv._id === session?.user?._id) {
+    //   return item.id_topic
+    // }
+  });
+
   const [requestList, setRequestList] = useState([
     <div
       key={1}

@@ -15,12 +15,12 @@ const DashboardLayout = ({ children, className }: Layout) => {
   return (
     <div className={cn("w-full min-h-screen ", className)}>
       <BreadcrumbDashboard />
-      {session?.user?.account_type === "gv" && <ButtonDashboard />}
       <div
         className={cn(
           "rounded-sm border border-gray-300 mx-10 my-5 min-h-screen p-3"
         )}
       >
+        {session?.user?.account_type === "gv" && <ButtonDashboard />}
         {children}
       </div>
     </div>
