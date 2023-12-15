@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/form/inputs/input/Input";
 import {
   DELETEdeleteTopic,
   GETgetAllTopic,
+  POSTregisterTopic,
   PUTupdateTopic,
 } from "../api/topic-api";
 import { Topic } from "../types/types";
@@ -72,6 +73,26 @@ export function CustomTable({ className }: { className?: string }) {
       toast.error("Error: " + err);
     },
   });
+
+  const registerTopicMutation = useMutation({
+    mutationFn: ({
+      student_id,
+      topic_id,
+    }: {
+      student_id: string;
+      topic_id: string;
+    }) => {
+      return POSTregisterTopic(student_id, topic_id);
+    },
+    onSuccess: () => {
+      toast.success("Đăng ký thành công");
+      queryClient.invalidateQueries({ queryKey: ["topics"] });
+    },
+    onError: (err) => {
+      toast.error("Đăng ký thất bại: " + err);
+    },
+  });
+
   const [modal, setModal] = useState(false);
   const { data: session } = useSession();
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -134,7 +155,7 @@ export function CustomTable({ className }: { className?: string }) {
         <ButtonDashboard className="justify-end " />
       )}
       {/* <div className="flex flex-col gap-3 m-auto pt-8"></div> */}
-      <Table className="mx-auto h-96 w-full text-default overflow-auto">
+      <Table className="mx-auto h-96 w-full text-default overflow-auto mt-5">
         <TableHeader className="[&_tr]:bg-info">
           <TableRow className=" text-center">
             {filteredTableHeadItems.map((item) => (
@@ -153,15 +174,30 @@ export function CustomTable({ className }: { className?: string }) {
               <TableCell className="text-center">
                 {topicItem.ma_gv?.fullname}
               </TableCell>
-              <TableCell className="text-center">
-                {topicItem.trang_thai}
-              </TableCell>
+
               <TableCell className="text-center">
                 <Link className="text-indigo-600 hover:underline" href="#">
                   Chi tiết
                 </Link>
               </TableCell>
-
+              <TableCell className="text-center">
+                {topicItem.trang_thai === "Đã đăng ký" ? (
+                  topicItem.trang_thai
+                ) : (
+                  <Button
+                    type="submit"
+                    variant={"default"}
+                    onClick={() => {
+                      registerTopicMutation.mutate({
+                        student_id: session!.user?._id || "",
+                        topic_id: topicItem._id || "",
+                      });
+                    }}
+                  >
+                    Đăng ký
+                  </Button>
+                )}
+              </TableCell>
               {/* <TableCell className="text-center">Chỉnh sửa</TableCell> */}
 
               <TableCell className="text-center">
@@ -255,8 +291,23 @@ export function CustomTable({ className }: { className?: string }) {
                         </DialogContent>
                       </Dialog>
                     </div>
-                    // <Button>Chỉnh sửa</Button>
                   )}
+                {/* {session?.user?.account_type === "sv" && (
+                  <div>
+                    <Button
+                      type="submit"
+                      variant={"default"}
+                      onClick={() => {
+                        registerTopicMutation.mutate({
+                          student_id: session.user?._id || "",
+                          topic_id: topicItem._id || "",
+                        });
+                      }}
+                    >
+                      Đăng ký
+                    </Button>
+                  </div>
+                )} */}
               </TableCell>
             </TableRow>
           ))}
