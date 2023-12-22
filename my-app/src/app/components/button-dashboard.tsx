@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar/Calendar";
 import { usePathname } from "next/navigation";
 import { POSTaddTopic } from "../api/topic-api";
-import { Topic, Notification } from "../types/types";
+import { Topic, Notification, DeadlineItemObj } from "../types/types";
 import { useSession } from "next-auth/react";
 import { Toaster, toast } from "sonner";
 import {
@@ -31,6 +31,7 @@ import {
 } from "@tanstack/react-query";
 import FileInput from "./file-input";
 import { POSTaddNotification } from "../api/notification-api";
+import { POSTaddDeadline } from "../api/deadline-api";
 
 type ButtonDashboard = {
   className?: string;
@@ -59,7 +60,19 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       toast.error("Lỗi. Vui lòng kiểm tra lại");
     },
   });
-  let [topic, setTopic] = useState<Topic>({
+
+  const addDeadline = useMutation({
+    mutationFn: POSTaddDeadline,
+    onSuccess: () => {
+      toast.success("Tạo deadline thành công");
+      queryClient.invalidateQueries({ queryKey: ["deadlines"] });
+    },
+    onError: () => {
+      toast.error("Lỗi. Vui lòng kiểm tra lại");
+    },
+  });
+
+  const [topic, setTopic] = useState<Topic>({
     topic_name: "",
     topic_description: "",
   });
@@ -68,16 +81,28 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     file: null,
   });
 
+  const [deadline, setDeadline] = useState<DeadlineItemObj>({
+    tieu_de: "",
+    noi_dung: "",
+    ngay_bat_dau: "",
+    ngay_ket_thuc: "",
+    ma_gv: "",
+  });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (page === "notificationpage") {
+    if (page === "deadlinepage" && teacherSession?.user) {
+      addDeadline.mutate({
+        deadline: deadline,
+        teacher_id: teacherSession.user._id || "",
+      });
+      return;
+    } else if (page === "notificationpage") {
       addNotification.mutate({
         tieu_de: notification.tieu_de,
         file: notification.file,
       });
       return;
-    }
-    if (teacherSession?.user) {
+    } else if (teacherSession?.user) {
       addTopicMutation.mutate({
         topic: topic,
         teacher_id: teacherSession.user._id || "",
@@ -87,14 +112,27 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
   };
 
   const handleChange = (
-    topic_name: string,
-    topic_description: string,
-    file?: FileList
+    topic_name?: string,
+    topic_description?: string,
+    file?: FileList,
+    deadline_title?: string,
+    deadline_content?: string,
+    deadline_start?: string,
+    deadline_end?: string
   ) => {
     if (page === "notificationpage") {
       setNotification({
         tieu_de: topic_name,
         file: file,
+      });
+      return;
+    }
+    if (page === "deadlinepage") {
+      setDeadline({
+        tieu_de: deadline_title,
+        noi_dung: deadline_content,
+        // ngay_bat_dau: deadline_start,
+        // ngay_ket_thuc: deadline_end,
       });
       return;
     }
@@ -137,24 +175,33 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     }
   };
   // handlePathname();
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [startDate, setStartDate] = React.useState<Date | undefined>(
+    new Date()
+  );
+  const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  useEffect(() => {
+    let start = startDate?.toISOString();
+    let end = endDate?.toDateString();
+    setDeadline({
+      tieu_de: deadline.tieu_de,
+      noi_dung: deadline.noi_dung,
+      ngay_bat_dau: start,
+      ngay_ket_thuc: end,
+    });
+  }, [startDate, endDate]);
   return (
     <div className={cn(className)}>
       {page === "deadlinepage" && (
-        <div className="min-w-screen ml-10 mt-3 flex gap-5">
+        <div className="min-w-screen ml-10 my-3 flex justify-end">
           <Dialog>
             <DialogTrigger>
-              <Button className="w-20" variant={"default"}>
-                Thêm
+              <Button className="min-w-20 w-max" variant={"default"}>
+                Tạo deadline cho sinh viên
               </Button>
             </DialogTrigger>
             <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
               <DialogHeader title="Tạo deadline" />
-              <form
-                action="POST"
-                className="grid gap-4 py-4"
-                // onSubmit={handleSubmit}
-              >
+              <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">
                     Tiêu đề deadline
@@ -163,6 +210,17 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                     id="name"
                     defaultValue="Pedro Duarte"
                     className="col-span-3"
+                    onChange={(e) => {
+                      handleChange(
+                        "",
+                        "",
+                        undefined,
+                        e.target.value,
+                        deadline.noi_dung,
+                        deadline.ngay_bat_dau,
+                        deadline.ngay_ket_thuc
+                      );
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -173,6 +231,17 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                     id="username"
                     defaultValue="@peduarte"
                     className="col-span-3"
+                    onChange={(e) => {
+                      handleChange(
+                        "",
+                        "",
+                        undefined,
+                        deadline.tieu_de,
+                        e.target.value,
+                        deadline.ngay_bat_dau,
+                        deadline.ngay_ket_thuc
+                      );
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -185,18 +254,22 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                         variant={"outline"}
                         className={cn(
                           "justify-start text-left font-normal col-span-3",
-                          !date && "text-muted-foreground"
+                          !startDate && "text-muted-foreground"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        {startDate ? (
+                          format(startDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
-                        selected={date}
-                        onSelect={setDate}
+                        selected={startDate}
+                        onSelect={setStartDate}
                         initialFocus
                       />
                     </PopoverContent>
@@ -212,29 +285,33 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                         variant={"outline"}
                         className={cn(
                           "justify-start text-left font-normal col-span-3",
-                          !date && "text-muted-foreground"
+                          !endDate && "text-muted-foreground"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        {endDate ? (
+                          format(endDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
-                        selected={date}
-                        onSelect={setDate}
+                        selected={endDate}
+                        onSelect={setEndDate}
                         initialFocus
                       />
                     </PopoverContent>
                   </Popover>
                 </div>
+                <DialogFooter>
+                  <Button type="submit" variant={"secondary"}>
+                    THÊM
+                  </Button>
+                </DialogFooter>
               </form>
-              <DialogFooter>
-                <Button type="submit" variant={"secondary"}>
-                  THÊM
-                </Button>
-              </DialogFooter>
             </DialogContent>
           </Dialog>
 
@@ -314,11 +391,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                     defaultValue="Pedro Duarte"
                     className="col-span-3"
                     onChange={(e) => {
-                      handleChange(
-                        e.target.value,
-                        "",
-                        notification.file || undefined
-                      );
+                      handleChange(e.target.value, "", undefined);
                     }}
                   />
                 </div>

@@ -43,11 +43,11 @@ const Navbar = () => {
       href: "/pages/changetopic",
       id: "changetopic",
     },
-    {
-      name: "Tiến trình thực hiện",
-      href: "/pages/process",
-      id: "process",
-    },
+    // {
+    //   name: "Tiến trình thực hiện",
+    //   href: "/pages/process",
+    //   id: "process",
+    // },
     {
       name: "Dashboard",
       href: "/pages/dashboard",
@@ -71,11 +71,11 @@ const Navbar = () => {
       href: "/pages/changetopic",
       id: "changetopic",
     },
-    {
-      name: "Tiến trình thực hiện",
-      href: "/pages/process",
-      id: "process",
-    },
+    // {
+    //   name: "Tiến trình thực hiện",
+    //   href: "/pages/process",
+    //   id: "process",
+    // },
     {
       name: "Dashboard",
       href: "/pages/dashboard",

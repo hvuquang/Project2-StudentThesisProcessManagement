@@ -1,10 +1,10 @@
 export type DeadlineItemObj = {
-  tieu_de: string;
-  noi_dung: string;
-  ngay_bat_dau: string;
-  ngay_ket_thuc: string;
+  tieu_de?: string;
+  noi_dung?: string;
+  ngay_bat_dau?: string;
+  ngay_ket_thuc?: string;
   file?: string;
-  ma_gv: string;
+  ma_gv?: string;
 };
 
 export type Teacher = {
@@ -15,8 +15,8 @@ export type Teacher = {
 
 export type Topic = {
   _id?: string;
-  topic_name: string;
-  topic_description: string;
+  topic_name?: string;
+  topic_description?: string;
   ma_gv?: Teacher;
   trang_thai?: string;
 };
