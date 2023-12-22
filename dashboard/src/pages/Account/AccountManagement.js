@@ -3,17 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import './AccountMangement.css';
-import Popup from '../components/Popup/Popup';
-import Toast from '../components/Toast/Toast';
+import Popup from '../../components/Popup/Popup';
+import Toast from '../../components/Toast/Toast';
 
 
 function AccountManagement() {
     const [accounts, setAccounts] = useState();
     const [accountType, setAccountType] = useState('sv');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [showToast, setShowToast] = useState(false);
     const [pages,setPages] = useState(0);
-    const [selectedPage, setSelectedPage] = useState(1)
+    const [selectedPage, setSelectedPage] = useState(1);
+    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:8000/v1/account/pageNumber/'+accountType).then(res=>setPages(res.data))
@@ -42,14 +42,6 @@ function AccountManagement() {
 
     const handleClosePopup = () => {
         setIsPopupOpen(false);
-
-        // Hiển thị Toast khi đóng Popup
-        setShowToast(true);
-
-        // Ẩn Toast sau 2 giây
-        setTimeout(() => {
-            setShowToast(false);
-        }, 2000);
     };
 
     const selectedPageHandle = (indexPage)=>{
@@ -95,6 +87,8 @@ function AccountManagement() {
                     accountType={accountType}
                     onAddAccount={handleAddAccount}
                     onClosePopup={handleClosePopup}
+                    showToast={showToast}
+                    setShowToast={setShowToast}
                 />
             )}
             <table className="account-table">

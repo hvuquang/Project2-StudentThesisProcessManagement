@@ -1,7 +1,7 @@
 /* Sidebar.css */
 
 .sidebar {
-    width: 250px;
+    min-width: 250px;
     /* Độ rộng của sidebar */
     height: 100%;
     /* Chiều cao tối đa của sidebar */
@@ -18,7 +18,7 @@
     width: 120px;
     height: 120px;
     object-fit: contain;
-    margin-left: 40px;
+    margin-left: 55px;
 }
 
 /* Thiết lập kiểu cho các mục menu */

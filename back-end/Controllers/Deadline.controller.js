@@ -1,5 +1,6 @@
 const deadlineModel = require("../Models/Deadline.model");
 const registerTopicModel = require("../Models/RegisterTopic.model")
+const submitDeadlineModel = require("../Models/SubmitDeadline.model")
 
 const deadlineController = {
     addDeadline: async (req, res) => {
@@ -44,22 +45,49 @@ const deadlineController = {
             const { ma_sv, id_deadline } = req.params;
             const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
 
-            // Lọc các phần tử khác id_deadline và gán lại vào mảng id_deadlines
             const index = registerTopic.id_deadlines.indexOf(id_deadline);
             if (index !== -1) {
                 registerTopic.id_deadlines.splice(index, 1);
             }
 
-            // Đẩy id_deadline vào mảng done_deadline
-            registerTopic.deadlines_done.push(id_deadline);
+            const newSubmitDeadline = new submitDeadlineModel({
+                ma_sv: ma_sv
+            })
 
-            // Lưu thay đổi vào cơ sở dữ liệu
+            if (req.file) {
+                newSubmitDeadline.file = req.file.path;
+            }
+
+            registerTopic.deadlines_done.push(id_deadline);
+            registerTopic.submit_deadlines.push(newSubmitDeadline._id);
+
+            await newSubmitDeadline.save();
             await registerTopic.save();
 
             res.status(200).json(registerTopic);
         } catch (error) {
             res.status(500).json(error);
         }
+    //     try {
+    //         const { ma_sv, id_deadline } = req.params;
+    //         const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
+
+    //         // Lọc các phần tử khác id_deadline và gán lại vào mảng id_deadlines
+    //         const index = registerTopic.id_deadlines.indexOf(id_deadline);
+    //         if (index !== -1) {
+    //             registerTopic.id_deadlines.splice(index, 1);
+    //         }
+
+    //         // Đẩy id_deadline vào mảng done_deadline
+    //         registerTopic.deadlines_done.push(id_deadline);
+
+    //         // Lưu thay đổi vào cơ sở dữ liệu
+    //         await registerTopic.save();
+
+    //         res.status(200).json(registerTopic);
+    //     } catch (error) {
+    //         res.status(500).json(error);
+    //     }
     }
 };
 

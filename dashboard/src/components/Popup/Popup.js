@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import './Popup.css'; // Tùy chỉnh CSS cho popup
 import axios from "axios";
+import Toast from "../Toast/Toast"
 
 
-function Popup({ isOpen, onClose, accountType, onAddAccount }) {
+function Popup({ isOpen, onClose, accountType, onAddAccount, showToast, setShowToast }) {
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    // const [showToast, setShowToast] = useState(false);
     const pass = "123456"
 
     const handleSave = () => {
@@ -22,6 +24,13 @@ function Popup({ isOpen, onClose, accountType, onAddAccount }) {
             if (res.status === 201) {
                 // setErrorMessage('Tạo tài khoản thành công.');
                 onAddAccount(res.data); // Cập nhật danh sách tài khoản
+                // Hiển thị Toast khi đóng Popup
+                setShowToast(true);
+
+                // Ẩn Toast sau 2 giây
+                setTimeout(() => {
+                    setShowToast(false);
+                }, 2000);
             } else {
                 alert('Có lỗi xảy ra khi tạo tài khoản.');
             }

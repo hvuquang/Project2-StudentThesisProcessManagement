@@ -27,7 +27,23 @@ const registerTopicSchema = new mongoose.Schema({
     deadlines_done: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Deadline",
-    }]
+    }],
+    reports: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Report",
+    }],
+    reports_done: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Report",
+    }],
+    submit_reports: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "SubmitReport",
+    }],
+    submit_deadlines: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "SubmitDeadline",
+    }],
 },{timestamps: true});
 
 const registerTopic = mongoose.model("RegisterTopic",registerTopicSchema);
