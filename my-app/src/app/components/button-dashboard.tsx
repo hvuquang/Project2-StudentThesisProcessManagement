@@ -64,7 +64,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     topic_description: "",
   });
   const [notification, setNotification] = useState<Notification>({
-    title: "",
+    tieu_de: "",
     file: null,
   });
 
@@ -72,7 +72,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     e.preventDefault();
     if (page === "notificationpage") {
       addNotification.mutate({
-        title: notification.title,
+        tieu_de: notification.tieu_de,
         file: notification.file,
       });
       return;
@@ -93,7 +93,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
   ) => {
     if (page === "notificationpage") {
       setNotification({
-        title: topic_name,
+        tieu_de: topic_name,
         file: file,
       });
       return;
@@ -128,7 +128,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     if (files) {
       const fileNames = Array.from(files).map((file) => file.name);
       setNotification({
-        title: notification.title ?? "",
+        tieu_de: notification.tieu_de ?? "",
         file: files,
       });
       console.log("Selected Files:", fileNames);

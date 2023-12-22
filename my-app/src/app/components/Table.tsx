@@ -18,8 +18,6 @@ import {
   PUTupdateTopic,
 } from "../api/topic-api";
 import { Topic } from "../types/types";
-import Link from "next/link";
-import axios from "axios";
 // import { useSession } from "next-auth/react";
 import {
   Dialog,
@@ -47,8 +45,6 @@ import {
 } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button/Button";
 import { Label } from "@/components/ui/label/Label";
-import { Dropdown } from "@nextui-org/react";
-import { TextArea } from "@/components/ui/form";
 
 export function CustomTable({ className }: { className?: string }) {
   const queryClient = useQueryClient();
@@ -96,7 +92,6 @@ export function CustomTable({ className }: { className?: string }) {
 
   const [modal, setModal] = useState(false);
   const { data: session } = useSession();
-  const [topics, setTopics] = useState<Topic[]>([]);
   const { isLoading, error, data } = useQuery({
     queryKey: ["topics"],
     queryFn: GETgetAllTopic,

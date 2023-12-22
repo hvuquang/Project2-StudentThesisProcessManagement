@@ -22,6 +22,8 @@ export type Topic = {
 };
 
 export type Notification = {
-  title?: string;
-  file?: FileList | null;
+  _id?: string;
+  tieu_de?: string;
+  file?: FileList | null | string;
+  createdAt?: string;
 };
