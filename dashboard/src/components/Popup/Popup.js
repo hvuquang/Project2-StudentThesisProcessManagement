@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import './Popup.css'; // Tùy chỉnh CSS cho popup
 import axios from "axios";
-import Toast from "../Toast/Toast"
+import common from "../../common/Common.json"
 
 
 function Popup({ isOpen, onClose, accountType, onAddAccount, showToast, setShowToast }) {
@@ -13,7 +13,7 @@ function Popup({ isOpen, onClose, accountType, onAddAccount, showToast, setShowT
     const pass = "123456"
 
     const handleSave = () => {
-        axios.post('http://localhost:8000/v1/account/createAccount',{
+        axios.post(common.url_v1+'account/createAccount',{
             fullname: fullname,
             pass: pass,
             email: email,
