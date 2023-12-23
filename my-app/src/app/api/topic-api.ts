@@ -97,3 +97,19 @@ export async function GETgetAllRegisterTopic() {
     throw err;
   }
 }
+
+export async function PUTStudentRequestChangeTopic({
+  student_id,
+  new_topic_id,
+}: {
+  student_id: string;
+  new_topic_id: string;
+}) {
+  try {
+    await axios.put(
+      url + `v1/registerTopic/changeTopic/${student_id}&${new_topic_id}`
+    );
+  } catch (err) {
+    throw err;
+  }
+}

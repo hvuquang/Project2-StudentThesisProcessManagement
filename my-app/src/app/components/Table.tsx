@@ -13,11 +13,13 @@ import { ButtonDashboard } from "./button-dashboard";
 import { Input } from "@/components/ui/form/inputs/input/Input";
 import {
   DELETEdeleteTopic,
+  GETgetAllRegisterTopic,
   GETgetAllTopic,
   POSTregisterTopic,
+  PUTStudentRequestChangeTopic,
   PUTupdateTopic,
 } from "../api/topic-api";
-import { Topic } from "../types/types";
+import { RegisteredTopic, Topic } from "../types/types";
 // import { useSession } from "next-auth/react";
 import {
   Dialog,
@@ -90,12 +92,41 @@ export function CustomTable({ className }: { className?: string }) {
     },
   });
 
+  const studentRequestChangeTopic = useMutation({
+    mutationFn: ({
+      student_id,
+      new_topic_id,
+    }: {
+      student_id: string;
+      new_topic_id: string;
+    }) => {
+      return PUTStudentRequestChangeTopic({ student_id, new_topic_id });
+    },
+    onSuccess: () => {
+      toast.success("Gửi yêu cầu ĐTĐT thành công");
+      // queryClient.invalidateQueries({ queryKey: ["topics"] });
+    },
+    onError: (err) => {
+      toast.error("Gửi yêu cầu ĐTĐT thất bại: " + err);
+    },
+  });
+
+  const [studentTopic, setStudentTopic] = useState<RegisteredTopic>();
   const [modal, setModal] = useState(false);
   const { data: session } = useSession();
-  const { isLoading, error, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["topics"],
     queryFn: GETgetAllTopic,
   });
+
+  const allRegisterTopic = useQuery({
+    queryKey: ["registeredTopics"],
+    queryFn: GETgetAllRegisterTopic,
+  });
+
+  useEffect(() => {
+    console.log("from dashboard: " + allRegisterTopic.data);
+  }, [allRegisterTopic.data]);
 
   let [topic, setTopic] = useState<Topic>({
     topic_name: "",
@@ -118,6 +149,68 @@ export function CustomTable({ className }: { className?: string }) {
       _id: topic_id,
     });
   };
+  let firstTopic: RegisteredTopic = {};
+  const renderRegisterTopic = () => {
+    if (session?.user?.account_type === "gv") return <></>;
+    let matchingTopics = [];
+    if (allRegisterTopic && allRegisterTopic.data) {
+      matchingTopics = allRegisterTopic.data.filter((item: RegisteredTopic) => {
+        return item.ma_sv?._id === session?.user?._id;
+      });
+    }
+    if (matchingTopics.length > 0) {
+      firstTopic = matchingTopics[0];
+      // setStudentTopic(firstTopic);
+      return (
+        <div className="bg-white p-5 my-2 rounded-xl border-slate-300 text-black">
+          <p>Đề tài đang thực hiện: {matchingTopics[0].topic_name}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderButton = (topicItem: Topic) => {
+    if (firstTopic.topic_name) {
+      console.log(firstTopic);
+      if (firstTopic.id_topic === topicItem._id) {
+        return <p className="text-green-500">Đang đăng ký</p>;
+      } else if (topicItem.trang_thai === "Đã đăng ký")
+        return <p>Đã đăng ký</p>;
+      return (
+        <Button
+          type="submit"
+          variant={"default"}
+          onClick={() => {
+            studentRequestChangeTopic.mutate({
+              student_id: session!.user?._id || "",
+              new_topic_id: topicItem._id || "",
+            });
+          }}
+        >
+          ĐTĐT
+        </Button>
+      );
+    } else if (topicItem.trang_thai === "Đã đăng ký") {
+      return <p>Đã đăng ký</p>;
+    } else {
+      return (
+        <Button
+          type="submit"
+          variant={"default"}
+          onClick={() => {
+            registerTopicMutation.mutate({
+              student_id: session!.user?._id || "",
+              topic_id: topicItem._id || "",
+            });
+          }}
+        >
+          Đăng ký
+        </Button>
+      );
+    }
+  };
+
   const TABLE_HEAD_ITEMS = [
     {
       key: 0,
@@ -150,6 +243,7 @@ export function CustomTable({ className }: { className?: string }) {
       {session?.user?.account_type === "gv" && (
         <ButtonDashboard className="justify-end " />
       )}
+      {renderRegisterTopic()}
       {/* <div className="flex flex-col gap-3 m-auto pt-8"></div> */}
       <Table className="mx-auto h-96 w-full text-default overflow-auto mt-5">
         <TableHeader className="[&_tr]:bg-info">
@@ -230,7 +324,7 @@ export function CustomTable({ className }: { className?: string }) {
               )}
               {session?.user?.account_type === "sv" && (
                 <TableCell className="text-center">
-                  {topicItem.trang_thai === "Đã đăng ký" ? (
+                  {/* {topicItem.trang_thai === "Đã đăng ký" ? (
                     topicItem.trang_thai
                   ) : (
                     <Button
@@ -245,7 +339,8 @@ export function CustomTable({ className }: { className?: string }) {
                     >
                       Đăng ký
                     </Button>
-                  )}
+                  )} */}
+                  {renderButton(topicItem)}
                 </TableCell>
               )}
 

@@ -1,9 +1,12 @@
 "use client";
+import { GETgetAllRegisterTopic } from "@/app/api/topic-api";
 import BreadcrumbDashboard from "@/app/components/breadcrumb";
 import { ButtonDashboard } from "@/app/components/button-dashboard";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { da } from "date-fns/locale";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 type Layout = {
   children?: React.ReactNode;
@@ -12,6 +15,7 @@ type Layout = {
 
 const DashboardLayout = ({ children, className }: Layout) => {
   const { data: session } = useSession();
+
   return (
     <div className={cn("w-full min-h-screen ", className)}>
       <BreadcrumbDashboard />
