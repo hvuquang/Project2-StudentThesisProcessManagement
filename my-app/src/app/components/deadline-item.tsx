@@ -40,9 +40,11 @@ import { useSession } from "next-auth/react";
 export const DeadlineItem = ({
   id,
   status,
+  deadlineObj,
 }: {
-  id: string;
+  id?: string;
   status: string;
+  deadlineObj?: DeadlineItemObj;
 }) => {
   const ROUTER = useRouter();
   const { data: session } = useSession();
@@ -55,8 +57,12 @@ export const DeadlineItem = ({
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   useEffect(() => {
     async function fetchData() {
+      if (status === "normal") {
+        setStartDate(new Date(deadlineObj?.ngay_bat_dau as string));
+        setEndDate(new Date(deadlineObj?.ngay_ket_thuc as string));
+        return;
+      }
       const res = await GETgetDeadlineByID(id);
-      console.log("DeadlineItem:" + res);
       setDeadlineItem(res);
       setStartDate(new Date(res.ngay_bat_dau));
       setEndDate(new Date(res.ngay_ket_thuc));
@@ -92,7 +98,7 @@ export const DeadlineItem = ({
     if (session?.user) {
       updateStatusDeadline.mutate({
         studentID: session?.user?._id as string,
-        deadlineID: id,
+        deadlineID: id as string,
         file: file as File,
       });
     }
@@ -116,7 +122,9 @@ export const DeadlineItem = ({
         <Dialog>
           <DialogTrigger>
             <p className="text-indigo-500 hover:underline">
-              {deadlineItem?.tieu_de}
+              {status === "normal"
+                ? deadlineObj?.tieu_de
+                : deadlineItem?.tieu_de}
             </p>
           </DialogTrigger>
           <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
@@ -129,7 +137,11 @@ export const DeadlineItem = ({
                 <Input
                   readOnly
                   id="name"
-                  defaultValue={deadlineItem?.tieu_de}
+                  defaultValue={
+                    status === "normal"
+                      ? deadlineObj?.tieu_de
+                      : deadlineItem?.tieu_de
+                  }
                   className="col-span-3"
                   // onChange={(e) => {
                   //   handleChange(
@@ -151,7 +163,11 @@ export const DeadlineItem = ({
                 <Input
                   readOnly
                   id="username"
-                  defaultValue={deadlineItem?.noi_dung}
+                  defaultValue={
+                    status === "normal"
+                      ? deadlineObj?.noi_dung
+                      : deadlineItem?.noi_dung
+                  }
                   className="col-span-3"
                   // onChange={(e) => {
                   //   handleChange(
