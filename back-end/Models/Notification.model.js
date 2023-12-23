@@ -5,9 +5,12 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    file: {
+    noi_dung: {
         type: String,
         required: true
+    },
+    file: {
+        type: String
     }
 },{timestamps:true});
 

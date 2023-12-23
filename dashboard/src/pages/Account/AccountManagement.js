@@ -5,10 +5,11 @@ import axios from 'axios';
 import './AccountMangement.css';
 import Popup from '../../components/Popup/Popup';
 import Toast from '../../components/Toast/Toast';
+import Loading from '../../components/Loading/Loading';
 
 
 function AccountManagement() {
-    const [accounts, setAccounts] = useState();
+    const [accounts, setAccounts] = useState(null);
     const [accountType, setAccountType] = useState('sv');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [pages,setPages] = useState(0);
@@ -102,7 +103,7 @@ function AccountManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {accounts?.map((account) => (
+                    {accounts ? accounts?.map((account) => (
                         <tr key={account._id}>
                             <td>{account._id}</td>
                             <td>{account.fullname}</td>
@@ -117,7 +118,7 @@ function AccountManagement() {
                                 </button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <Loading/>}
                 </tbody>
             </table>
             <div className="pagination">
