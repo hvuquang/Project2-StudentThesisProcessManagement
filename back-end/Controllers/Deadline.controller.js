@@ -88,6 +88,24 @@ const deadlineController = {
     //     } catch (error) {
     //         res.status(500).json(error);
     //     }
+    },
+    getAllDeadlinesByTeacherId: async(req,res)=>{
+        try {
+            const { teacher_id } = req.params;
+            const deadlines = await deadlineModel.find({ ma_gv: teacher_id });
+            res.status(200).json(deadlines);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getDeadlineById: async(req,res)=>{
+        try {
+            const { _id } = req.params;
+            const deadline = await deadlineModel.findById(_id);
+            res.status(200).json(deadline);
+        } catch (error) {
+            res.status(500).json(error);
+        }
     }
 };
 
