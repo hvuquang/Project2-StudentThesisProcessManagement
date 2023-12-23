@@ -18,7 +18,12 @@ export async function POSTaddDeadline({
         ngay_ket_thuc: deadline?.ngay_ket_thuc,
       })
       .then((res) => {
-        console.log("Tạo deadline thành công: " + res.data.ngay_bat_dau);
+        console.log(
+          "Tạo deadline thành công: " +
+            res.data.tieu_de +
+            ", " +
+            res.data.noi_dung
+        );
       });
   } catch (err) {
     throw err;

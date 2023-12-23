@@ -71,14 +71,15 @@ export const DeadlineList = () => {
   const [registeredTopic, setRegisteredTopic] = useState<RegisteredTopic[]>();
 
   function getRegisteredTopic() {
-    data.map((item: RegisteredTopic) => {
-      let arr: RegisteredTopic[] = [];
-      if (item.ma_sv?._id === session!.user!._id) {
-        arr.push(item);
-      }
-      setRegisteredTopic(arr);
-      getDeadlineFromRegisteredTopic(arr);
-    });
+    if (data)
+      data.map((item: RegisteredTopic) => {
+        let arr: RegisteredTopic[] = [];
+        if (item.ma_sv?._id === session!.user!._id) {
+          arr.push(item);
+        }
+        setRegisteredTopic(arr);
+        getDeadlineFromRegisteredTopic(arr);
+      });
   }
 
   function getDeadlineFromRegisteredTopic(arr: RegisteredTopic[]) {
@@ -109,7 +110,7 @@ export const DeadlineList = () => {
           </div>
         );
       })}
-      <div className="mb-5 border w-full h-[1px]"></div>
+      <div className="border w-full h-[1px]"></div>
       <p>Deadline đã hoàn thành</p>
       {doneDeadline?.map((item) => {
         return (

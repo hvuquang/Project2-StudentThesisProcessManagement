@@ -13,5 +13,6 @@ export const config = {
     "/pages/registerthesis",
     "/pages/homepage",
     "/pages/notificationpage",
+    "/pages/deadlinepage",
   ],
 };

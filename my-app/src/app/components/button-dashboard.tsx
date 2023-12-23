@@ -131,8 +131,8 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       setDeadline({
         tieu_de: deadline_title,
         noi_dung: deadline_content,
-        // ngay_bat_dau: deadline_start,
-        // ngay_ket_thuc: deadline_end,
+        ngay_bat_dau: startDate?.toISOString(),
+        ngay_ket_thuc: endDate?.toISOString(),
       });
       return;
     }

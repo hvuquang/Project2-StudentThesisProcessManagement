@@ -129,7 +129,7 @@ export const DeadlineItem = ({
                 <Input
                   readOnly
                   id="name"
-                  defaultValue="Pedro Duarte"
+                  defaultValue={deadlineItem?.tieu_de}
                   className="col-span-3"
                   // onChange={(e) => {
                   //   handleChange(
@@ -151,7 +151,7 @@ export const DeadlineItem = ({
                 <Input
                   readOnly
                   id="username"
-                  defaultValue="@peduarte"
+                  defaultValue={deadlineItem?.noi_dung}
                   className="col-span-3"
                   // onChange={(e) => {
                   //   handleChange(
