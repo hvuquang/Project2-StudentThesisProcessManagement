@@ -103,6 +103,17 @@ const registerTopicController = {
         } catch (error) {
             res.status(500).json({ "Status": "failed", "error": error.message });
         }
+    },
+    deleteRegisterTopic: async(req,res)=>{
+        try {
+            const { _id } = req.params;
+            const findRegisterTopicById = await registerTopicModel.findById(_id);
+            findRegisterTopicById.active = false;
+            await findRegisterTopicById.save();
+            res.status(200).json({ "status": "success", findRegisterTopicById });
+        } catch (error) {
+            res.status(500).json({ "status": "fail", error });
+        }
     }
 };
 

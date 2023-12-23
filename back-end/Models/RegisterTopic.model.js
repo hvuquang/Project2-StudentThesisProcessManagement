@@ -51,6 +51,10 @@ const registerTopicSchema = new mongoose.Schema({
     id_new_topic: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Topic",
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 },{timestamps: true});
 
