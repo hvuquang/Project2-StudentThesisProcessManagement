@@ -114,6 +114,19 @@ const registerTopicController = {
         } catch (error) {
             res.status(500).json({ "status": "fail", error });
         }
+    },
+    getAllRegisterByStatus: async(req,res)=>{
+        try {
+            const allRegisterTopic = await registerTopicModel.find({ change_topic: "chờ khoa xác nhận"}).populate(
+                {
+                    path: "ma_sv",
+                    select: "fullname email phone"
+                }
+            )
+            res.status(200).json(allRegisterTopic);
+        } catch (error) {
+            res.status(500).json(error);
+        }
     }
 };
 
