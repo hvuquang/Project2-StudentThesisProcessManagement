@@ -181,7 +181,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   useEffect(() => {
     let start = startDate?.toISOString();
-    let end = endDate?.toDateString();
+    let end = endDate?.toISOString();
     setDeadline({
       tieu_de: deadline.tieu_de,
       noi_dung: deadline.noi_dung,

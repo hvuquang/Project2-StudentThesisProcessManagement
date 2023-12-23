@@ -82,50 +82,52 @@ const NotificationPage = () => {
     });
   };
   const convertToArray = (item: Notification) => {
-    let extension = (item.file as string).split(".").pop();
-    let filename = (item.file as string).split("\\").pop();
-    switch (extension) {
-      case "doc":
-      case "docx":
-        return (
-          <Link href={url + item.file}>
-            <p className="ml-5">
-              <span className="mr-3">📄</span>
-              {filename}
-            </p>
-          </Link>
-        ); // Word icon
-      case "pdf":
-        return (
-          <Link href={url + item.file}>
-            <p className="ml-5">
-              <span className="mr-3">📕</span>
-              {filename}
-            </p>
-          </Link>
-        ); // Word icon
-      case "jpg":
-      case "jpeg":
-      case "png":
-        return (
-          <Link href={url + item.file}>
-            <p className="ml-5">
-              <span className="mr-3">🖼️</span>
-              {filename}
-            </p>
-          </Link>
-        ); // Word icon; // Image icon
-      case "mp3":
-        return <span>🎵</span>; // Audio icon
-      default:
-        return (
-          <Link href={url + item.file}>
-            <p className="ml-5">
-              <span className="mr-3">📁</span>
-              {filename}
-            </p>
-          </Link> // Default icon)
-        );
+    if (item.file) {
+      let extension = (item.file as string).split(".").pop();
+      let filename = (item.file as string).split("\\").pop();
+      switch (extension) {
+        case "doc":
+        case "docx":
+          return (
+            <Link href={url + item.file}>
+              <p className="ml-5">
+                <span className="mr-3">📄</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon
+        case "pdf":
+          return (
+            <Link href={url + item.file}>
+              <p className="ml-5">
+                <span className="mr-3">📕</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon
+        case "jpg":
+        case "jpeg":
+        case "png":
+          return (
+            <Link href={url + item.file}>
+              <p className="ml-5">
+                <span className="mr-3">🖼️</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon; // Image icon
+        case "mp3":
+          return <span>🎵</span>; // Audio icon
+        default:
+          return (
+            <Link href={url + item.file}>
+              <p className="ml-5">
+                <span className="mr-3">📁</span>
+                {filename}
+              </p>
+            </Link> // Default icon)
+          );
+      }
     }
     // return <Link href={url + item.file}>File</Link>;
   };

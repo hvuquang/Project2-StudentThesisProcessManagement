@@ -25,15 +25,34 @@ export async function POSTaddDeadline({
   }
 }
 
-export async function PUTupdateStatusDeadline(notification: Notification) {
+export async function PUTupdateStatusDeadline({
+  studentID,
+  deadlineID,
+  file,
+}: {
+  studentID: string;
+  deadlineID: string;
+  file: File;
+}) {
   try {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
     await axios.put(
-      url + `v1/notification/updateNotification/${notification._id}`,
-      {
-        tieu_de: notification.tieu_de,
-        // topic_description: topic.topic_description,
-      }
+      url + `v1/deadline/done_deadline/${studentID}&${deadlineID}`,
+      formData
     );
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GETgetDeadlineByID(deadline_id: string | undefined) {
+  try {
+    const response = await axios.get(
+      url + `v1/deadline/deadlineById/${deadline_id}`
+    );
+    console.log("Deadline Item: " + response.data);
+    return response.data;
   } catch (err) {
     throw err;
   }
