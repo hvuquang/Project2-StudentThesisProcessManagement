@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTasks, faUser, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faTasks, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import "./SideBar.css";
 import logo from "../../images/Screenshot_2023-12-02_121808-removebg-preview.png";
@@ -25,9 +25,9 @@ function SideBar() {
           </Link>
         </li>
         <li>
-          <Link to="/settings" className="menu-link">
-            <FontAwesomeIcon icon={faCog} />
-            <span>Cài đặt</span>
+          <Link to="/manage-change-topics" className="menu-link">
+            <FontAwesomeIcon icon={faEnvelope} />
+            <span>Quản lý ĐTĐT</span>
           </Link>
         </li>
       </ul>
