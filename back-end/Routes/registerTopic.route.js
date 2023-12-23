@@ -7,5 +7,6 @@ router.get('/searchRegisterTopic', registerTopicController.getRegisterTopic);
 router.put("/changeTopic/:ma_sv&:id_new_topic", registerTopicController.studentChangeTopic);
 router.put("/teacherConfirmChangeTopic/:ma_sv", registerTopicController.teacherConfirmChangeTopicRequest);
 router.put("/facultyConfirmChangeTopic/:ma_sv", registerTopicController.facultyConfirmChangeTopic);
+router.delete("/deleteRegisterTopic/:_id", registerTopicController.deleteRegisterTopic);
 
 module.exports = router;
