@@ -44,4 +44,6 @@ export type RegisteredTopic = {
   reports_done?: [];
   submit_reports?: [];
   submit_deadlines?: [];
+  change_topic?: string;
+  id_new_topic?: string;
 };

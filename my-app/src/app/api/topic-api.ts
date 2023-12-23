@@ -113,3 +113,17 @@ export async function PUTStudentRequestChangeTopic({
     throw err;
   }
 }
+
+export async function PUTTeacherConfirmRequestChangeTopic({
+  student_id,
+}: {
+  student_id: string;
+}) {
+  try {
+    await axios.put(
+      url + `v1/registerTopic/teacherConfirmChangeTopic/${student_id}`
+    );
+  } catch (err) {
+    throw err;
+  }
+}
