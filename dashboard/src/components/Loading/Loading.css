@@ -34,10 +34,21 @@
     }
 }
 
+.ldio-efsjgj21ivd {
+    width: 80px;
+    /* Độ rộng của phần tử con */
+    height: 80px;
+    /* Chiều cao của phần tử con */
+    position: fixed;
+    top: 80px;
+    left: 450px;
+    transform: translate(-50%, -50%);
+}
+
 .ldio-efsjgj21ivd div {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     top: 60px;
     left: 20px;

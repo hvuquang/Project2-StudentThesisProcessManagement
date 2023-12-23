@@ -16,11 +16,10 @@
 /* CSS cho các nút "Sinh viên" và "Giáo viên" */
 .account-type-button {
     padding: 10px 20px;
-    background-color: gray;
+    background-color: F2F2F2;
     margin: 0 10px;
     border: none;
     border-radius: 4px;
-    color: white;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
@@ -46,11 +45,12 @@
 }
 
 .account-type-button:hover {
-    background-color: #2980b9;
+    background-color: #8C85FF;
 }
 
 .account-type-button.active {
-    background-color: #3498db;
+    background-color: #4F46E5;
+    color: white;
 }
 
 /* CSS cho bảng tài khoản */
@@ -61,8 +61,7 @@
 
 /* CSS cho hàng chẵn */
 .account-table tbody tr:nth-child(even) {
-    background-color: #2F6BFF;
-    color: white;
+    background-color: #F2F2F2;
 }
 
 /* CSS cho hàng lẻ */
@@ -116,6 +115,6 @@
 }
 
 .page-button.active {
-    background-color: #007bff;
+    background-color: #4F46E5;
     color: #fff;
 }

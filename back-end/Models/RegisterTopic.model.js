@@ -44,6 +44,14 @@ const registerTopicSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "SubmitDeadline",
     }],
+    change_topic: {
+        type: String,
+        default: ""
+    },
+    id_new_topic: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Topic",
+    }
 },{timestamps: true});
 
 const registerTopic = mongoose.model("RegisterTopic",registerTopicSchema);

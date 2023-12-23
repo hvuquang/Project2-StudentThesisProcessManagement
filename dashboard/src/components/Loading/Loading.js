@@ -3,11 +3,11 @@ import "./Loading.css"
 
 function Loading() {
   return (
-    <div class="ldio-efsjgj21ivd">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
+        <div class="ldio-efsjgj21ivd">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
   )
 }
 

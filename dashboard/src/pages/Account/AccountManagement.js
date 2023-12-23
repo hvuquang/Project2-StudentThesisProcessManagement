@@ -6,7 +6,7 @@ import './AccountMangement.css';
 import Popup from '../../components/Popup/Popup';
 import Toast from '../../components/Toast/Toast';
 import Loading from '../../components/Loading/Loading';
-
+import common from "../../common/Common.json"
 
 function AccountManagement() {
     const [accounts, setAccounts] = useState(null);
@@ -17,8 +17,8 @@ function AccountManagement() {
     const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/v1/account/pageNumber/'+accountType).then(res=>setPages(res.data))
-        axios.get(`http://localhost:8000/v1/account/getAccountByAccountType/${accountType}`+"&"+selectedPage)
+        axios.get(common.url_v1+'account/pageNumber/'+accountType).then(res=>setPages(res.data))
+        axios.get(common.url_v1+`account/getAccountByAccountType/${accountType}`+"&"+selectedPage)
             .then((res) => {
                 setAccounts(res.data);
             });
@@ -47,7 +47,7 @@ function AccountManagement() {
 
     const selectedPageHandle = (indexPage)=>{
         setSelectedPage(indexPage);
-        axios.get(`http://localhost:8000/v1/account/getAccountByAccountType/${accountType}` + "&" + indexPage)
+        axios.get(common.url_v1+`account/getAccountByAccountType/${accountType}` + "&" + indexPage)
             .then((res) => {
                 setAccounts(res.data);
             });

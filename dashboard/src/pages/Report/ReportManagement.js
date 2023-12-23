@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './ReportManagement.css';
 import axios from 'axios';
+import Loading from '../../components/Loading/Loading';
+import common from "../../common/Common.json";
 
 function ReportManagement() {
-    const [reports, setReports] = useState([]);
+    const [reports, setReports] = useState(null);
     const [selectedPage,SetSelectedPage] = useState(1);
     const [pageNumber,setPageNumber] = useState(0);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/v1/report/getSubmitReport/'+selectedPage).then(res => {
+        axios.get(common.url_v1+'report/getSubmitReport/'+selectedPage).then(res => {
             setReports(res.data);
         })
-        axios.get('http://localhost:8000/v1/report/pageNumber').then(res=>{
+        axios.get(common.url_v1+'report/pageNumber').then(res=>{
             setPageNumber(res.data);
         })
     }, []);
@@ -23,7 +25,7 @@ function ReportManagement() {
 
     const selectedPageHandle = (indexPage) => {
         SetSelectedPage(indexPage);
-        axios.get("http://localhost:8000/v1/report/getSubmitReport/" + indexPage)
+        axios.get(common.url_v1+"report/getSubmitReport/" + indexPage)
             .then((res) => {
                 setReports(res.data);
             });
@@ -39,12 +41,12 @@ function ReportManagement() {
                         <th>Mã Sinh Viên</th>
                         <th>Tên sinh viên</th>
                         <th>Loại báo cáo</th>
-                        <th>File Báo Cáo</th>
+                        <th>File báo Cáo</th>
                         <th>Thời Gian Nộp</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {reports?.map((report, key) => (
+                    {reports ? reports?.map((report, key) => (
                         <tr key={key} className={key % 2 === 0 ? 'even-row' : 'odd-row'}>
                             {report.submit_reports.map((submitReport, index) => (
                                 <React.Fragment key={index}>
@@ -52,7 +54,7 @@ function ReportManagement() {
                                     <td>{submitReport.ma_sv.fullname}</td>
                                     <td>{submitReport.loai_bao_cao}</td>
                                     <td>
-                                        <a href={`http://localhost:8000/${submitReport.file}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={common.url+`${submitReport.file}`} target="_blank" rel="noopener noreferrer">
                                             <span className="file-icon">File</span>
                                         </a>
                                     </td>
@@ -60,7 +62,7 @@ function ReportManagement() {
                                 </React.Fragment>
                             ))}
                         </tr>
-                    ))}
+                    )) : <Loading/>}
                 </tbody>
             </table>
             <div className="report-management">
