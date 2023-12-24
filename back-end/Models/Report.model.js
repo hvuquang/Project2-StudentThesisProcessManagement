@@ -18,7 +18,7 @@ const reportSchema = new mongoose.Schema({
         required: true
     },
     file: {
-        type: String,
+        type: String
     },
     ma_gv: {
         type: mongoose.SchemaTypes.ObjectId,
