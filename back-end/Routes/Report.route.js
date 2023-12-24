@@ -6,5 +6,6 @@ router.post('/addReport/:ma_gv',upload.single('file'),reportController.addReport
 router.put("/done_report/:ma_sv&:id_report",upload.single('file'),reportController.done_report);
 router.get("/getSubmitReport/:page",reportController.getSubmitReport);
 router.get("/pageNumber",reportController.pageNumber);
+router.get("/getReportById/:_id", reportController.getReportById);
 
 module.exports = router;

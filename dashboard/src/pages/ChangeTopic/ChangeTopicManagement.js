@@ -22,9 +22,18 @@ function ChangeTopicManagement() {
             "topic_name": "Quản lý sinh viên"
         }
     ]
-    const confirmHandler = (ma_sv)=>{
-        axios.put(common.url_v1 +"registerTopic/facultyConfirmChangeTopic/"+ma_sv);
+    
+    const confirmHandler = (ma_sv) => {
+        axios.put(common.url_v1 + "registerTopic/facultyConfirmChangeTopic/" + ma_sv).then(() => {
+            // Sau khi xác nhận thành công, cập nhật registerTopics bằng cách loại bỏ change_topic
+            const updatedTopics = registerTopics.filter(topic => topic.ma_sv._id !== ma_sv);
+            setRegisterTopics(updatedTopics);
+        }).catch(error => {
+            // Xử lý lỗi nếu cần
+            console.error("Error confirming topic:", error);
+        });
     }
+
   return (
       <div className="change-topic-management">
           <h1>Danh sách yêu cầu đổi đề tài</h1>
@@ -34,7 +43,8 @@ function ChangeTopicManagement() {
                   <tr>
                       <th>Mã sinh viên</th>
                       <th>Tên sinh viên</th>
-                      <th>Tên đề tài</th>
+                      <th>Đề tài hiện tại</th>
+                      <th>Đề tài Muốn đổi</th>
                       <th>Thao tác</th>
                   </tr>
               </thead>
@@ -44,6 +54,7 @@ function ChangeTopicManagement() {
                           <td>{topic.ma_sv._id}</td>
                           <td>{topic.ma_sv.fullname}</td>
                           <td>{topic.topic_name}</td>
+                          <td>{topic.id_new_topic.topic_name}</td>
                           <td>
                               <button className="confirm-button" onClick={()=>confirmHandler(topic.ma_sv._id)}>Xác nhận</button>
                           </td>

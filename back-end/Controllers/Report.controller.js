@@ -121,6 +121,15 @@ const reportController = {
         } catch (error) {
             res.status(500).json(error)
         }
+    },
+    getReportById: async(req,res)=>{
+        try {
+            const { _id } = req.params;
+            const report = await reportModel.findById(_id);
+            res.status(200).json(report);
+        } catch (error) {
+            res.status(500).json(error);
+        }
     }
 };
 
