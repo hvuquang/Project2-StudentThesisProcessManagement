@@ -107,14 +107,29 @@ const registerTopicController = {
     deleteRegisterTopic: async(req,res)=>{
         try {
             const { _id, id_topic } = req.params;
+
+            // Tìm và kiểm tra Register Topic
             const findRegisterTopicById = await registerTopicModel.findById(_id);
+            if (!findRegisterTopicById) {
+                return res.status(404).json({ "status": "fail", "error": "Không tìm thấy Register Topic" });
+            }
+
+            // Tìm và kiểm tra Topic
             const findTopicById = await topicModel.findById(id_topic);
+            if (!findTopicById) {
+                return res.status(404).json({ "status": "fail", "error": "Không tìm thấy Topic" });
+            }
+
+            // Cập nhật thông tin và lưu
             findRegisterTopicById.active = false;
             findTopicById.trang_thai = "Chưa đăng ký";
-            await findRegisterTopicById.save().then(()=>findTopicById.save());
+
+            await findRegisterTopicById.save();
+            await findTopicById.save();
+
             res.status(200).json({ "status": "success", findRegisterTopicById });
         } catch (error) {
-            res.status(500).json({ "status": "fail", error });
+            res.status(500).json({ "status": "fail", "error": error.message });
         }
     },
     getAllRegisterByStatus: async(req,res)=>{
