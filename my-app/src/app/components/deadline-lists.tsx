@@ -22,6 +22,8 @@ export const DeadlineList = () => {
   const queryClient = useQueryClient();
   const [deadlineList, setDeadlineList] = useState<string[]>();
   const [doneDeadline, setDoneDeadline] = useState<string[]>();
+  const [reportList, setReportList] = useState<string[]>();
+  const [doneReport, setDoneReport] = useState<string[]>();
   const [allDeadlines, setAllDeadlines] = useState<DeadlineItemObj[]>();
   const { isLoading, error, data } = useQuery({
     queryKey: ["registeredTopics"],
@@ -54,6 +56,8 @@ export const DeadlineList = () => {
     arr?.map((item) => {
       setDeadlineList(item.id_deadlines);
       setDoneDeadline(item.deadlines_done);
+      setDoneReport(item.reports_done);
+      setReportList(item.reports);
     });
   }
 
@@ -76,25 +80,46 @@ export const DeadlineList = () => {
   return (
     <div className="flex flex-col gap-3 overflow-y-visible">
       {session?.user?.account_type === "sv" && (
-        <>
-          <p>Deadline chưa hoàn thành</p>
-          {deadlineList?.map((item) => {
-            return (
-              <div>
-                <DeadlineItem id={item} status="pending" />
-              </div>
-            );
-          })}
-          <div className="border w-full h-[1px]"></div>
-          <p>Deadline đã hoàn thành</p>
-          {doneDeadline?.map((item) => {
-            return (
-              <div>
-                <DeadlineItem id={item} status="fullfilled" />
-              </div>
-            );
-          })}
-        </>
+        <div className="flex flex-col gap-10">
+          <div>
+            <p>Deadline chưa hoàn thành</p>
+            {deadlineList?.map((item) => {
+              return (
+                <div>
+                  <DeadlineItem type="deadline" id={item} status="pending" />
+                </div>
+              );
+            })}
+            <div className="border w-full h-[1px]"></div>
+            <p>Deadline đã hoàn thành</p>
+            {doneDeadline?.map((item) => {
+              return (
+                <div>
+                  <DeadlineItem type="deadline" id={item} status="fullfilled" />
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            <p>Report chưa hoàn thành</p>
+            {reportList?.map((item) => {
+              return (
+                <div>
+                  <DeadlineItem type="report" id={item} status="pending" />
+                </div>
+              );
+            })}
+            <div className="border w-full h-[1px]"></div>
+            <p>Report đã hoàn thành</p>
+            {doneReport?.map((item) => {
+              return (
+                <div>
+                  <DeadlineItem type="report" id={item} status="fullfilled" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
       {session?.user?.account_type === "gv" && (
         <>

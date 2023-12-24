@@ -32,20 +32,23 @@ export async function POSTaddReport({
   }
 }
 
-export async function PUTupdateStatusDeadline({
+export async function PUTupdateStatusReport({
   studentID,
-  deadlineID,
+  reportID,
   file,
+  loai_bao_cao,
 }: {
   studentID: string;
-  deadlineID: string;
+  reportID: string;
   file: File;
+  loai_bao_cao: string;
 }) {
   try {
     const formData = new FormData();
+    if (loai_bao_cao) formData.append("loai_bao_cao", loai_bao_cao);
     if (file) formData.append("file", file);
     await axios.put(
-      url + `v1/deadline/done_deadline/${studentID}&${deadlineID}`,
+      url + `v1/report/done_report/${studentID}&${reportID}`,
       formData
     );
   } catch (err) {
@@ -53,25 +56,12 @@ export async function PUTupdateStatusDeadline({
   }
 }
 
-export async function GETgetDeadlineByID(deadline_id: string | undefined) {
+export async function GETgetReportByID(report_id: string | undefined) {
   try {
     const response = await axios.get(
-      url + `v1/deadline/deadlineById/${deadline_id}`
+      url + `v1/report/getReportById/${report_id}`
     );
-    console.log("Deadline Item: " + response.data);
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-}
-
-export async function GETgetAllDeadlineByTeacherID(
-  teacher_id: string | undefined
-) {
-  try {
-    const response = await axios.get(
-      url + `v1/deadline/allDeadlinesByTeacherId/${teacher_id}`
-    );
+    console.log("Report Item: " + response.data);
     return response.data;
   } catch (err) {
     throw err;
