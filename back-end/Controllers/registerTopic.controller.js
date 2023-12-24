@@ -106,10 +106,12 @@ const registerTopicController = {
     },
     deleteRegisterTopic: async(req,res)=>{
         try {
-            const { _id } = req.params;
+            const { _id, id_topic } = req.params;
             const findRegisterTopicById = await registerTopicModel.findById(_id);
+            const findTopicById = await topicModel.findById(id_topic);
             findRegisterTopicById.active = false;
-            await findRegisterTopicById.save();
+            findTopicById.trang_thai = "Chưa đăng ký";
+            await findRegisterTopicById.save().then(()=>findTopicById.save());
             res.status(200).json({ "status": "success", findRegisterTopicById });
         } catch (error) {
             res.status(500).json({ "status": "fail", error });
@@ -128,9 +130,6 @@ const registerTopicController = {
             res.status(500).json(error);
         }
     },
-    teacherRejectChangeTopic: async(req,res)=>{
-        
-    }
 };
 
 module.exports = registerTopicController;
