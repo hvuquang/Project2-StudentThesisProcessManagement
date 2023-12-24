@@ -9,6 +9,7 @@ function ChangeTopicManagement() {
     useEffect(() => {
         axios.get(common.url_v1 + 'registerTopic/getAllRegisterTopicByStatus').then(res => {
             setRegisterTopics(res.data);
+            console.log(res.data);
         })
     }, []);
     const change_topic = [
@@ -42,7 +43,8 @@ function ChangeTopicManagement() {
                   <tr>
                       <th>Mã sinh viên</th>
                       <th>Tên sinh viên</th>
-                      <th>Tên đề tài</th>
+                      <th>Đề tài hiện tại</th>
+                      <th>Đề tài Muốn đổi</th>
                       <th>Thao tác</th>
                   </tr>
               </thead>
@@ -52,6 +54,7 @@ function ChangeTopicManagement() {
                           <td>{topic.ma_sv._id}</td>
                           <td>{topic.ma_sv.fullname}</td>
                           <td>{topic.topic_name}</td>
+                          <td>{topic.id_new_topic.topic_name}</td>
                           <td>
                               <button className="confirm-button" onClick={()=>confirmHandler(topic.ma_sv._id)}>Xác nhận</button>
                           </td>

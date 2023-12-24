@@ -29,7 +29,7 @@ const registerTopicController = {
                     path: "ma_sv",
                     select: "fullname email phone"
                 }
-            )
+            ).populate('id_new_topic')
             res.status(200).json(allRegisterTopic);
         } catch (error) {
             res.status(500).json(error);
@@ -122,11 +122,14 @@ const registerTopicController = {
                     path: "ma_sv",
                     select: "fullname email phone"
                 }
-            )
+            ).populate('id_new_topic')
             res.status(200).json(allRegisterTopic);
         } catch (error) {
             res.status(500).json(error);
         }
+    },
+    teacherRejectChangeTopic: async(req,res)=>{
+        
     }
 };
 
