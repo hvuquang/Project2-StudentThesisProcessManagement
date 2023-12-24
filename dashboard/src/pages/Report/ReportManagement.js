@@ -46,23 +46,21 @@ function ReportManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {reports ? reports?.map((report, key) => (
-                        <tr key={key} className={key % 2 === 0 ? 'even-row' : 'odd-row'}>
-                            {report.submit_reports.map((submitReport, index) => (
-                                <React.Fragment key={index}>
-                                    <td>{submitReport.ma_sv._id}</td>
-                                    <td>{submitReport.ma_sv.fullname}</td>
-                                    <td>{submitReport.loai_bao_cao}</td>
-                                    <td>
-                                        <a href={common.url+`${submitReport.file}`} target="_blank" rel="noopener noreferrer">
-                                            <span className="file-icon">File</span>
-                                        </a>
-                                    </td>
-                                    <td>{formatDate(submitReport.createdAt)}</td>
-                                </React.Fragment>
-                            ))}
-                        </tr>
-                    )) : <Loading/>}
+                    {reports ? reports.map((report, key) => (
+                        report.submit_reports.map((submitReport, index) => (
+                            <tr key={`${key}-${index}`} className={(key + index) % 2 === 0 ? 'even-row' : 'odd-row'}>
+                                <td>{submitReport.ma_sv._id}</td>
+                                <td>{submitReport.ma_sv.fullname}</td>
+                                <td>{submitReport.loai_bao_cao}</td>
+                                <td>
+                                    <a href={common.url + `${submitReport.file}`} target="_blank" rel="noopener noreferrer">
+                                        <span className="file-icon">File</span>
+                                    </a>
+                                </td>
+                                <td>{formatDate(submitReport.createdAt)}</td>
+                            </tr>
+                        ))
+                    )) : <Loading />}
                 </tbody>
             </table>
             <div className="report-management">
