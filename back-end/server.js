@@ -11,6 +11,8 @@ const registerTopicRouter = require("./Routes/registerTopic.route");
 const notificationRouter = require("./Routes/Notification.route")
 const deadlineRouter = require("./Routes/Deadline.route");
 const reportRouter = require("./Routes/Report.route");
+const submitReportRouter = require("./Routes/SubmitReport.route");
+const submitDeadlineRouter = require("./Routes/SubmitDeadline.route");
 
 app.use(express.json());
 app.use(cors());
@@ -26,6 +28,8 @@ app.use('/v1/registerTopic',registerTopicRouter);
 app.use('/v1/notification', notificationRouter);
 app.use('/v1/deadline',deadlineRouter);
 app.use('/v1/report',reportRouter);
+app.use('/v1/submitReport', submitReportRouter);
+app.use('/v1/submitDeadline', submitDeadlineRouter);
 
 app.listen(process.env.PORT,()=>{
     console.log("Server is running on port "+process.env.PORT);
