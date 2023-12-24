@@ -29,7 +29,7 @@ const registerTopicController = {
                     path: "ma_sv",
                     select: "fullname email phone"
                 }
-            ).populate('id_new_topic')
+            ).populate('id_new_topic').populate('submit_reports').populate('submit_deadlines');
             res.status(200).json(allRegisterTopic);
         } catch (error) {
             res.status(500).json(error);
