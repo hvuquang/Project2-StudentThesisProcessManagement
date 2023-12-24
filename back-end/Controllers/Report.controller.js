@@ -52,7 +52,8 @@ const reportController = {
 
             const newSubmitReport = new submitReportModel({
                 loai_bao_cao: req.body.loai_bao_cao,
-                ma_sv: ma_sv
+                ma_sv: ma_sv,
+                id_report: id_report
             })
 
             if(req.file){

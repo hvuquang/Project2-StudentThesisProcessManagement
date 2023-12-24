@@ -14,6 +14,11 @@ const submitReportSchema = new mongoose.Schema({
         ref: "Account",
         required: true
     },
+    id_report: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Report",
+        required: true
+    },
 }, { timestamps: true });
 
 const submitReport = mongoose.model('SubmitReport', submitReportSchema);
