@@ -84,18 +84,12 @@ const ChangeTopic = () => {
   };
   return (
     <div className="flex w-4/5 m-auto justify-center content-center flex-col">
-      <div className="bg-white p-5 my-2 rounded-xl border-slate-300 ">
-        <p>Đề tài đang thực hiện: Quản lý khóa luận tốt nghiệp</p>
-        <p>Giáo viên hướng dẫn: Thầy Trọng</p>
-        <p>{session?.user?.account_type}</p>
-      </div>
-      <button
-        className="bg-slate-500 w-1/5 m-auto p-4 my-10 rounded-md text-white"
-        // onClick={handleClick}
-      >
-        Nộp đơn ĐTĐT
-      </button>
-      <div id="container" className="h-80 overflow-auto">
+      {session?.user?.account_type === "gv" && (
+        <h1 className="text-center text-2xl my-10 uppercase">
+          Danh sách sinh viên muốn ĐTĐT
+        </h1>
+      )}
+      <div id="container" className="h-80 overflow-auto overflow-y-auto">
         {/* {requestList} */}
         {session?.user?.account_type === "gv" &&
           renderListChangeTopicFromStudent()}

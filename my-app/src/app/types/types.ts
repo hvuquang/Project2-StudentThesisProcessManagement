@@ -7,6 +7,14 @@ export type DeadlineItemObj = {
   ma_gv?: string;
 };
 
+export type Report = {
+  loai_bao_cao?: string;
+  noi_dung?: string;
+  ngay_bat_dau?: string;
+  ngay_ket_thuc?: string;
+  file?: FileList | null | string;
+};
+
 export type Teacher = {
   fullname?: string;
   email?: string;

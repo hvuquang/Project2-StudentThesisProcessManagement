@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar/Calendar";
 import { usePathname } from "next/navigation";
 import { POSTaddTopic } from "../api/topic-api";
-import { Topic, Notification, DeadlineItemObj } from "../types/types";
+import { Topic, Notification, DeadlineItemObj, Report } from "../types/types";
 import { useSession } from "next-auth/react";
 import { Toaster, toast } from "sonner";
 import {
@@ -32,6 +32,9 @@ import {
 import FileInput from "./file-input";
 import { POSTaddNotification } from "../api/notification-api";
 import { POSTaddDeadline } from "../api/deadline-api";
+import DropDown from "./DropDown";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { POSTaddReport } from "../api/report-api";
 
 type ButtonDashboard = {
   className?: string;
@@ -72,6 +75,17 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     },
   });
 
+  const addReport = useMutation({
+    mutationFn: POSTaddReport,
+    onSuccess: () => {
+      toast.success("Tạo report thành công");
+      queryClient.invalidateQueries({ queryKey: ["reports"] });
+    },
+    onError: () => {
+      toast.error("Lỗi. Vui lòng kiểm tra lại");
+    },
+  });
+
   const [topic, setTopic] = useState<Topic>({
     topic_name: "",
     topic_description: "",
@@ -88,6 +102,15 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     ngay_ket_thuc: "",
     ma_gv: "",
   });
+
+  const [report, setReport] = useState<Report>({
+    loai_bao_cao: "giữa kì",
+    noi_dung: "",
+    file: null,
+    ngay_bat_dau: "",
+    ngay_ket_thuc: "",
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (page === "deadlinepage" && teacherSession?.user) {
@@ -111,6 +134,16 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     return;
   };
 
+  const handleSubmitReport = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (teacherSession?.user) {
+      addReport.mutate({
+        report: report,
+        teacher_id: teacherSession.user._id || "",
+      });
+    }
+  };
+
   const handleChange = (
     topic_name?: string,
     topic_description?: string,
@@ -130,6 +163,12 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     if (page === "deadlinepage") {
       setDeadline({
         tieu_de: deadline_title,
+        noi_dung: deadline_content,
+        ngay_bat_dau: startDate?.toISOString(),
+        ngay_ket_thuc: endDate?.toISOString(),
+      });
+      setReport({
+        loai_bao_cao: report.loai_bao_cao,
         noi_dung: deadline_content,
         ngay_bat_dau: startDate?.toISOString(),
         ngay_ket_thuc: endDate?.toISOString(),
@@ -169,6 +208,10 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
         tieu_de: notification.tieu_de ?? "",
         file: files,
       });
+      setReport((prevState) => ({
+        ...prevState,
+        file: files,
+      }));
       console.log("Selected Files:", fileNames);
     } else {
       console.log("No files selected");
@@ -188,15 +231,21 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       ngay_bat_dau: start,
       ngay_ket_thuc: end,
     });
+    setReport({
+      loai_bao_cao: report.loai_bao_cao,
+      noi_dung: report.noi_dung,
+      ngay_bat_dau: start,
+      ngay_ket_thuc: end,
+    });
   }, [startDate, endDate]);
   return (
     <div className={cn(className)}>
       {page === "deadlinepage" && (
-        <div className="min-w-screen ml-10 my-3 flex justify-end">
+        <div className="min-w-screen ml-10 my-3 flex justify-end gap-5">
           <Dialog>
             <DialogTrigger>
               <Button className="min-w-20 w-max" variant={"default"}>
-                Tạo deadline cho sinh viên
+                Tạo deadline
               </Button>
             </DialogTrigger>
             <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
@@ -315,9 +364,153 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
             </DialogContent>
           </Dialog>
 
-          {/* <Button className="w-20" variant={"outline"}>
-            Xóa
-          </Button> */}
+          <Dialog>
+            <DialogTrigger>
+              <Button className="min-w-20 w-max" variant={"default"}>
+                Tạo chỗ nộp report
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
+              <DialogHeader title="Tạo deadline" />
+              <form className="grid gap-4 py-4" onSubmit={handleSubmitReport}>
+                <div className="grid grid-cols-4 gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Loại báo cáo
+                  </Label>
+                  {/* <Input
+                    id="name"
+                    defaultValue="Pedro Duarte"
+                    className="col-span-3"
+                    onChange={(e) => {
+                      handleChange(
+                        "",
+                        "",
+                        undefined,
+                        e.target.value,
+                        deadline.noi_dung,
+                        deadline.ngay_bat_dau,
+                        deadline.ngay_ket_thuc
+                      );
+                    }}
+                  /> */}
+
+                  <RadioGroup defaultValue="giữa kỳ" id="radio-group">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="giữa kỳ" id="r1" />
+                      <Label htmlFor="r1">Giữa kỳ</Label>
+                    </div>
+                    <div
+                      className="flex items-center space-x-2"
+                      onClick={() => {
+                        setReport((prevReport) => ({
+                          ...prevReport,
+                          loai_bao_cao: "Cuối kì",
+                        }));
+                      }}
+                    >
+                      <RadioGroupItem value="cuối kỳ" id="r2" />
+                      <Label htmlFor="r2">Cuối kỳ</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Nội dung báo cáo
+                  </Label>
+                  <Input
+                    id="username"
+                    defaultValue="@peduarte"
+                    className="col-span-3"
+                    onChange={(e) => {
+                      report.noi_dung = e.target.value;
+                      handleChange(
+                        "",
+                        "",
+                        undefined,
+                        deadline.tieu_de,
+                        e.target.value,
+                        deadline.ngay_bat_dau,
+                        deadline.ngay_ket_thuc
+                      );
+                    }}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Ngày bắt đầu
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "justify-start text-left font-normal col-span-3",
+                          !startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {startDate ? (
+                          format(startDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Ngày kết thúc
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "justify-start text-left font-normal col-span-3",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {endDate ? (
+                          format(endDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    File
+                  </Label>
+                  <FileInput onFilesChange={handleFilesChange} />
+                </div>
+                <DialogFooter>
+                  <Button type="submit" variant={"secondary"}>
+                    THÊM
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       )}
       {page === "registerthesis" && (
