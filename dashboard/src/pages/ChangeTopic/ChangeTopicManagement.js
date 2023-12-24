@@ -9,7 +9,6 @@ function ChangeTopicManagement() {
     useEffect(() => {
         axios.get(common.url_v1 + 'registerTopic/getAllRegisterTopicByStatus').then(res => {
             setRegisterTopics(res.data);
-            console.log(res.data);
         })
     }, []);
     const change_topic = [
@@ -22,9 +21,18 @@ function ChangeTopicManagement() {
             "topic_name": "Quản lý sinh viên"
         }
     ]
-    const confirmHandler = (ma_sv)=>{
-        axios.put(common.url_v1 +"registerTopic/facultyConfirmChangeTopic/"+ma_sv);
+    
+    const confirmHandler = (ma_sv) => {
+        axios.put(common.url_v1 + "registerTopic/facultyConfirmChangeTopic/" + ma_sv).then(() => {
+            // Sau khi xác nhận thành công, cập nhật registerTopics bằng cách loại bỏ change_topic
+            const updatedTopics = registerTopics.filter(topic => topic.ma_sv._id !== ma_sv);
+            setRegisterTopics(updatedTopics);
+        }).catch(error => {
+            // Xử lý lỗi nếu cần
+            console.error("Error confirming topic:", error);
+        });
     }
+
   return (
       <div className="change-topic-management">
           <h1>Danh sách yêu cầu đổi đề tài</h1>
