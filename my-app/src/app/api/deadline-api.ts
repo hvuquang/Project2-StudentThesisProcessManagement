@@ -75,3 +75,16 @@ export async function GETgetAllDeadlineByTeacherID(
     throw err;
   }
 }
+
+export async function GETgetSubmitDeadlineByDeadlineID(
+  deadline_id: string | undefined
+) {
+  try {
+    const response = await axios.get(
+      url + `v1/submitDeadline/getSubmitDeadlineById/${deadline_id}`
+    );
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}

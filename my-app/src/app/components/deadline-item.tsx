@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { DeadlineItemObj, Report } from "../types/types";
+import { DeadlineItemObj, Report, SubmitReport } from "../types/types";
 import { useRouter } from "next/navigation";
 import {
   QueryClient,
@@ -44,12 +44,16 @@ export const DeadlineItem = ({
   deadlineObj,
   type,
   report,
+  submitDeadlines,
+  submitReports,
 }: {
   id?: string;
   status: string;
   deadlineObj?: DeadlineItemObj;
   type?: string;
   report?: Report;
+  submitDeadlines?: DeadlineItemObj[];
+  submitReports?: SubmitReport[];
 }) => {
   const ROUTER = useRouter();
   const { data: session } = useSession();
@@ -61,6 +65,69 @@ export const DeadlineItem = ({
     new Date()
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
+  const [submitFile, setSubmitFile] = useState<string>();
+  useEffect(() => {
+    if (submitReports !== undefined && submitReports?.length > 0) {
+      let submitReport = submitReports.filter((item) => {
+        return item.id_report === id;
+      });
+      console.log(submitReport);
+      if (submitReport !== undefined && submitReport.length > 0) {
+        setSubmitFile(submitReport[0].file as string);
+        console.log(submitReport[0].file as string);
+      }
+    }
+  }, []);
+  // const convertToArray = (item: Notification) => {
+  //   if (item.file) {
+  //     let extension = (item.file as string).split(".").pop();
+  //     let filename = (item.file as string).split("\\").pop();
+  //     switch (extension) {
+  //       case "doc":
+  //       case "docx":
+  //         return (
+  //           <Link href={url + item.file}>
+  //             <p className="ml-5">
+  //               <span className="mr-3">📄</span>
+  //               {filename}
+  //             </p>
+  //           </Link>
+  //         ); // Word icon
+  //       case "pdf":
+  //         return (
+  //           <Link href={url + item.file}>
+  //             <p className="ml-5">
+  //               <span className="mr-3">📕</span>
+  //               {filename}
+  //             </p>
+  //           </Link>
+  //         ); // Word icon
+  //       case "jpg":
+  //       case "jpeg":
+  //       case "png":
+  //         return (
+  //           <Link href={url + item.file}>
+  //             <p className="ml-5">
+  //               <span className="mr-3">🖼️</span>
+  //               {filename}
+  //             </p>
+  //           </Link>
+  //         ); // Word icon; // Image icon
+  //       case "mp3":
+  //         return <span>🎵</span>; // Audio icon
+  //       default:
+  //         return (
+  //           <Link href={url + item.file}>
+  //             <p className="ml-5">
+  //               <span className="mr-3">📁</span>
+  //               {filename}
+  //             </p>
+  //           </Link> // Default icon)
+  //         );
+  //     }
+  //   }
+  //   // return <Link href={url + item.file}>File</Link>;
+  // };
   useEffect(() => {
     async function fetchData() {
       if (status === "normal") {
@@ -464,6 +531,8 @@ export const DeadlineItem = ({
 
                     <FileInput onFilesChange={handleFilesChange} />
                   </div>
+                  {submitFile && <p>{submitFile}</p>}
+                  <p>{id}</p>
                   <DialogFooter>
                     <Button type="submit" variant={"secondary"}>
                       NỘP

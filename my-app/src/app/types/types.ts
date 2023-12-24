@@ -55,3 +55,14 @@ export type RegisteredTopic = {
   change_topic?: string;
   id_new_topic?: string;
 };
+
+export type SubmitReport = {
+  _id?: string;
+  loai_bao_cao?: string;
+  ma_sv?: string;
+  id_report?: string;
+  noi_dung?: string;
+  ngay_bat_dau?: string;
+  ngay_ket_thuc?: string;
+  file?: FileList | null | string;
+};

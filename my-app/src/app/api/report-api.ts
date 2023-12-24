@@ -67,3 +67,16 @@ export async function GETgetReportByID(report_id: string | undefined) {
     throw err;
   }
 }
+
+export async function GETgetSubmitReportByReportID(
+  report_id: string | undefined
+) {
+  try {
+    const response = await axios.get(
+      url + `v1/submitReport/getSubmitReportById/${report_id}`
+    );
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}

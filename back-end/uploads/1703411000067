@@ -1,0 +1,3 @@
+
+# DB
+DATABASE_URL=postgresql://postgres:@localhost:5450/ttbs-local

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { DeadlineItem } from "./deadline-item";
-import { DeadlineItemObj } from "../types/types";
+import { DeadlineItemObj, Report, SubmitReport } from "../types/types";
 import { useSession } from "next-auth/react";
 import {
   QueryClient,
@@ -25,6 +25,9 @@ export const DeadlineList = () => {
   const [reportList, setReportList] = useState<string[]>();
   const [doneReport, setDoneReport] = useState<string[]>();
   const [allDeadlines, setAllDeadlines] = useState<DeadlineItemObj[]>();
+  const [submitReports, setSubmitReports] = useState<SubmitReport[]>();
+  const [submitReport, setSubmitReport] = useState<Report>();
+  const [submitDeadlines, setSubmitDeadlines] = useState<DeadlineItemObj[]>();
   const { isLoading, error, data } = useQuery({
     queryKey: ["registeredTopics"],
     queryFn: GETgetAllRegisterTopic,
@@ -58,6 +61,8 @@ export const DeadlineList = () => {
       setDoneDeadline(item.deadlines_done);
       setDoneReport(item.reports_done);
       setReportList(item.reports);
+      setSubmitReports(item.submit_reports);
+      setSubmitDeadlines(item.submit_deadlines);
     });
   }
 
@@ -73,6 +78,11 @@ export const DeadlineList = () => {
         setAllDeadlines(response);
       }
     }
+    // async function fetchSubmit() {
+    //   let report = submitReports?.filter((item) => {
+    //     return
+    //   })
+    // }
     fetchAllDeadline();
     fetchData();
   }, [data]);
@@ -95,7 +105,12 @@ export const DeadlineList = () => {
             {doneDeadline?.map((item) => {
               return (
                 <div>
-                  <DeadlineItem type="deadline" id={item} status="fullfilled" />
+                  <DeadlineItem
+                    submitDeadlines={submitDeadlines}
+                    type="deadline"
+                    id={item}
+                    status="fullfilled"
+                  />
                 </div>
               );
             })}
@@ -114,7 +129,12 @@ export const DeadlineList = () => {
             {doneReport?.map((item) => {
               return (
                 <div>
-                  <DeadlineItem type="report" id={item} status="fullfilled" />
+                  <DeadlineItem
+                    submitReports={submitReports}
+                    type="report"
+                    id={item}
+                    status="fullfilled"
+                  />
                 </div>
               );
             })}
