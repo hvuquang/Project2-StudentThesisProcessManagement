@@ -36,6 +36,7 @@ export async function PUTupdateNotification(notification: Notification) {
       {
         tieu_de: notification.tieu_de,
         // topic_description: topic.topic_description,
+        noi_dung: notification.noi_dung,
       }
     );
   } catch (err) {
