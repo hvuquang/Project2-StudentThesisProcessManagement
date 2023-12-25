@@ -101,6 +101,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     noi_dung: "",
     ngay_bat_dau: "",
     ngay_ket_thuc: "",
+    file: "",
     ma_gv: "",
   });
 
@@ -167,6 +168,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       setDeadline({
         tieu_de: deadline_title,
         noi_dung: deadline_content,
+        file: file,
         ngay_bat_dau: startDate?.toISOString(),
         ngay_ket_thuc: endDate?.toISOString(),
       });
@@ -212,6 +214,10 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
         noi_dung: notification.noi_dung ?? "",
         file: files,
       });
+      setDeadline((prevState) => ({
+        ...prevState,
+        file: files,
+      }));
       setReport((prevState) => ({
         ...prevState,
         file: files,
@@ -232,6 +238,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     setDeadline({
       tieu_de: deadline.tieu_de,
       noi_dung: deadline.noi_dung,
+      file: deadline.file,
       ngay_bat_dau: start,
       ngay_ket_thuc: end,
     });
@@ -358,6 +365,12 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                       />
                     </PopoverContent>
                   </Popover>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    File
+                  </Label>
+                  <FileInput onFilesChange={handleFilesChange} />
                 </div>
                 <DialogFooter>
                   <Button type="submit" variant={"secondary"}>

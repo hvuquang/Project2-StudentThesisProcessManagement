@@ -9,22 +9,36 @@ export async function POSTaddDeadline({
   deadline: DeadlineItemObj;
   teacher_id: string;
 }) {
+  // try {
+  //   await axios
+  //     .post(url + `v1/deadline/addDeadline/${teacher_id}`, {
+  //       tieu_de: deadline?.tieu_de,
+  //       noi_dung: deadline?.noi_dung,
+  //       ngay_bat_dau: deadline?.ngay_bat_dau,
+  //       ngay_ket_thuc: deadline?.ngay_ket_thuc,
+  //     })
+  //     .then((res) => {
+  //       console.log(
+  //         "Tạo deadline thành công: " +
+  //           res.data.tieu_de +
+  //           ", " +
+  //           res.data.noi_dung
+  //       );
+  //     });
+  // } catch (err) {
+  //   throw err;
+  // }
   try {
-    await axios
-      .post(url + `v1/deadline/addDeadline/${teacher_id}`, {
-        tieu_de: deadline?.tieu_de,
-        noi_dung: deadline?.noi_dung,
-        ngay_bat_dau: deadline?.ngay_bat_dau,
-        ngay_ket_thuc: deadline?.ngay_ket_thuc,
-      })
-      .then((res) => {
-        console.log(
-          "Tạo deadline thành công: " +
-            res.data.tieu_de +
-            ", " +
-            res.data.noi_dung
-        );
-      });
+    const formData = new FormData();
+    formData.append("tieu_de", deadline.tieu_de || "");
+    formData.append("noi_dung", deadline.noi_dung || "");
+    formData.append("ngay_bat_dau", deadline.ngay_bat_dau || "");
+    formData.append("ngay_ket_thuc", deadline.ngay_ket_thuc || "");
+    if (deadline.file)
+      for (let i = 0; i < deadline.file.length; i++) {
+        formData.append("file", deadline.file[i]);
+      }
+    await axios.post(url + `v1/deadline/addDeadline/${teacher_id}`, formData);
   } catch (err) {
     throw err;
   }

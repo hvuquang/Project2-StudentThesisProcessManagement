@@ -3,7 +3,7 @@ export type DeadlineItemObj = {
   noi_dung?: string;
   ngay_bat_dau?: string;
   ngay_ket_thuc?: string;
-  file?: string;
+  file?: FileList | null | string;
   ma_gv?: string;
 };
 
