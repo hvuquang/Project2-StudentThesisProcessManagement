@@ -38,6 +38,8 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { GETgetReportByID, PUTupdateStatusReport } from "../api/report-api";
+import { url } from "../lib/constants";
+import Link from "next/link";
 export const DeadlineItem = ({
   id,
   status,
@@ -78,56 +80,56 @@ export const DeadlineItem = ({
       }
     }
   }, []);
-  // const convertToArray = (item: Notification) => {
-  //   if (item.file) {
-  //     let extension = (item.file as string).split(".").pop();
-  //     let filename = (item.file as string).split("\\").pop();
-  //     switch (extension) {
-  //       case "doc":
-  //       case "docx":
-  //         return (
-  //           <Link href={url + item.file}>
-  //             <p className="ml-5">
-  //               <span className="mr-3">📄</span>
-  //               {filename}
-  //             </p>
-  //           </Link>
-  //         ); // Word icon
-  //       case "pdf":
-  //         return (
-  //           <Link href={url + item.file}>
-  //             <p className="ml-5">
-  //               <span className="mr-3">📕</span>
-  //               {filename}
-  //             </p>
-  //           </Link>
-  //         ); // Word icon
-  //       case "jpg":
-  //       case "jpeg":
-  //       case "png":
-  //         return (
-  //           <Link href={url + item.file}>
-  //             <p className="ml-5">
-  //               <span className="mr-3">🖼️</span>
-  //               {filename}
-  //             </p>
-  //           </Link>
-  //         ); // Word icon; // Image icon
-  //       case "mp3":
-  //         return <span>🎵</span>; // Audio icon
-  //       default:
-  //         return (
-  //           <Link href={url + item.file}>
-  //             <p className="ml-5">
-  //               <span className="mr-3">📁</span>
-  //               {filename}
-  //             </p>
-  //           </Link> // Default icon)
-  //         );
-  //     }
-  //   }
-  //   // return <Link href={url + item.file}>File</Link>;
-  // };
+  const convertToArray = (item: string) => {
+    if (item) {
+      let extension = (item as string).split(".").pop();
+      let filename = (item as string).split("\\").pop();
+      switch (extension) {
+        case "doc":
+        case "docx":
+          return (
+            <Link href={url + item}>
+              <p className="ml-5">
+                <span className="mr-3">📄</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon
+        case "pdf":
+          return (
+            <Link href={url + item}>
+              <p className="ml-5">
+                <span className="mr-3">📕</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon
+        case "jpg":
+        case "jpeg":
+        case "png":
+          return (
+            <Link href={url + item}>
+              <p className="ml-5">
+                <span className="mr-3">🖼️</span>
+                {filename}
+              </p>
+            </Link>
+          ); // Word icon; // Image icon
+        case "mp3":
+          return <span>🎵</span>; // Audio icon
+        default:
+          return (
+            <Link href={url + item}>
+              <p className="ml-5">
+                <span className="mr-3">📁</span>
+                {filename}
+              </p>
+            </Link> // Default icon)
+          );
+      }
+    }
+    //   // return <Link href={url + item.file}>File</Link>;
+  };
   useEffect(() => {
     async function fetchData() {
       if (status === "normal") {
@@ -246,53 +248,88 @@ export const DeadlineItem = ({
                     <Label htmlFor="name" className="text-right">
                       Tiêu đề deadline
                     </Label>
-                    <Input
-                      readOnly
-                      id="name"
-                      defaultValue={
-                        status === "normal"
-                          ? deadlineObj?.tieu_de
-                          : deadlineItem?.tieu_de
-                      }
-                      className="col-span-3"
-                      // onChange={(e) => {
-                      //   handleChange(
-                      //     "",
-                      //     "",
-                      //     undefined,
-                      //     e.target.value,
-                      //     deadline.noi_dung,
-                      //     deadline.ngay_bat_dau,
-                      //     deadline.ngay_ket_thuc
-                      //   );
-                      // }}
-                    />
+                    {session?.user?.account_type === "gv" ? (
+                      <Input
+                        id="name"
+                        defaultValue={
+                          status === "normal"
+                            ? deadlineObj?.tieu_de
+                            : deadlineItem?.tieu_de
+                        }
+                        className="col-span-3"
+                        // onChange={(e) => {
+                        //   handleChange(
+                        //     "",
+                        //     "",
+                        //     undefined,
+                        //     e.target.value,
+                        //     deadline.noi_dung,
+                        //     deadline.ngay_bat_dau,
+                        //     deadline.ngay_ket_thuc
+                        //   );
+                        // }}
+                      />
+                    ) : (
+                      <Input
+                        id="name"
+                        readOnly
+                        defaultValue={
+                          status === "normal"
+                            ? deadlineObj?.tieu_de
+                            : deadlineItem?.tieu_de
+                        }
+                        className="col-span-3"
+                        // onChange={(e) => {
+                        //   handleChange(
+                        //     "",
+                        //     "",
+                        //     undefined,
+                        //     e.target.value,
+                        //     deadline.noi_dung,
+                        //     deadline.ngay_bat_dau,
+                        //     deadline.ngay_ket_thuc
+                        //   );
+                        // }}
+                      />
+                    )}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
                       Nội dung deadline
                     </Label>
-                    <Input
-                      readOnly
-                      id="username"
-                      defaultValue={
-                        status === "normal"
-                          ? deadlineObj?.noi_dung
-                          : deadlineItem?.noi_dung
-                      }
-                      className="col-span-3"
-                      // onChange={(e) => {
-                      //   handleChange(
-                      //     "",
-                      //     "",
-                      //     undefined,
-                      //     deadline.tieu_de,
-                      //     e.target.value,
-                      //     deadline.ngay_bat_dau,
-                      //     deadline.ngay_ket_thuc
-                      //   );
-                      // }}
-                    />
+                    {session?.user?.account_type === "gv" ? (
+                      <Input
+                        id="username"
+                        defaultValue={
+                          status === "normal"
+                            ? deadlineObj?.noi_dung
+                            : deadlineItem?.noi_dung
+                        }
+                        className="col-span-3"
+                        // onChange={(e) => {
+                        //   handleChange(
+                        //     "",
+                        //     "",
+                        //     undefined,
+                        //     deadline.tieu_de,
+                        //     e.target.value,
+                        //     deadline.ngay_bat_dau,
+                        //     deadline.ngay_ket_thuc
+                        //   );
+                        // }}
+                      />
+                    ) : (
+                      <Input
+                        readOnly
+                        id="username"
+                        defaultValue={
+                          status === "normal"
+                            ? deadlineObj?.noi_dung
+                            : deadlineItem?.noi_dung
+                        }
+                        className="col-span-3"
+                      />
+                    )}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
@@ -408,11 +445,11 @@ export const DeadlineItem = ({
                 </p>
               </DialogTrigger>
               <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
-                <DialogHeader title="Tạo deadline" />
+                <DialogHeader title="Tạo báo cáo" />
                 <form className="grid gap-4 py-4" onSubmit={handleSubmitReport}>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="name" className="text-right">
-                      Tiêu đề deadline
+                      Tiêu đề báo cáo
                     </Label>
                     <Input
                       readOnly
@@ -438,7 +475,7 @@ export const DeadlineItem = ({
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
-                      Nội dung deadline
+                      Nội dung báo cáo
                     </Label>
                     <Input
                       readOnly
@@ -534,12 +571,21 @@ export const DeadlineItem = ({
 
                     <FileInput onFilesChange={handleFilesChange} />
                   </div>
-                  {submitFile && <p>{submitFile}</p>}
-                  <p>{id}</p>
+                  {submitFile ? (
+                    <div className="">
+                      File đã nộp: {convertToArray(submitFile)}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <DialogFooter>
-                    <Button type="submit" variant={"secondary"}>
-                      NỘP
-                    </Button>
+                    {submitFile ? (
+                      ""
+                    ) : (
+                      <Button type="submit" variant={"secondary"}>
+                        NỘP
+                      </Button>
+                    )}
                   </DialogFooter>
                 </form>
               </DialogContent>
