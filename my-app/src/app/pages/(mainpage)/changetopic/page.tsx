@@ -50,7 +50,7 @@ const ChangeTopic = () => {
               <p>Họ tên: {item.ma_sv?.fullname}</p>
               <p>Email: {item.ma_sv?.email}</p>
               <p>Đề tài cũ: {item.id_topic}</p>
-              <p>Đề tài mới muốn đổi: {item.id_new_topic}</p>
+              <p>Đề tài mới muốn đổi: {item.id_new_topic?.topic_name}</p>
             </div>
             <div className="flex flex-col gap-5">
               <Button

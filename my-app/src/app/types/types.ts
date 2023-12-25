@@ -32,6 +32,7 @@ export type Topic = {
 export type Notification = {
   _id?: string;
   tieu_de?: string;
+  noi_dung?: string;
   file?: FileList | null | string;
   createdAt?: string;
 };
@@ -53,7 +54,12 @@ export type RegisteredTopic = {
   submit_reports?: [];
   submit_deadlines?: [];
   change_topic?: string;
-  id_new_topic?: string;
+  id_new_topic?: {
+    ma_gv?: string;
+    topic_description?: string;
+    trang_thai?: string;
+    topic_name?: string;
+  };
 };
 
 export type SubmitReport = {

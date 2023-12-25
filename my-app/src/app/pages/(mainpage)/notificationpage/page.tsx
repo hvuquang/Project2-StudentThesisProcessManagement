@@ -31,6 +31,7 @@ const NotificationPage = () => {
   const [notificationItem, setNotificationItem] = useState<Notification | null>(
     {
       tieu_de: "",
+      noi_dung: "",
       file: null,
       _id: "",
     }
@@ -65,6 +66,7 @@ const NotificationPage = () => {
   ) => {
     setNotificationItem({
       tieu_de: tieu_de,
+      noi_dung: topic_description,
       file: null,
       _id: _id,
     });
@@ -157,7 +159,7 @@ const NotificationPage = () => {
                 >
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="name" className="text-right">
-                      Tên đề tài
+                      Tên thông báo
                     </Label>
 
                     <Input
@@ -169,23 +171,19 @@ const NotificationPage = () => {
                       }}
                     />
                   </div>
-                  {/* <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Nội dung đề tài
-                  </Label>
-                  <Input
-                    id="username"
-                    defaultValue={topicItem.topic_description}
-                    className="col-span-3"
-                    onChange={(e) => {
-                      handleChange(
-                        undefined,
-                        e.target.value,
-                        topicItem._id ?? ""
-                      );
-                    }}
-                  />
-                </div> */}
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Nội dung thông báo
+                    </Label>
+                    <Input
+                      id="username"
+                      defaultValue={item.noi_dung}
+                      className="col-span-3"
+                      onChange={(e) => {
+                        handleChange(undefined, e.target.value, item._id ?? "");
+                      }}
+                    />
+                  </div>
                   <DialogFooter>
                     <Button type="submit" variant={"secondary"}>
                       Cập nhật đề tài

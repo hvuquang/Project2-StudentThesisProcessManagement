@@ -142,11 +142,17 @@ export const DeadlineList = () => {
         </div>
       )}
       {session?.user?.account_type === "gv" && (
-        <>
+        <div>
           {allDeadlines?.map((item) => {
-            return <DeadlineItem deadlineObj={item} status="normal" />;
+            return (
+              <DeadlineItem
+                type="deadline"
+                deadlineObj={item}
+                status="normal"
+              />
+            );
           })}
-        </>
+        </div>
       )}
     </div>
   );

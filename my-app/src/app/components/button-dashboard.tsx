@@ -92,6 +92,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
   });
   const [notification, setNotification] = useState<Notification>({
     tieu_de: "",
+    noi_dung: "",
     file: null,
   });
 
@@ -122,6 +123,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     } else if (page === "notificationpage") {
       addNotification.mutate({
         tieu_de: notification.tieu_de,
+        noi_dung: notification.noi_dung,
         file: notification.file,
       });
       return;
@@ -156,6 +158,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     if (page === "notificationpage") {
       setNotification({
         tieu_de: topic_name,
+        noi_dung: topic_description,
         file: file,
       });
       return;
@@ -206,6 +209,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       const fileNames = Array.from(files).map((file) => file.name);
       setNotification({
         tieu_de: notification.tieu_de ?? "",
+        noi_dung: notification.noi_dung ?? "",
         file: files,
       });
       setReport((prevState) => ({
@@ -584,7 +588,28 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                     defaultValue="Pedro Duarte"
                     className="col-span-3"
                     onChange={(e) => {
-                      handleChange(e.target.value, "", undefined);
+                      handleChange(
+                        e.target.value,
+                        notification.noi_dung,
+                        undefined
+                      );
+                    }}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Nội dung thông báo
+                  </Label>
+                  <Input
+                    id="content"
+                    defaultValue="Pedro Duarte"
+                    className="col-span-3"
+                    onChange={(e) => {
+                      handleChange(
+                        notification.tieu_de,
+                        e.target.value,
+                        undefined
+                      );
                     }}
                   />
                 </div>

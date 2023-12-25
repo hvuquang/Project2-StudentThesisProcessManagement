@@ -7,7 +7,7 @@ export async function POSTaddNotification(notification: Notification) {
   try {
     const formData = new FormData();
     formData.append("tieu_de", notification.tieu_de || "");
-    // formData.append("file", notification.file);
+    formData.append("noi_dung", notification.noi_dung || "");
     if (notification.file)
       for (let i = 0; i < notification.file.length; i++) {
         formData.append("file", notification.file[i]);

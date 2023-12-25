@@ -368,7 +368,10 @@ export const DeadlineItem = ({
                   </div>
                   <DialogFooter>
                     <Button type="submit" variant={"secondary"}>
-                      NỘP
+                      {/* NỘP */}
+                      {session?.user?.account_type === "gv"
+                        ? "Cập nhật"
+                        : "Nộp"}
                     </Button>
                   </DialogFooter>
                 </form>
