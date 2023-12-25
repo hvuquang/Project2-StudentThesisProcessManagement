@@ -40,6 +40,7 @@ import { useSession } from "next-auth/react";
 import { GETgetReportByID, PUTupdateStatusReport } from "../api/report-api";
 import { url } from "../lib/constants";
 import Link from "next/link";
+import { divider } from "@nextui-org/react";
 export const DeadlineItem = ({
   id,
   status,
@@ -48,6 +49,7 @@ export const DeadlineItem = ({
   report,
   submitDeadlines,
   submitReports,
+  currentPage,
 }: {
   id?: string;
   status: string;
@@ -56,6 +58,7 @@ export const DeadlineItem = ({
   report?: Report;
   submitDeadlines?: DeadlineItemObj[];
   submitReports?: SubmitReport[];
+  currentPage?: string;
 }) => {
   const ROUTER = useRouter();
   const { data: session } = useSession();
@@ -73,13 +76,11 @@ export const DeadlineItem = ({
       let submitReport = submitReports.filter((item) => {
         return item.id_report === id;
       });
-      console.log(submitReport);
       if (submitReport !== undefined && submitReport.length > 0) {
         setSubmitFile(submitReport[0].file as string);
-        console.log(submitReport[0].file as string);
       }
     }
-  }, []);
+  }, [currentPage]);
   const convertToArray = (item: string) => {
     if (item) {
       let extension = (item as string).split(".").pop();
@@ -151,7 +152,7 @@ export const DeadlineItem = ({
       }
     }
     fetchData();
-  }, []);
+  }, [currentPage]);
   const handleFilesChange = (files: FileList | null) => {
     // Do something with the selected files
     if (files) {
@@ -235,11 +236,36 @@ export const DeadlineItem = ({
             )}
             <Dialog>
               <DialogTrigger>
-                <p className="text-indigo-500 hover:underline">
-                  {status === "normal"
-                    ? deadlineObj?.tieu_de
-                    : deadlineItem?.tieu_de}
-                </p>
+                <div className="my-3">
+                  <p className="text-indigo-500 hover:underline text-left">
+                    {status === "normal"
+                      ? deadlineObj?.tieu_de
+                      : deadlineItem?.tieu_de}
+                  </p>
+                  <p className="text-left ml-5 text-sm">
+                    {status === "normal" ? (
+                      <span className="font-semibold">Nội dung: </span>
+                    ) : (
+                      ""
+                    )}
+
+                    {status === "normal" ? deadlineObj?.noi_dung : ""}
+                  </p>
+                  {deadlineObj?.file ? (
+                    <div className="text-left ml-5 text-sm">
+                      {status === "normal" ? (
+                        <div>
+                          <span className="font-semibold">File tham khảo:</span>
+                          {convertToArray(deadlineObj?.file as string)}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </DialogTrigger>
               <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
                 <DialogHeader title="Tạo deadline" />
@@ -403,6 +429,13 @@ export const DeadlineItem = ({
 
                     <FileInput onFilesChange={handleFilesChange} />
                   </div>
+                  {deadlineObj?.file ? (
+                    <div className="">
+                      File đã nộp: {convertToArray(deadlineObj?.file as string)}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <DialogFooter>
                     <Button type="submit" variant={"secondary"}>
                       {/* NỘP */}
@@ -415,6 +448,9 @@ export const DeadlineItem = ({
               </DialogContent>
             </Dialog>
           </div>
+          {status === "normal" && (
+            <div className="mb-5 border w-full h-[1px]"></div>
+          )}
         </div>
       )}
       {type === "report" && (

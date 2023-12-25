@@ -19,7 +19,6 @@ import { toast } from "sonner";
 
 export const DeadlineList = () => {
   const { data: session } = useSession();
-  const queryClient = useQueryClient();
   const [deadlineList, setDeadlineList] = useState<string[]>();
   const [doneDeadline, setDoneDeadline] = useState<string[]>();
   const [reportList, setReportList] = useState<string[]>();
@@ -33,16 +32,7 @@ export const DeadlineList = () => {
     queryFn: GETgetAllRegisterTopic,
   });
   const [registeredTopic, setRegisteredTopic] = useState<RegisteredTopic[]>();
-  // useEffect(() => {
-  //   async function fetchAllDeadline() {
-  //     if (session?.user?.account_type === "gv") {
-  //       const response = await GETgetAllDeadlineByTeacherID(session?.user?._id);
-  //       setAllDeadlines(response);
-  //       console.log("All deadlines: " + response);
-  //     }
-  //   }
-  //   fetchAllDeadline();
-  // }, []);
+
   function getRegisteredTopic() {
     if (data)
       data.map((item: RegisteredTopic) => {
@@ -78,67 +68,144 @@ export const DeadlineList = () => {
         setAllDeadlines(response);
       }
     }
-    // async function fetchSubmit() {
-    //   let report = submitReports?.filter((item) => {
-    //     return
-    //   })
-    // }
     fetchAllDeadline();
     fetchData();
   }, [data]);
 
+  const [currentPage, setCurrentPage] = useState("deadline");
+
+  const renderContent = () => {
+    switch (currentPage) {
+      case "report":
+        return (
+          <div>
+            <div>
+              <div className="bg-red-500 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Report chưa hoàn thành</span>
+              </div>
+              {reportList?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem
+                      type="report"
+                      id={item}
+                      status="pending"
+                      currentPage={currentPage}
+                    />
+                  </div>
+                );
+              })}
+              <div className="bg-green-700 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Report đã hoàn thành</span>
+              </div>
+              {doneReport?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem
+                      submitReports={submitReports}
+                      type="report"
+                      id={item}
+                      status="fullfilled"
+                      currentPage={currentPage}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      case "deadline":
+        return (
+          <div>
+            <div>
+              <div className="bg-red-500 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Deadline chưa hoàn thành</span>
+              </div>
+              {deadlineList?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem type="deadline" id={item} status="pending" />
+                  </div>
+                );
+              })}
+              <div className="bg-green-700 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Deadline đã hoàn thành</span>
+              </div>
+              {doneDeadline?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem
+                      submitDeadlines={submitDeadlines}
+                      type="deadline"
+                      id={item}
+                      status="fullfilled"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <div>
+              <div className="bg-red-500 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Deadline chưa hoàn thành</span>
+              </div>
+              {deadlineList?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem
+                      type="deadline"
+                      id={item}
+                      status="pending"
+                      currentPage={currentPage}
+                    />
+                  </div>
+                );
+              })}
+              <div className="bg-green-700 text-white px-4 py-2 rounded-md shadow my-3">
+                <span className="font-semibold">Deadline đã hoàn thành</span>
+              </div>
+              {doneDeadline?.map((item) => {
+                return (
+                  <div>
+                    <DeadlineItem
+                      submitDeadlines={submitDeadlines}
+                      type="deadline"
+                      id={item}
+                      status="fullfilled"
+                      currentPage={currentPage}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3 overflow-y-visible">
       {session?.user?.account_type === "sv" && (
-        <div className="flex flex-col gap-10">
-          <div>
-            <p>Deadline chưa hoàn thành</p>
-            {deadlineList?.map((item) => {
-              return (
-                <div>
-                  <DeadlineItem type="deadline" id={item} status="pending" />
-                </div>
-              );
-            })}
-            <div className="border w-full h-[1px]"></div>
-            <p>Deadline đã hoàn thành</p>
-            {doneDeadline?.map((item) => {
-              return (
-                <div>
-                  <DeadlineItem
-                    submitDeadlines={submitDeadlines}
-                    type="deadline"
-                    id={item}
-                    status="fullfilled"
-                  />
-                </div>
-              );
-            })}
+        <div>
+          <div className="flex flex-row gap-10 text-center justify-center">
+            <button
+              className="bg-indigo-500 flex-1 text-white rounded-md font-bold p-3"
+              onClick={() => setCurrentPage("report")}
+            >
+              Report
+            </button>
+            <button
+              className="bg-indigo-500 flex-1 text-white rounded-md font-bold p-3"
+              onClick={() => setCurrentPage("deadline")}
+            >
+              Deadline
+            </button>
           </div>
-          <div>
-            <p>Report chưa hoàn thành</p>
-            {reportList?.map((item) => {
-              return (
-                <div>
-                  <DeadlineItem type="report" id={item} status="pending" />
-                </div>
-              );
-            })}
-            <div className="border w-full h-[1px]"></div>
-            <p>Report đã hoàn thành</p>
-            {doneReport?.map((item) => {
-              return (
-                <div>
-                  <DeadlineItem
-                    submitReports={submitReports}
-                    type="report"
-                    id={item}
-                    status="fullfilled"
-                  />
-                </div>
-              );
-            })}
-          </div>
+          <div>{renderContent()}</div>
         </div>
       )}
       {session?.user?.account_type === "gv" && (
