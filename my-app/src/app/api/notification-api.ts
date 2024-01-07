@@ -7,6 +7,7 @@ export async function POSTaddNotification(notification: Notification) {
   try {
     const formData = new FormData();
     formData.append("tieu_de", notification.tieu_de || "");
+    formData.append("noi_dung", notification.noi_dung || "");
     // formData.append("file", notification.file);
     if (notification.file)
       for (let i = 0; i < notification.file.length; i++) {
@@ -35,7 +36,7 @@ export async function PUTupdateNotification(notification: Notification) {
       url + `v1/notification/updateNotification/${notification._id}`,
       {
         tieu_de: notification.tieu_de,
-        // topic_description: topic.topic_description,
+        noi_dung: notification.noi_dung,
       }
     );
   } catch (err) {

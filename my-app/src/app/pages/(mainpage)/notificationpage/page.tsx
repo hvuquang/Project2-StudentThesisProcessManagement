@@ -31,6 +31,7 @@ const NotificationPage = () => {
   const [notificationItem, setNotificationItem] = useState<Notification | null>(
     {
       tieu_de: "",
+      noi_dung: "",
       file: null,
       _id: "",
     }
@@ -59,12 +60,13 @@ const NotificationPage = () => {
   };
   const handleChange = (
     tieu_de?: string,
-    topic_description?: string,
+    noi_dung?: string,
     _id?: string,
     date?: string
   ) => {
     setNotificationItem({
       tieu_de: tieu_de,
+      noi_dung: noi_dung,
       file: null,
       _id: _id,
     });
@@ -134,75 +136,84 @@ const NotificationPage = () => {
 
   return (
     <DashboardLayout>
-      {data?.map((item: Notification) => (
-        <div className="w-full">
-          <div className="flex justify-between w-full">
-            <Dialog>
-              <DialogTrigger>
-                <div>
-                  <p className="text-indigo-500 hover:underline">
-                    {item.tieu_de}
-                  </p>
+      {data?.map((item: Notification) => {
+        let notify = item;
+        return (
+          <div className="w-full">
+            <div className="flex justify-between w-full">
+              <Dialog>
+                <DialogTrigger>
+                  <div>
+                    <p className="text-indigo-500 hover:underline">
+                      {item.tieu_de || "Tiêu đề rỗng"}
+                    </p>
 
-                  {/* <p>{item.file}</p> */}
-                </div>
-              </DialogTrigger>
-              <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
-                <DialogHeader title="Cập nhật đề tài KLTN" />
-                <form
-                  className="grid gap-4 py-4"
-                  onSubmit={(e) => {
-                    handleSubmit(e);
-                  }}
-                >
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="name" className="text-right">
-                      Tên đề tài
-                    </Label>
-
-                    <Input
-                      id="name"
-                      defaultValue={item.tieu_de}
-                      className="col-span-3"
-                      onChange={(e) => {
-                        handleChange(e.target.value, undefined, item._id);
-                      }}
-                    />
+                    {/* <p>{item.file}</p> */}
                   </div>
-                  {/* <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Nội dung đề tài
-                  </Label>
-                  <Input
-                    id="username"
-                    defaultValue={topicItem.topic_description}
-                    className="col-span-3"
-                    onChange={(e) => {
-                      handleChange(
-                        undefined,
-                        e.target.value,
-                        topicItem._id ?? ""
-                      );
+                </DialogTrigger>
+                <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
+                  <DialogHeader title="Cập nhật thông báo" />
+                  <form
+                    className="grid gap-4 py-4"
+                    onSubmit={(e) => {
+                      handleSubmit(e);
                     }}
-                  />
-                </div> */}
-                  <DialogFooter>
-                    <Button type="submit" variant={"secondary"}>
-                      Cập nhật đề tài
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-            <div>
-              <p>{formatDate(item.createdAt as string)}</p>
-            </div>
-          </div>
+                  >
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Tiêu đề thông báo
+                      </Label>
 
-          <p className="text-sm text-left ml-5 mb-5">{convertToArray(item)}</p>
-          <div className="mb-5 border w-full h-[1px]"></div>
-        </div>
-      ))}
+                      <Input
+                        id="name"
+                        defaultValue={item.tieu_de}
+                        className="col-span-3"
+                        onChange={(e) => {
+                          handleChange(
+                            e.target.value || item.tieu_de,
+                            notificationItem?.noi_dung || item.noi_dung,
+                            item._id
+                          );
+                        }}
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="username" className="text-right">
+                        Nội dung thông báo
+                      </Label>
+                      <Input
+                        id="noidung"
+                        defaultValue={item.noi_dung}
+                        className="col-span-3"
+                        onChange={(e) => {
+                          handleChange(
+                            notificationItem?.tieu_de || item.tieu_de,
+                            e.target.value || item.noi_dung,
+                            item._id ?? ""
+                          );
+                        }}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" variant={"secondary"}>
+                        Cập nhật thông báo
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+              <div>
+                <p>{formatDate(item.createdAt as string)}</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-left ml-5 mb-5">
+              {convertToArray(item)}
+            </p>
+            <div className="mb-5 border w-full h-[1px]"></div>
+          </div>
+        );
+      })}
     </DashboardLayout>
   );
 };

@@ -32,6 +32,7 @@ export type Topic = {
 export type Notification = {
   _id?: string;
   tieu_de?: string;
+  noi_dung?: string;
   file?: FileList | null | string;
   createdAt?: string;
 };

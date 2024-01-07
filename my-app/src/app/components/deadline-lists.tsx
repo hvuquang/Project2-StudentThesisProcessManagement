@@ -78,11 +78,6 @@ export const DeadlineList = () => {
         setAllDeadlines(response);
       }
     }
-    // async function fetchSubmit() {
-    //   let report = submitReports?.filter((item) => {
-    //     return
-    //   })
-    // }
     fetchAllDeadline();
     fetchData();
   }, [data]);
