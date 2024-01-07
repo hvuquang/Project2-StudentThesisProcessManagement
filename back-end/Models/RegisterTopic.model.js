@@ -55,6 +55,10 @@ const registerTopicSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         default: true
+    },
+    score: {
+        type: String,
+        default: "Chưa có kết quả"
     }
 },{timestamps: true});
 

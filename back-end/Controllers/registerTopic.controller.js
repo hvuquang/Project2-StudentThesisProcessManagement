@@ -145,6 +145,20 @@ const registerTopicController = {
             res.status(500).json(error);
         }
     },
+    inputScore: async(req,res)=>{
+        try {
+            const {id_registerToppic} = req.params;
+            if (Number(req.body.score) >= 0 && Number(req.body.score) <= 10){
+                const registerTopic = await registerTopicModel.findByIdAndUpdate(id_registerToppic, req.body, { new: true });
+                res.status(200).json(registerTopic)
+            }
+            else{
+                res.status(404).json("Please enter a score from 0 to 10");
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 };
 
 module.exports = registerTopicController;

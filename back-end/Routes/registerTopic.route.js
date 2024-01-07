@@ -9,5 +9,6 @@ router.put("/teacherConfirmChangeTopic/:ma_sv", registerTopicController.teacherC
 router.put("/facultyConfirmChangeTopic/:ma_sv", registerTopicController.facultyConfirmChangeTopic);
 router.delete("/deleteRegisterTopic/:_id&:id_topic", registerTopicController.deleteRegisterTopic);
 router.get('/getAllRegisterTopicByStatus', registerTopicController.getAllRegisterByStatus);
+router.put("/inputScore/:id_registerToppic", registerTopicController.inputScore);
 
 module.exports = router;
