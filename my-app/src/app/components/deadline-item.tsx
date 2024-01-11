@@ -18,7 +18,12 @@ import {
   DialogHeader,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { DeadlineItemObj, Report, SubmitReport } from "../types/types";
+import {
+  DeadlineItemObj,
+  Report,
+  SubmitDeadline,
+  SubmitReport,
+} from "../types/types";
 import { useRouter } from "next/navigation";
 import {
   QueryClient,
@@ -52,7 +57,7 @@ export const DeadlineItem = ({
   deadlineObj?: DeadlineItemObj;
   type?: string;
   report?: Report;
-  submitDeadlines?: DeadlineItemObj[];
+  submitDeadlines?: SubmitDeadline[];
   submitReports?: SubmitReport[];
 }) => {
   const ROUTER = useRouter();
@@ -67,6 +72,16 @@ export const DeadlineItem = ({
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   const [submitFile, setSubmitFile] = useState<string>();
   useEffect(() => {
+    if (submitDeadlines !== undefined && submitDeadlines?.length > 0) {
+      let submitReport = submitDeadlines.filter((item) => {
+        return item.id_report === id;
+      });
+      console.log(submitReport);
+      if (submitReport !== undefined && submitReport.length > 0) {
+        setSubmitFile(submitReport[0].file as string);
+        console.log(submitReport[0].file as string);
+      }
+    }
     if (submitReports !== undefined && submitReports?.length > 0) {
       let submitReport = submitReports.filter((item) => {
         return item.id_report === id;
@@ -366,6 +381,8 @@ export const DeadlineItem = ({
 
                     <FileInput onFilesChange={handleFilesChange} />
                   </div>
+                  {submitFile && <p>{submitFile}</p>}
+                  <p>{id}</p>
                   <DialogFooter>
                     <Button type="submit" variant={"secondary"}>
                       NỘP

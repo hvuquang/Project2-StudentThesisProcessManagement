@@ -358,6 +358,12 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
                     </PopoverContent>
                   </Popover>
                 </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    File
+                  </Label>
+                  <FileInput onFilesChange={handleFilesChange} />
+                </div>
                 <DialogFooter>
                   <Button type="submit" variant={"secondary"}>
                     THÊM

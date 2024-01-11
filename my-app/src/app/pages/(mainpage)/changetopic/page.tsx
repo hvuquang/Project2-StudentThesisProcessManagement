@@ -1,5 +1,6 @@
 "use client";
 import {
+  DELETEregisterTopic,
   GETgetAllRegisterTopic,
   PUTTeacherConfirmRequestChangeTopic,
 } from "@/app/api/topic-api";
@@ -30,6 +31,26 @@ const ChangeTopic = () => {
       toast.error("Chấp thuận yêu cầu ĐTĐT thất bại: " + err);
     },
   });
+
+  const teacherRefuseRequestChangeTopic = useMutation({
+    mutationFn: ({
+      registerTopic_id,
+      newTopic_id,
+    }: {
+      registerTopic_id: string;
+      newTopic_id: string;
+    }) => {
+      return DELETEregisterTopic({ registerTopic_id, newTopic_id });
+    },
+    onSuccess: () => {
+      toast.success("Từ chối yêu cầu ĐTĐT thành công");
+      queryClient.invalidateQueries({ queryKey: ["registeredTopics"] });
+    },
+    onError: (err) => {
+      toast.error("Từ chối yêu cầu ĐTĐT thất bại: " + err);
+    },
+  });
+
   useEffect(() => {
     if (allRegisterTopic.data) {
       setTopic(
@@ -44,41 +65,43 @@ const ChangeTopic = () => {
     if (filteredTopics.length > 0) {
       console.log(filteredTopics);
       return filteredTopics.map((item: RegisteredTopic) => {
-        return (
-          <div className="flex justify-between border-2 p-5 rounded-md hover:cursor-pointer hover:border-indigo-500 transition-all delay-100 duration-300">
-            <div>
-              <p>Họ tên: {item.ma_sv?.fullname}</p>
-              <p>Email: {item.ma_sv?.email}</p>
-              <p>Đề tài cũ: {item.id_topic}</p>
-              <p>Đề tài mới muốn đổi: {item.id_new_topic}</p>
+        if (item.active == true)
+          return (
+            <div className="flex mb-3 justify-between border-2 p-5 rounded-md hover:cursor-pointer hover:border-indigo-500 transition-all delay-100 duration-300">
+              <div>
+                <p>Họ tên: {item.ma_sv?.fullname}</p>
+                <p>Email: {item.ma_sv?.email}</p>
+                <p>Đề tài cũ: {item.topic_name}</p>
+                <p>Đề tài mới muốn đổi: {item.id_new_topic!.topic_name}</p>
+              </div>
+              <div className="flex flex-col gap-5">
+                <Button
+                  type="submit"
+                  variant={"default"}
+                  onClick={() => {
+                    teacherConfirmRequestChangeTopic.mutate({
+                      student_id: item.ma_sv?._id || "",
+                    });
+                  }}
+                >
+                  Chấp thuận
+                </Button>
+                <Button
+                  type="submit"
+                  variant={"outline"}
+                  onClick={() => {
+                    teacherRefuseRequestChangeTopic.mutate({
+                      registerTopic_id: item._id || "",
+                      newTopic_id: item.id_topic || "",
+                    });
+                  }}
+                >
+                  Từ chối
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col gap-5">
-              <Button
-                type="submit"
-                variant={"default"}
-                onClick={() => {
-                  teacherConfirmRequestChangeTopic.mutate({
-                    student_id: item.ma_sv?._id || "",
-                  });
-                }}
-              >
-                Chấp thuận
-              </Button>
-              <Button
-                type="submit"
-                variant={"outline"}
-                // onClick={() => {
-                //   studentRequestChangeTopic.mutate({
-                //     student_id: session!.user?._id || "",
-                //     new_topic_id: topicItem._id || "",
-                //   });
-                // }}
-              >
-                Từ chối
-              </Button>
-            </div>
-          </div>
-        );
+          );
+        else return <></>;
       });
     } else return <></>;
   };

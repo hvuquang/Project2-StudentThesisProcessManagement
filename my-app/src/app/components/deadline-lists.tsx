@@ -75,6 +75,7 @@ export const DeadlineList = () => {
     async function fetchAllDeadline() {
       if (session?.user?.account_type === "gv") {
         const response = await GETgetAllDeadlineByTeacherID(session?.user?._id);
+        console.log(response);
         setAllDeadlines(response);
       }
     }
@@ -139,7 +140,13 @@ export const DeadlineList = () => {
       {session?.user?.account_type === "gv" && (
         <>
           {allDeadlines?.map((item) => {
-            return <DeadlineItem deadlineObj={item} status="normal" />;
+            return (
+              <DeadlineItem
+                type="deadline"
+                deadlineObj={item}
+                status="normal"
+              />
+            );
           })}
         </>
       )}

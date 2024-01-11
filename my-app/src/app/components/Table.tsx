@@ -47,9 +47,11 @@ import {
 } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button/Button";
 import { Label } from "@/components/ui/label/Label";
+import { GETgetASingleAccount } from "../api/account";
 
 export function CustomTable({ className }: { className?: string }) {
   const queryClient = useQueryClient();
+  const [teacher, setTeacher] = useState("");
   const delTopicMutation = useMutation({
     mutationFn: (topic_id: string) => {
       return DELETEdeleteTopic(topic_id);
@@ -111,7 +113,7 @@ export function CustomTable({ className }: { className?: string }) {
     },
   });
 
-  const [studentTopic, setStudentTopic] = useState<RegisteredTopic>();
+  // const [studentTopic, setStudentTopic] = useState<RegisteredTopic>();
   const [modal, setModal] = useState(false);
   const { data: session } = useSession();
   const { data } = useQuery({
@@ -123,6 +125,11 @@ export function CustomTable({ className }: { className?: string }) {
     queryKey: ["registeredTopics"],
     queryFn: GETgetAllRegisterTopic,
   });
+
+  // const singleAccount = useQuery({
+  //   queryKey: ["account"],
+  //   queryFn: () => GETgetASingleAccount,
+  // });
 
   useEffect(() => {
     console.log("from dashboard: " + allRegisterTopic.data);
@@ -159,11 +166,32 @@ export function CustomTable({ className }: { className?: string }) {
       });
     }
     if (matchingTopics.length > 0) {
+      const teacherName = GETgetASingleAccount(matchingTopics[0].ma_gv);
+      console.log(teacherName);
+      //   .then((res) => {
+      //     console.log(res);
+      //     setTeacher(res);
+      //     return res;
+      //   })
+      //   .catch((err) => {
+      //     throw err;
+      //   });
       firstTopic = matchingTopics[0];
       // setStudentTopic(firstTopic);
       return (
-        <div className="bg-white p-5 my-2 rounded-xl border-slate-300 text-black">
-          <p>Đề tài đang thực hiện: {matchingTopics[0].topic_name}</p>
+        <div className="bg-white p-5 my-2 rounded-xl border border-slate-300 text-black">
+          <p>
+            <span className="font-semibold">Đề tài đang thực hiện: </span>
+            {matchingTopics[0].topic_name ?? ""}
+          </p>
+          <p>
+            <span className="font-semibold">Giảng viên phụ trách: </span>
+            {/* {teacherName.fullname ?? ""} */}
+          </p>
+          <p>
+            <span className="font-semibold">Điểm: </span>
+            {matchingTopics[0].score ?? ""}
+          </p>
         </div>
       );
     }
@@ -222,14 +250,18 @@ export function CustomTable({ className }: { className?: string }) {
     },
     {
       key: 2,
-      title: "Trạng thái đăng ký",
-    },
-    {
-      key: 3,
       title: "Chi tiết",
     },
     {
+      key: 3,
+      title: "Trạng thái đăng ký",
+    },
+    {
       key: 4,
+      title: "Điểm",
+    },
+    {
+      key: 5,
       title: "Chỉnh sửa",
     },
   ];
@@ -245,7 +277,7 @@ export function CustomTable({ className }: { className?: string }) {
       )}
       {renderRegisterTopic()}
       {/* <div className="flex flex-col gap-3 m-auto pt-8"></div> */}
-      <Table className="mx-auto h-96 w-full text-default overflow-auto mt-5">
+      <Table className="mx-auto w-full text-default mt-5">
         <TableHeader className="[&_tr]:bg-info">
           <TableRow className=" text-center">
             {filteredTableHeadItems.map((item) => (
@@ -255,7 +287,7 @@ export function CustomTable({ className }: { className?: string }) {
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="max-h-[120px] overflow-y-auto">
           {data?.map((topicItem: Topic) => (
             <TableRow key={topicItem._id}>
               <TableCell className="text-center">
@@ -344,7 +376,9 @@ export function CustomTable({ className }: { className?: string }) {
                 </TableCell>
               )}
 
-              {/* <TableCell className="text-center">Chỉnh sửa</TableCell> */}
+              <TableCell className="text-center">
+                {topicItem.score ?? ""}
+              </TableCell>
 
               <TableCell className="text-center">
                 {session?.user?.account_type === "gv" &&

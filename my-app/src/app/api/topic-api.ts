@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { url } from "@/app/lib/constants";
 import { Topic } from "../types/types";
 
@@ -122,6 +121,23 @@ export async function PUTTeacherConfirmRequestChangeTopic({
   try {
     await axios.put(
       url + `v1/registerTopic/teacherConfirmChangeTopic/${student_id}`
+    );
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function DELETEregisterTopic({
+  registerTopic_id,
+  newTopic_id,
+}: {
+  registerTopic_id: string;
+  newTopic_id: string;
+}) {
+  try {
+    await axios.delete(
+      url +
+        `v1/registerTopic/deleteRegisterTopic/${registerTopic_id}&${newTopic_id}`
     );
   } catch (err) {
     throw err;
