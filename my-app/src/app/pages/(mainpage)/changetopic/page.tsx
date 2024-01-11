@@ -24,11 +24,11 @@ const ChangeTopic = () => {
       return PUTTeacherConfirmRequestChangeTopic({ student_id });
     },
     onSuccess: () => {
-      toast.success("Chấp thuận yêu cầu ĐTĐT thành công");
+      toast.success("Chấp thuận yêu cầu ĐTĐT");
       queryClient.invalidateQueries({ queryKey: ["registeredTopics"] });
     },
     onError: (err) => {
-      toast.error("Chấp thuận yêu cầu ĐTĐT thất bại: " + err);
+      toast.error("Từ chối yêu cầu ĐTĐT: " + err);
     },
   });
 
@@ -65,7 +65,7 @@ const ChangeTopic = () => {
     if (filteredTopics.length > 0) {
       console.log(filteredTopics);
       return filteredTopics.map((item: RegisteredTopic) => {
-        if (item.active == true)
+        if (item.active)
           return (
             <div className="flex mb-3 justify-between border-2 p-5 rounded-md hover:cursor-pointer hover:border-indigo-500 transition-all delay-100 duration-300">
               <div>

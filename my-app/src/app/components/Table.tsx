@@ -162,8 +162,10 @@ export function CustomTable({ className }: { className?: string }) {
     let matchingTopics = [];
     if (allRegisterTopic && allRegisterTopic.data) {
       matchingTopics = allRegisterTopic.data.filter((item: RegisteredTopic) => {
-        return item.ma_sv?._id === session?.user?._id;
+        return item.ma_sv?._id === session?.user?._id && item.active;
       });
+      console.log("Topic đăng ký:");
+      console.log(matchingTopics);
     }
     if (matchingTopics.length > 0) {
       const teacherName = GETgetASingleAccount(matchingTopics[0].ma_gv);
@@ -199,12 +201,17 @@ export function CustomTable({ className }: { className?: string }) {
   };
 
   const renderButton = (topicItem: Topic) => {
-    if (firstTopic.topic_name) {
+    // sinh viên đã đky topic
+    if (firstTopic.topic_name && firstTopic.active === true) {
       console.log(firstTopic);
-      if (firstTopic.id_topic === topicItem._id) {
+      if (
+        firstTopic.id_topic === topicItem._id &&
+        topicItem.trang_thai !== "Chưa đăng ký"
+      ) {
         return <p className="text-green-500">Đang đăng ký</p>;
       } else if (topicItem.trang_thai === "Đã đăng ký")
         return <p>Đã đăng ký</p>;
+      // else if (topicItem.trang_thai === "Chưa đăng ký") return <p>Đăng ký</p>;
       return (
         <Button
           type="submit"
@@ -222,6 +229,7 @@ export function CustomTable({ className }: { className?: string }) {
     } else if (topicItem.trang_thai === "Đã đăng ký") {
       return <p>Đã đăng ký</p>;
     } else {
+      // sinh viên chưa đky đề tài
       return (
         <Button
           type="submit"
