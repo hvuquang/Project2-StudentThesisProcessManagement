@@ -168,6 +168,20 @@ const registerTopicController = {
       res.status(500).json(error);
     }
   },
+  getAllRegisterTopicsByTeacherId: async (req, res) => {
+    try {
+      const { ma_gv } = req.params;
+      const registerTopic = await registerTopicModel
+        .find({ ma_gv, active: true })
+        .populate({
+          path: "ma_sv",
+          select: "fullname email phone",
+        });
+      res.status(200).json(registerTopic);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
 };
 
 module.exports = registerTopicController;

@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/form/inputs/input/Input";
 import {
   DELETEdeleteTopic,
   GETgetAllRegisterTopic,
+  GETgetAllRegisterTopicsByTeacherId,
   GETgetAllTopic,
   POSTregisterTopic,
   PUTStudentRequestChangeTopic,
@@ -49,7 +50,13 @@ import { Button } from "@/components/ui/button/Button";
 import { Label } from "@/components/ui/label/Label";
 import { GETgetASingleAccount } from "../api/account";
 
-export function CustomTable({ className }: { className?: string }) {
+export function CustomTable({
+  className,
+  type,
+}: {
+  className?: string;
+  type?: string;
+}) {
   const queryClient = useQueryClient();
   const [teacher, setTeacher] = useState("");
   const delTopicMutation = useMutation({
@@ -126,14 +133,61 @@ export function CustomTable({ className }: { className?: string }) {
     queryFn: GETgetAllRegisterTopic,
   });
 
-  // const singleAccount = useQuery({
-  //   queryKey: ["account"],
-  //   queryFn: () => GETgetASingleAccount,
-  // });
+  // const getTeacherThesis = async ({ queryKey }) => {
+  //   const [_, teacherId] = queryKey;
+  //   // console.log(teacherId);
+  //   const { data } = await GETgetAllRegisterTopicsByTeacherId(
+  //     session?.user?._id as string
+  //   );
+  //   console.log(data);
+  //   return data;
+  // };
 
+  // function getThesis(teacher_id: string) {
+  //   const teacherThesises = useQuery({
+  //     queryKey: ["teacherThesis", teacher_id],
+  //     queryFn: () => GETgetAllRegisterTopicsByTeacherId(teacher_id),
+  //   });
+  // }
+
+  // async function fetchTeacherTheses(teacherId: string) {
+  //   const { data } = await GETgetAllRegisterTopicsByTeacherId(teacherId);
+  //   return data;
+  // }
+
+  // function getThesis(teacherId: string) {
+  //   const {
+  //     data: teacherTheses,
+  //     isLoading,
+  //     error,
+  //   } = useQuery({
+  //     queryKey: ["teacherThesis", teacherId],
+  //     queryFn: () => fetchTeacherTheses(teacherId),
+  //   });
+  // }
+  // const teacherThesis = useQuery({
+  //   queryKey: ["teacherRegisteredThesis", teacher_id],
+  //   queryFn: async () => {
+  //     return GETgetAllRegisterTopicsByTeacherId(session?.user?._id ?? "");
+  //   },
+  // });
+  const [thesis, setThesis] = useState<RegisteredTopic[]>([]);
   useEffect(() => {
-    console.log("from dashboard: " + allRegisterTopic.data);
-  }, [allRegisterTopic.data]);
+    async function getThesisByIDTeacher() {
+      if (session?.user?._id) {
+        // getThesis(session.user._id);
+        const data = await GETgetAllRegisterTopicsByTeacherId(
+          session.user._id
+        ).then((res) => {
+          setThesis(res);
+          console.log(res);
+        });
+        return data;
+      }
+    }
+    getThesisByIDTeacher();
+    // console.log("from dashboard: " + allRegisterTopic.data);
+  }, []);
 
   let [topic, setTopic] = useState<Topic>({
     topic_name: "",
@@ -254,23 +308,19 @@ export function CustomTable({ className }: { className?: string }) {
     },
     {
       key: 1,
-      title: "Giáo viên đăng ký",
+      title: "Tên sinh viên",
     },
     {
       key: 2,
-      title: "Chi tiết",
+      title: "Email sinh viên",
     },
     {
       key: 3,
-      title: "Trạng thái đăng ký",
-    },
-    {
-      key: 4,
       title: "Điểm",
     },
     {
-      key: 5,
-      title: "Chỉnh sửa",
+      key: 4,
+      title: "Chấm điểm",
     },
   ];
   //* for each item, if it not 4, it will be included in the new array
@@ -284,6 +334,9 @@ export function CustomTable({ className }: { className?: string }) {
         <ButtonDashboard className="justify-end " />
       )}
       {renderRegisterTopic()}
+      <h1 className="text-center text-2xl8 text-black mt-5">
+        DANH SÁCH CÁC SINH VIÊN ĐĂNG KÝ ĐỀ TÀI ĐỒ ÁN TỐT NGHIỆP CỦA GIẢNG VIÊN
+      </h1>
       {/* <div className="flex flex-col gap-3 m-auto pt-8"></div> */}
       <Table className="mx-auto w-full text-default mt-5">
         <TableHeader className="[&_tr]:bg-info">
@@ -296,18 +349,20 @@ export function CustomTable({ className }: { className?: string }) {
           </TableRow>
         </TableHeader>
         <TableBody className="max-h-[120px] overflow-y-auto">
-          {data?.map((topicItem: Topic) => (
+          {thesis?.map((topicItem: RegisteredTopic) => (
             <TableRow key={topicItem._id}>
               <TableCell className="text-center">
                 {topicItem.topic_name}
               </TableCell>
               <TableCell className="text-center">
-                {topicItem.ma_gv?.fullname}
+                {topicItem.ma_sv?.fullname}
               </TableCell>
-
+              <TableCell className="text-center">
+                {topicItem.ma_sv?.email}
+              </TableCell>
               <TableCell className="text-center">
                 <div className="text-indigo-600 hover:underline">
-                  <Dialog>
+                  {/* <Dialog>
                     <DialogTrigger>Chi tiết</DialogTrigger>
                     <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
                       <DialogHeader title="Cập nhật đề tài KLTN" />
@@ -341,7 +396,7 @@ export function CustomTable({ className }: { className?: string }) {
                           <Input
                             readOnly
                             id="username"
-                            defaultValue={topicItem.topic_description}
+                            // defaultValue={topicItem.}
                             className="col-span-3"
                             onChange={(e) => {
                               handleChange(
@@ -354,149 +409,13 @@ export function CustomTable({ className }: { className?: string }) {
                         </div>
                       </form>
                     </DialogContent>
-                  </Dialog>
+                  </Dialog> */}
                 </div>
               </TableCell>
               {session?.user?.account_type === "gv" && (
-                <TableCell className="text-center">
-                  {topicItem.trang_thai}
-                </TableCell>
+                <TableCell className="text-center">{topicItem.score}</TableCell>
               )}
-              {session?.user?.account_type === "sv" && (
-                <TableCell className="text-center">
-                  {/* {topicItem.trang_thai === "Đã đăng ký" ? (
-                    topicItem.trang_thai
-                  ) : (
-                    <Button
-                      type="submit"
-                      variant={"default"}
-                      onClick={() => {
-                        registerTopicMutation.mutate({
-                          student_id: session!.user?._id || "",
-                          topic_id: topicItem._id || "",
-                        });
-                      }}
-                    >
-                      Đăng ký
-                    </Button>
-                  )} */}
-                  {renderButton(topicItem)}
-                </TableCell>
-              )}
-
-              <TableCell className="text-center">
-                {topicItem.score ?? ""}
-              </TableCell>
-
-              <TableCell className="text-center">
-                {session?.user?.account_type === "gv" &&
-                  topicItem.ma_gv?.email === session?.user?.email && (
-                    <div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger>Chỉnh sửa</DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          {/* <DropdownMenuItem> */}
-                          <DropdownMenuItem
-                            onClick={() => {
-                              setTopic({
-                                topic_name: topicItem.topic_name,
-                                topic_description: topicItem.topic_description,
-                                _id: topicItem._id,
-                              });
-                              setModal(!modal);
-                            }}
-                          >
-                            Chỉnh sửa
-                          </DropdownMenuItem>
-                          {/* </DropdownMenuItem> */}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => {
-                              delTopicMutation.mutate(topicItem._id ?? "");
-                            }}
-                            className="text-white bg-red-500 hover:bg-red-600 focus:text-none focus:bg-red-600"
-                          >
-                            Xóa
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                      <Dialog
-                        key={topicItem._id}
-                        open={topicItem._id === topic._id && modal}
-                        onOpenChange={() => {
-                          setModal(!modal);
-                        }}
-                      >
-                        {/* <DialogTrigger>
-                            <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-                          </DialogTrigger> */}
-                        <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
-                          <DialogHeader title="Cập nhật đề tài KLTN" />
-                          <form
-                            className="grid gap-4 py-4"
-                            onSubmit={(e) => handleSubmit(e)}
-                          >
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="name" className="text-right">
-                                Tên đề tài
-                              </Label>
-                              <Input
-                                id="name"
-                                defaultValue={topicItem.topic_name}
-                                className="col-span-3"
-                                onChange={(e) => {
-                                  handleChange(
-                                    e.target.value,
-                                    undefined,
-                                    topicItem._id ?? ""
-                                  );
-                                }}
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="username" className="text-right">
-                                Nội dung đề tài
-                              </Label>
-                              <Input
-                                id="username"
-                                defaultValue={topicItem.topic_description}
-                                className="col-span-3"
-                                onChange={(e) => {
-                                  handleChange(
-                                    undefined,
-                                    e.target.value,
-                                    topicItem._id ?? ""
-                                  );
-                                }}
-                              />
-                            </div>
-                            <DialogFooter>
-                              <Button type="submit" variant={"secondary"}>
-                                Cập nhật đề tài
-                              </Button>
-                            </DialogFooter>
-                          </form>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  )}
-                {/* {session?.user?.account_type === "sv" && (
-                  <div>
-                    <Button
-                      type="submit"
-                      variant={"default"}
-                      onClick={() => {
-                        registerTopicMutation.mutate({
-                          student_id: session.user?._id || "",
-                          topic_id: topicItem._id || "",
-                        });
-                      }}
-                    >
-                      Đăng ký
-                    </Button>
-                  </div>
-                )} */}
-              </TableCell>
+              {/*  */}
             </TableRow>
           ))}
         </TableBody>

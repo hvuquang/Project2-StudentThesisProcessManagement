@@ -1,9 +1,12 @@
-import React from 'react'
+import { CustomTable } from "@/app/components/Table";
+import React from "react";
 
 const Process = () => {
   return (
-    <div>Welcome to Process Page</div>
-  )
-}
+    <div className="mb-5">
+      <CustomTable type="teacher-thesis" className={"text-white mx-5"} />
+    </div>
+  );
+};
 
-export default Process
+export default Process;

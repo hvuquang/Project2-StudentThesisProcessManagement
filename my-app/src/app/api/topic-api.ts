@@ -143,3 +143,15 @@ export async function DELETEregisterTopic({
     throw err;
   }
 }
+
+export async function GETgetAllRegisterTopicsByTeacherId(teacher_id: string) {
+  try {
+    const response = await axios.get(
+      url + `v1/registerTopic/getAllRegisterTopicsByTeacherId/${teacher_id}`
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
