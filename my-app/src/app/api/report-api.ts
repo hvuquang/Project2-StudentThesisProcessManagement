@@ -10,15 +10,27 @@ export async function POSTaddReport({
   teacher_id: string;
 }) {
   try {
-    console.log("Report: " + report);
+    const formData = new FormData();
+    formData.append("loai_bao_cao", report.loai_bao_cao!);
+    formData.append("noi_dung", report.noi_dung!);
+    formData.append("ngay_bat_dau", report?.ngay_bat_dau!);
+    formData.append("ngay_ket_thuc", report?.ngay_ket_thuc!);
+    console.log(report.file);
+    if (report.file) {
+      let files = report.file as FileList;
+      let file = files[0];
+      formData.append("file", file);
+    }
     await axios
-      .post(url + `v1/report/addReport/${teacher_id}`, {
-        loai_bao_cao: report?.loai_bao_cao,
-        noi_dung: report?.noi_dung,
-        ngay_bat_dau: report?.ngay_bat_dau,
-        ngay_ket_thuc: report?.ngay_ket_thuc,
-        file: report?.file,
-      })
+      .post(
+        url + `v1/report/addReport/${teacher_id}`,
+        // loai_bao_cao: report?.loai_bao_cao,
+        // noi_dung: report?.noi_dung,
+        // ngay_bat_dau: report?.ngay_bat_dau,
+        // ngay_ket_thuc: report?.ngay_ket_thuc,
+        // file: report?.file,
+        formData
+      )
       .then((res) => {
         console.log(
           "Tạo report thành công: " +

@@ -102,6 +102,7 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     ngay_bat_dau: "",
     ngay_ket_thuc: "",
     ma_gv: "",
+    file: null,
   });
 
   const [report, setReport] = useState<Report>({
@@ -153,7 +154,8 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
     deadline_title?: string,
     deadline_content?: string,
     deadline_start?: string,
-    deadline_end?: string
+    deadline_end?: string,
+    eachFile?: File
   ) => {
     if (page === "notificationpage") {
       setNotification({
@@ -169,12 +171,14 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
         noi_dung: deadline_content,
         ngay_bat_dau: startDate?.toISOString(),
         ngay_ket_thuc: endDate?.toISOString(),
+        file: deadline.file,
       });
       setReport({
         loai_bao_cao: report.loai_bao_cao,
         noi_dung: deadline_content,
         ngay_bat_dau: startDate?.toISOString(),
         ngay_ket_thuc: endDate?.toISOString(),
+        file: report.file,
       });
       return;
     }
@@ -215,6 +219,10 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
         ...prevState,
         file: files,
       }));
+      setDeadline((prevState) => ({
+        ...prevState,
+        file: files,
+      }));
       console.log("Selected Files:", fileNames);
     } else {
       console.log("No files selected");
@@ -233,12 +241,14 @@ export const ButtonDashboard = (className: ButtonDashboard) => {
       noi_dung: deadline.noi_dung,
       ngay_bat_dau: start,
       ngay_ket_thuc: end,
+      file: deadline.file,
     });
     setReport({
       loai_bao_cao: report.loai_bao_cao,
       noi_dung: report.noi_dung,
       ngay_bat_dau: start,
       ngay_ket_thuc: end,
+      file: report.file,
     });
   }, [startDate, endDate]);
   return (

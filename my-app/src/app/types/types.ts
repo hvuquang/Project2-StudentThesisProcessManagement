@@ -12,7 +12,7 @@ export type Report = {
   noi_dung?: string;
   ngay_bat_dau?: string;
   ngay_ket_thuc?: string;
-  file?: FileList | null | string;
+  file?: File | FileList | null | string;
 };
 
 export type Teacher = {

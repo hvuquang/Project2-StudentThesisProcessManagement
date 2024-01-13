@@ -149,6 +149,7 @@ export const DeadlineItem = ({
   useEffect(() => {
     async function fetchData() {
       if (status === "normal") {
+        console.log(deadlineObj?.file);
         setStartDate(new Date(deadlineObj?.ngay_bat_dau as string));
         setEndDate(new Date(deadlineObj?.ngay_ket_thuc as string));
         return;

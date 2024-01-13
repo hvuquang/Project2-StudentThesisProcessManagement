@@ -10,13 +10,18 @@ export async function POSTaddDeadline({
   teacher_id: string;
 }) {
   try {
+    const formData = new FormData();
+    formData.append("tieu_de", deadline.tieu_de!);
+    formData.append("noi_dung", deadline.noi_dung!);
+    formData.append("ngay_bat_dau", deadline?.ngay_bat_dau!);
+    formData.append("ngay_ket_thuc", deadline?.ngay_ket_thuc!);
+    if (deadline.file) {
+      let files = deadline.file as FileList;
+      let file = files[0];
+      formData.append("file", file);
+    }
     await axios
-      .post(url + `v1/deadline/addDeadline/${teacher_id}`, {
-        tieu_de: deadline?.tieu_de,
-        noi_dung: deadline?.noi_dung,
-        ngay_bat_dau: deadline?.ngay_bat_dau,
-        ngay_ket_thuc: deadline?.ngay_ket_thuc,
-      })
+      .post(url + `v1/deadline/addDeadline/${teacher_id}`, formData)
       .then((res) => {
         console.log(
           "Tạo deadline thành công: " +
