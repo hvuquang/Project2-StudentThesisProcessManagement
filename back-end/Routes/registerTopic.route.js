@@ -31,4 +31,8 @@ router.get(
   "/getAllRegisterTopicsByTeacherId/:ma_gv",
   registerTopicController.getAllRegisterTopicsByTeacherId
 );
+router.put(
+  "/inputScore/:id_registerToppic",
+  registerTopicController.inputScore
+);
 module.exports = router;

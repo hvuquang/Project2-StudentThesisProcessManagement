@@ -1,62 +1,81 @@
 const mongoose = require("mongoose");
 
-const registerTopicSchema = new mongoose.Schema({
+const registerTopicSchema = new mongoose.Schema(
+  {
     ma_sv: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required : true,
-        ref: "Account"
+      type: mongoose.SchemaTypes.ObjectId,
+      required: true,
+      ref: "Account",
     },
     id_topic: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true,
-        ref: "Topic"
+      type: mongoose.SchemaTypes.ObjectId,
+      required: true,
+      ref: "Topic",
     },
     topic_name: {
-        type: String,
-        require: true
+      type: String,
+      require: true,
     },
-    ma_gv : {
-        type : mongoose.SchemaTypes.ObjectId,
-        ref : "Account",
-        required : true
+    ma_gv: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Account",
+      required: true,
     },
-    id_deadlines : [{
+    id_deadlines: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Deadline",
-    }],
-    deadlines_done: [{
+      },
+    ],
+    deadlines_done: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Deadline",
-    }],
-    reports: [{
+      },
+    ],
+    reports: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Report",
-    }],
-    reports_done: [{
+      },
+    ],
+    reports_done: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Report",
-    }],
-    submit_reports: [{
+      },
+    ],
+    submit_reports: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "SubmitReport",
-    }],
-    submit_deadlines: [{
+      },
+    ],
+    submit_deadlines: [
+      {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "SubmitDeadline",
-    }],
+      },
+    ],
     change_topic: {
-        type: String,
-        default: ""
+      type: String,
+      default: "",
     },
     id_new_topic: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "Topic",
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Topic",
     },
     active: {
-        type: Boolean,
-        default: true
-    }
-},{timestamps: true});
+      type: Boolean,
+      default: true,
+    },
+    score: {
+      type: String,
+      default: "Chưa có kết quả",
+    },
+  },
+  { timestamps: true }
+);
 
-const registerTopic = mongoose.model("RegisterTopic",registerTopicSchema);
+const registerTopic = mongoose.model("RegisterTopic", registerTopicSchema);
 module.exports = registerTopic;

@@ -49,6 +49,7 @@ import {
 import { Button } from "@/components/ui/button/Button";
 import { Label } from "@/components/ui/label/Label";
 import { GETgetASingleAccount } from "../api/account";
+import InputWithIcons from "./input-icon";
 
 export function CustomTable({
   className,
@@ -58,29 +59,6 @@ export function CustomTable({
   type?: string;
 }) {
   const queryClient = useQueryClient();
-  const [teacher, setTeacher] = useState("");
-  const delTopicMutation = useMutation({
-    mutationFn: (topic_id: string) => {
-      return DELETEdeleteTopic(topic_id);
-    },
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-      queryClient.invalidateQueries({ queryKey: ["topics"] });
-    },
-  });
-
-  const updateTopicMutation = useMutation({
-    mutationFn: (topic: Topic) => {
-      return PUTupdateTopic(topic);
-    },
-    onSuccess: () => {
-      toast.success("Update successfully");
-      queryClient.invalidateQueries({ queryKey: ["topics"] });
-    },
-    onError: (err) => {
-      toast.error("Error: " + err);
-    },
-  });
 
   const registerTopicMutation = useMutation({
     mutationFn: ({
@@ -133,58 +111,36 @@ export function CustomTable({
     queryFn: GETgetAllRegisterTopic,
   });
 
-  // const getTeacherThesis = async ({ queryKey }) => {
-  //   const [_, teacherId] = queryKey;
-  //   // console.log(teacherId);
-  //   const { data } = await GETgetAllRegisterTopicsByTeacherId(
-  //     session?.user?._id as string
-  //   );
-  //   console.log(data);
-  //   return data;
-  // };
-
-  // function getThesis(teacher_id: string) {
-  //   const teacherThesises = useQuery({
-  //     queryKey: ["teacherThesis", teacher_id],
-  //     queryFn: () => GETgetAllRegisterTopicsByTeacherId(teacher_id),
-  //   });
-  // }
-
-  // async function fetchTeacherTheses(teacherId: string) {
-  //   const { data } = await GETgetAllRegisterTopicsByTeacherId(teacherId);
-  //   return data;
-  // }
-
-  // function getThesis(teacherId: string) {
-  //   const {
-  //     data: teacherTheses,
-  //     isLoading,
-  //     error,
-  //   } = useQuery({
-  //     queryKey: ["teacherThesis", teacherId],
-  //     queryFn: () => fetchTeacherTheses(teacherId),
-  //   });
-  // }
-  // const teacherThesis = useQuery({
-  //   queryKey: ["teacherRegisteredThesis", teacher_id],
-  //   queryFn: async () => {
-  //     return GETgetAllRegisterTopicsByTeacherId(session?.user?._id ?? "");
-  //   },
-  // });
   const [thesis, setThesis] = useState<RegisteredTopic[]>([]);
-  useEffect(() => {
-    async function getThesisByIDTeacher() {
-      if (session?.user?._id) {
-        // getThesis(session.user._id);
-        const data = await GETgetAllRegisterTopicsByTeacherId(
-          session.user._id
-        ).then((res) => {
-          setThesis(res);
-          console.log(res);
-        });
-        return data;
-      }
+  async function getThesisByIDTeacher() {
+    if (session?.user?._id) {
+      // getThesis(session.user._id);
+      const data = await GETgetAllRegisterTopicsByTeacherId(
+        session.user._id
+      ).then((res) => {
+        setThesis(res);
+        console.log(res);
+      });
+      return data;
     }
+  }
+
+  const renderScoreComponent = (topicItem: RegisteredTopic) => {
+    return (
+      <div>
+        {topicItem.score === "Chưa có kết quả" ? (
+          <InputWithIcons
+            thesis_id={topicItem._id!}
+            getData={getThesisByIDTeacher}
+          />
+        ) : (
+          topicItem.score
+        )}
+      </div>
+    );
+  };
+
+  useEffect(() => {
     getThesisByIDTeacher();
     // console.log("from dashboard: " + allRegisterTopic.data);
   }, []);
@@ -194,22 +150,6 @@ export function CustomTable({
     topic_description: "",
     _id: "",
   });
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateTopicMutation.mutate(topic);
-    return;
-  };
-  const handleChange = (
-    topic_name?: string,
-    topic_description?: string,
-    topic_id?: string
-  ) => {
-    setTopic({
-      topic_name: topic_name ?? topic.topic_name,
-      topic_description: topic_description ?? topic.topic_description,
-      _id: topic_id,
-    });
-  };
   let firstTopic: RegisteredTopic = {};
   const renderRegisterTopic = () => {
     if (session?.user?.account_type === "gv") return <></>;
@@ -318,10 +258,6 @@ export function CustomTable({
       key: 3,
       title: "Điểm",
     },
-    {
-      key: 4,
-      title: "Chấm điểm",
-    },
   ];
   //* for each item, if it not 4, it will be included in the new array
   const filteredTableHeadItems =
@@ -360,60 +296,10 @@ export function CustomTable({
               <TableCell className="text-center">
                 {topicItem.ma_sv?.email}
               </TableCell>
-              <TableCell className="text-center">
-                <div className="text-indigo-600 hover:underline">
-                  {/* <Dialog>
-                    <DialogTrigger>Chi tiết</DialogTrigger>
-                    <DialogContent className="min-w-[35rem] pt-5 px-3 md:max-w-[40rem]">
-                      <DialogHeader title="Cập nhật đề tài KLTN" />
-                      <form
-                        className="grid gap-4 py-4"
-                        onSubmit={(e) => handleSubmit(e)}
-                      >
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">
-                            Tên đề tài
-                          </Label>
-                          <Input
-                            readOnly
-                            id="name"
-                            defaultValue={topicItem.topic_name}
-                            className="col-span-3"
-                            onChange={(e) => {
-                              handleChange(
-                                e.target.value,
-                                undefined,
-                                topicItem._id ?? ""
-                              );
-                            }}
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="username" className="text-right">
-                            Nội dung đề tài
-                          </Label>
-
-                          <Input
-                            readOnly
-                            id="username"
-                            // defaultValue={topicItem.}
-                            className="col-span-3"
-                            onChange={(e) => {
-                              handleChange(
-                                undefined,
-                                e.target.value,
-                                topicItem._id ?? ""
-                              );
-                            }}
-                          />
-                        </div>
-                      </form>
-                    </DialogContent>
-                  </Dialog> */}
-                </div>
-              </TableCell>
               {session?.user?.account_type === "gv" && (
-                <TableCell className="text-center">{topicItem.score}</TableCell>
+                <TableCell className="text-center">
+                  {renderScoreComponent(topicItem)}
+                </TableCell>
               )}
               {/*  */}
             </TableRow>

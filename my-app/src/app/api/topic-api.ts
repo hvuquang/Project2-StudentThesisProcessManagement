@@ -127,6 +127,26 @@ export async function PUTTeacherConfirmRequestChangeTopic({
   }
 }
 
+export async function PUTTeacherConfirmScore({
+  thesis_id,
+  score,
+}: {
+  thesis_id: string;
+  score: string;
+}) {
+  try {
+    const data = await axios.put(
+      url + `v1/registerTopic/inputScore/${thesis_id}`,
+      {
+        score: score,
+      }
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function DELETEregisterTopic({
   registerTopic_id,
   newTopic_id,

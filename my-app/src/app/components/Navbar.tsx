@@ -72,7 +72,7 @@ const Navbar = () => {
       id: "changetopic",
     },
     {
-      name: "Tiến trình thực hiện",
+      name: "Sinh viên đăng ký",
       href: "/pages/process",
       id: "process",
     },
