@@ -18,7 +18,12 @@ import {
   DialogHeader,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { DeadlineItemObj, Report, SubmitReport } from "../types/types";
+import {
+  DeadlineItemObj,
+  Report,
+  SubmitDeadline,
+  SubmitReport,
+} from "../types/types";
 import { useRouter } from "next/navigation";
 import {
   QueryClient,
@@ -56,7 +61,7 @@ export const DeadlineItem = ({
   deadlineObj?: DeadlineItemObj;
   type?: string;
   report?: Report;
-  submitDeadlines?: DeadlineItemObj[];
+  submitDeadlines?: SubmitDeadline[];
   submitReports?: SubmitReport[];
   currentPage?: string;
 }) => {
@@ -71,6 +76,7 @@ export const DeadlineItem = ({
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
   const [submitFile, setSubmitFile] = useState<string>();
+  const [submitDFile, setSubmitDFile] = useState<string>();
   useEffect(() => {
     if (submitReports !== undefined && submitReports?.length > 0) {
       let submitReport = submitReports.filter((item) => {
@@ -78,6 +84,15 @@ export const DeadlineItem = ({
       });
       if (submitReport !== undefined && submitReport.length > 0) {
         setSubmitFile(submitReport[0].file as string);
+      }
+    } else if (submitDeadlines !== undefined && submitDeadlines?.length > 0) {
+      let submitDeadline = submitDeadlines.filter((item) => {
+        return item.id_deadline === id;
+      });
+      console.log(submitDeadline);
+      if (submitDeadline !== undefined && submitDeadline.length > 0) {
+        setSubmitDFile(submitDeadline[0].file as string);
+        console.log(("fileD: " + submitDeadline[0].file) as string);
       }
     }
   }, [currentPage]);
@@ -429,20 +444,21 @@ export const DeadlineItem = ({
 
                     <FileInput onFilesChange={handleFilesChange} />
                   </div>
-                  {deadlineObj?.file ? (
+                  {submitDFile ? (
                     <div className="">
-                      File đã nộp: {convertToArray(deadlineObj?.file as string)}
+                      File đã nộp: {convertToArray(submitDFile)}
                     </div>
                   ) : (
                     ""
                   )}
                   <DialogFooter>
-                    <Button type="submit" variant={"secondary"}>
-                      {/* NỘP */}
-                      {session?.user?.account_type === "gv"
-                        ? "Cập nhật"
-                        : "Nộp"}
-                    </Button>
+                    {submitDFile ? (
+                      ""
+                    ) : (
+                      <Button type="submit" variant={"secondary"}>
+                        NỘP
+                      </Button>
+                    )}
                   </DialogFooter>
                 </form>
               </DialogContent>

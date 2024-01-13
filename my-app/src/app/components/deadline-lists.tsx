@@ -1,7 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { DeadlineItem } from "./deadline-item";
-import { DeadlineItemObj, Report, SubmitReport } from "../types/types";
+import {
+  DeadlineItemObj,
+  Report,
+  SubmitDeadline,
+  SubmitReport,
+} from "../types/types";
 import { useSession } from "next-auth/react";
 import {
   QueryClient,
@@ -27,7 +32,7 @@ export const DeadlineList = () => {
   const [allDeadlines, setAllDeadlines] = useState<DeadlineItemObj[]>();
   const [submitReports, setSubmitReports] = useState<SubmitReport[]>();
   const [submitReport, setSubmitReport] = useState<Report>();
-  const [submitDeadlines, setSubmitDeadlines] = useState<DeadlineItemObj[]>();
+  const [submitDeadlines, setSubmitDeadlines] = useState<SubmitDeadline[]>();
   const { isLoading, error, data } = useQuery({
     queryKey: ["registeredTopics"],
     queryFn: GETgetAllRegisterTopic,
@@ -133,6 +138,7 @@ export const DeadlineList = () => {
                 <span className="font-semibold">Deadline đã hoàn thành</span>
               </div>
               {doneDeadline?.map((item) => {
+                console.log(submitDeadlines);
                 return (
                   <div>
                     <DeadlineItem
@@ -140,6 +146,7 @@ export const DeadlineList = () => {
                       type="deadline"
                       id={item}
                       status="fullfilled"
+                      currentPage={currentPage}
                     />
                   </div>
                 );

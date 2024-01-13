@@ -1,73 +1,76 @@
 const deadlineModel = require("../Models/Deadline.model");
-const registerTopicModel = require("../Models/RegisterTopic.model")
-const submitDeadlineModel = require("../Models/SubmitDeadline.model")
+const registerTopicModel = require("../Models/RegisterTopic.model");
+const submitDeadlineModel = require("../Models/SubmitDeadline.model");
 
 const deadlineController = {
-    addDeadline: async (req, res) => {
-        try {
-            const { ma_gv } = req.params;
+  addDeadline: async (req, res) => {
+    try {
+      const { ma_gv } = req.params;
 
-            const newDeadline = new deadlineModel({
-                tieu_de: req.body.tieu_de,
-                noi_dung: req.body.noi_dung,
-                ngay_bat_dau: req.body.ngay_bat_dau,
-                ngay_ket_thuc: req.body.ngay_ket_thuc,
-                ma_gv: ma_gv
-            });
-            if(req.file){
-                newDeadline.file = req.file.path;
-            }
+      const newDeadline = new deadlineModel({
+        tieu_de: req.body.tieu_de,
+        noi_dung: req.body.noi_dung,
+        ngay_bat_dau: req.body.ngay_bat_dau,
+        ngay_ket_thuc: req.body.ngay_ket_thuc,
+        ma_gv: ma_gv,
+      });
+      if (req.file) {
+        newDeadline.file = req.file.path;
+      }
 
-            const savedDeadline = await newDeadline.save();
+      const savedDeadline = await newDeadline.save();
 
-            // Tìm tất cả registerTopic có ma_gv bằng với ma_gv hiện tại
-            const foundRegisterTopics = await registerTopicModel.find({ ma_gv: ma_gv });
+      // Tìm tất cả registerTopic có ma_gv bằng với ma_gv hiện tại
+      const foundRegisterTopics = await registerTopicModel.find({
+        ma_gv: ma_gv,
+      });
 
-            // Lấy mảng _id của deadlines để thêm vào registerTopic
-            const deadlineId = savedDeadline._id;
+      // Lấy mảng _id của deadlines để thêm vào registerTopic
+      const deadlineId = savedDeadline._id;
 
-            // Tạo mảng các promise cho việc cập nhật registerTopic
-            const updatePromises = foundRegisterTopics.map(async (topic) => {
-                topic.id_deadlines.push(deadlineId);
-                await topic.save(); // Không chờ đợi lưu từng topic một
-            });
+      // Tạo mảng các promise cho việc cập nhật registerTopic
+      const updatePromises = foundRegisterTopics.map(async (topic) => {
+        topic.id_deadlines.push(deadlineId);
+        await topic.save(); // Không chờ đợi lưu từng topic một
+      });
 
-            // Chạy tất cả các promise song song và chờ đợi kết quả
-            await Promise.all(updatePromises);
+      // Chạy tất cả các promise song song và chờ đợi kết quả
+      await Promise.all(updatePromises);
 
-            res.status(201).send(savedDeadline);
-        } catch (error) {
-            res.status(500).send(error);
-        }
-    },
-    done_deadline: async (req, res) => {
-        try {
-            const { ma_sv, id_deadline } = req.params;
-            const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
+      res.status(201).send(savedDeadline);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+  done_deadline: async (req, res) => {
+    try {
+      const { ma_sv, id_deadline } = req.params;
+      const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
 
-            const index = registerTopic.id_deadlines.indexOf(id_deadline);
-            if (index !== -1) {
-                registerTopic.id_deadlines.splice(index, 1);
-            }
+      const index = registerTopic.id_deadlines.indexOf(id_deadline);
+      if (index !== -1) {
+        registerTopic.id_deadlines.splice(index, 1);
+      }
 
-            const newSubmitDeadline = new submitDeadlineModel({
-                ma_sv: ma_sv
-            })
+      const newSubmitDeadline = new submitDeadlineModel({
+        ma_sv: ma_sv,
+        id_deadline: id_deadline,
+      });
 
-            if (req.file) {
-                newSubmitDeadline.file = req.file.path;
-            }
+      if (req.file) {
+        newSubmitDeadline.file = req.file.path;
+      }
 
-            registerTopic.deadlines_done.push(id_deadline);
-            registerTopic.submit_deadlines.push(newSubmitDeadline._id);
+      registerTopic.deadlines_done.push(id_deadline);
+      registerTopic.submit_deadlines.push(newSubmitDeadline._id);
 
-            await newSubmitDeadline.save();
-            await registerTopic.save();
+      await newSubmitDeadline.save();
+      await registerTopic.save();
 
-            res.status(200).json(registerTopic);
-        } catch (error) {
-            res.status(500).json(error);
-        }
+      res.status(200).json(registerTopic);
+    } catch (error) {
+      res.status(500).json(error);
+    }
     //     try {
     //         const { ma_sv, id_deadline } = req.params;
     //         const registerTopic = await registerTopicModel.findOne({ ma_sv: ma_sv });
@@ -88,25 +91,25 @@ const deadlineController = {
     //     } catch (error) {
     //         res.status(500).json(error);
     //     }
-    },
-    getAllDeadlinesByTeacherId: async(req,res)=>{
-        try {
-            const { teacher_id } = req.params;
-            const deadlines = await deadlineModel.find({ ma_gv: teacher_id });
-            res.status(200).json(deadlines);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    },
-    getDeadlineById: async(req,res)=>{
-        try {
-            const { _id } = req.params;
-            const deadline = await deadlineModel.findById(_id);
-            res.status(200).json(deadline);
-        } catch (error) {
-            res.status(500).json(error);
-        }
+  },
+  getAllDeadlinesByTeacherId: async (req, res) => {
+    try {
+      const { teacher_id } = req.params;
+      const deadlines = await deadlineModel.find({ ma_gv: teacher_id });
+      res.status(200).json(deadlines);
+    } catch (error) {
+      res.status(500).json(error);
     }
+  },
+  getDeadlineById: async (req, res) => {
+    try {
+      const { _id } = req.params;
+      const deadline = await deadlineModel.findById(_id);
+      res.status(200).json(deadline);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
 };
 
 module.exports = deadlineController;
