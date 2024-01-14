@@ -144,7 +144,7 @@ const NotificationPage = () => {
               <Dialog>
                 <DialogTrigger>
                   <div>
-                    <p className="text-indigo-500 hover:underline">
+                    <p className="text-indigo-500 hover:underline text-left">
                       {item.tieu_de || "Tiêu đề rỗng"}
                     </p>
 

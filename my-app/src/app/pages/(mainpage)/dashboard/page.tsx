@@ -17,30 +17,30 @@ const Dashboard = () => {
   return (
     <div>
       <DashboardLayout>
-        <div id="container" className="flex justify-around items-center mt-10">
+        <div id="container" className="flex flex-col items-start gap-5 mt-5">
           <Button
-            variant={"default"}
+            variant={"link"}
             onClick={() => {
               router.push("/pages/notificationpage");
             }}
           >
-            Thông báo
+            TRANG THÔNG BÁO
           </Button>
-          <Button
+          {/* <Button
             variant={"default"}
             onClick={() => {
               router.push("/pages/folderpage");
             }}
           >
             Tài liệu
-          </Button>
+          </Button> */}
           <Button
-            variant={"default"}
+            variant={"link"}
             onClick={() => {
               router.push("/pages/deadlinepage");
             }}
           >
-            Deadline
+            TRANG DEADLINE
           </Button>
         </div>
       </DashboardLayout>

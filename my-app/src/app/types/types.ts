@@ -84,3 +84,11 @@ export type SubmitDeadline = {
   ngay_ket_thuc?: string;
   file?: FileList | null | string;
 };
+
+export type Account = {
+  _id?: string;
+  fullname?: string;
+  email?: string;
+  phone_number?: string;
+  account_type?: string;
+};
